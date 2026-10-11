@@ -1,0 +1,1768 @@
+{
+  "created_utc": "2026-10-10T09:14:59.716377+00:00",
+  "scope": "English legal notices for redistributable suite components; project MIT applies only to independently written files.",
+  "ue4ss_source_commit": "e3ba1016562d6c0868c410d0a71e88bfcdbf691b",
+  "ue4ss_runtime_sha256": "680a026890abb4d0df2211251f8defc1681a584275f1521dcc0fe30af480006f",
+  "ue4ss_proxy_sha256": "cf440b9eb8643bb7c434acfda696aee57fd981d185dca5e57fb8dbb18f8fc1cd",
+  "files": [
+    {
+      "file": "AC8MouseAim_CC0_Declaration.txt",
+      "component": "AC8 Mouse Aim original code",
+      "source_url": "https://raw.githubusercontent.com/FletcherMiya/AC8-Mouse-Aim/30aba07b715a006d2b67b9a4b6fa37bc10b79fce/LICENSE.txt",
+      "version_or_ref": "Release",
+      "role": "license",
+      "bytes": 299,
+      "sha256": "f93e77d02fef23d2e9669d027510e3a684b71de828a31fb98a14ac2718f0b0d0",
+      "original_source_url": "https://raw.githubusercontent.com/FletcherMiya/AC8-Mouse-Aim/Release/LICENSE.txt",
+      "source_commit": "30aba07b715a006d2b67b9a4b6fa37bc10b79fce"
+    },
+    {
+      "file": "AsmJit.txt",
+      "component": "AsmJit / PolyHook dependency",
+      "source_url": "https://raw.githubusercontent.com/asmjit/asmjit/a3199e8857792cd10b7589ff5d58343d2c9008ea/LICENSE.md",
+      "version_or_ref": "a3199e8857792cd10b7589ff5d58343d2c9008ea",
+      "role": "license",
+      "bytes": 862,
+      "sha256": "8fc74133788bc8a7aa94168e9913a2d0b0e3f0a6064a0e72a0f1206d5ce9189e",
+      "source_commit": "a3199e8857792cd10b7589ff5d58343d2c9008ea"
+    },
+    {
+      "file": "AsmTk.txt",
+      "component": "AsmTk / PolyHook dependency",
+      "source_url": "https://raw.githubusercontent.com/asmjit/asmtk/3bce8a48aa895e6d639501d1f1105ab5fe007753/LICENSE.md",
+      "version_or_ref": "3bce8a48aa895e6d639501d1f1105ab5fe007753",
+      "role": "license",
+      "bytes": 925,
+      "sha256": "d79e47f50caf8dc61c7ea920e364b09a34d303862b4d4752f06789623ef7c1b7",
+      "source_commit": "3bce8a48aa895e6d639501d1f1105ab5fe007753"
+    },
+    {
+      "file": "Droid_Apache-2.0.txt",
+      "component": "Droid Sans Fallback font",
+      "source_url": "https://raw.githubusercontent.com/UE4SS-RE/RE-UE4SS/e3ba1016562d6c0868c410d0a71e88bfcdbf691b/UE4SS/include/fonts/LICENSE_Droid.txt",
+      "version_or_ref": "e3ba1016562d6c0868c410d0a71e88bfcdbf691b",
+      "role": "license",
+      "bytes": 10695,
+      "sha256": "38751245389e1e23f73e6f5384b5cbe7fa972cc4410c5adc9c04b082a0b9561a",
+      "source_commit": "e3ba1016562d6c0868c410d0a71e88bfcdbf691b"
+    },
+    {
+      "file": "Droid_NOTICE.txt",
+      "component": "Droid Sans Fallback font",
+      "source_url": "https://raw.githubusercontent.com/UE4SS-RE/RE-UE4SS/e3ba1016562d6c0868c410d0a71e88bfcdbf691b/deps/fonts/droid/NOTICE.txt",
+      "version_or_ref": "e3ba1016562d6c0868c410d0a71e88bfcdbf691b",
+      "role": "license",
+      "bytes": 10695,
+      "sha256": "38751245389e1e23f73e6f5384b5cbe7fa972cc4410c5adc9c04b082a0b9561a",
+      "source_commit": "e3ba1016562d6c0868c410d0a71e88bfcdbf691b"
+    },
+    {
+      "file": "FontAwesome_Free_5.15.4.txt",
+      "component": "Font Awesome 5 Free Solid font",
+      "source_url": "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/7d3d774145ac38663f6d1effc6def0334b68ab7e/LICENSE.txt",
+      "version_or_ref": "5.15.4",
+      "role": "license",
+      "bytes": 1548,
+      "sha256": "e779748dfe75e84f974df3c7bc07f842011a100159158b0f1f49b2f2a5a515cb",
+      "original_source_url": "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/5.15.4/LICENSE.txt",
+      "source_commit": "7d3d774145ac38663f6d1effc6def0334b68ab7e"
+    },
+    {
+      "file": "GLFW_3.3_Zlib.txt",
+      "component": "GLFW",
+      "source_url": "https://raw.githubusercontent.com/UE4SS-RE/RE-UE4SS/e3ba1016562d6c0868c410d0a71e88bfcdbf691b/deps/third/GLFW/include/GLFW/glfw3.h",
+      "version_or_ref": "e3ba1016562d6c0868c410d0a71e88bfcdbf691b",
+      "role": "license",
+      "bytes": 1280,
+      "sha256": "ff98d8936e33bbff43527aafb3163436c0d937cbe5c5f0f9be659f955d8dea9d",
+      "source_sha256": "0992a30f01ebaa41c32f3f0588e942961abb8a9a52ca8764bd32ee4d7d71a46d",
+      "notes": "Complete license comment extracted without changing its wording.",
+      "source_commit": "e3ba1016562d6c0868c410d0a71e88bfcdbf691b"
+    },
+    {
+      "file": "IconFontCppHeaders.txt",
+      "component": "IconFontCppHeaders",
+      "source_url": "https://raw.githubusercontent.com/juliettef/IconFontCppHeaders/210b5a399a64270674560d633638952d1e8d804d/licence.txt",
+      "version_or_ref": "210b5a399a64270674560d633638952d1e8d804d",
+      "role": "license",
+      "bytes": 870,
+      "sha256": "8a0e8338ba1d9359adbbfe5ffb70d6423b169192d146dae12410adaff15aa67a",
+      "source_commit": "210b5a399a64270674560d633638952d1e8d804d"
+    },
+    {
+      "file": "ImGuiColorTextEdit_MIT.txt",
+      "component": "ImGuiColorTextEdit",
+      "source_url": "https://raw.githubusercontent.com/UE4SS-RE/ImGuiColorTextEdit/6d943aba9f7cef05da80b86dbb0253b63818f95c/LICENSE",
+      "version_or_ref": "6d943aba9f7cef05da80b86dbb0253b63818f95c",
+      "role": "license",
+      "bytes": 1067,
+      "sha256": "7d8a940bdfabdc84091e8d597811784f21eb453b1eba157597ac319f59ec2b19",
+      "source_commit": "6d943aba9f7cef05da80b86dbb0253b63818f95c"
+    },
+    {
+      "file": "ImGui_MIT.txt",
+      "component": "Dear ImGui",
+      "source_url": "https://raw.githubusercontent.com/ocornut/imgui/5d4126876bc10396d4c6511853ff10964414c776/LICENSE.txt",
+      "version_or_ref": "v1.92.1",
+      "role": "license",
+      "bytes": 1083,
+      "sha256": "c80c5789748d955c4a650562baa0d750494e2c7128c2ca66aaebe2e3c4e198bf",
+      "original_source_url": "https://raw.githubusercontent.com/ocornut/imgui/v1.92.1/LICENSE.txt",
+      "source_commit": "5d4126876bc10396d4c6511853ff10964414c776"
+    },
+    {
+      "file": "Khronos_MIT.txt",
+      "component": "Khronos platform header used by glad",
+      "source_url": "https://raw.githubusercontent.com/UE4SS-RE/RE-UE4SS/e3ba1016562d6c0868c410d0a71e88bfcdbf691b/deps/third/glad/include/KHR/khrplatform.h",
+      "version_or_ref": "e3ba1016562d6c0868c410d0a71e88bfcdbf691b",
+      "role": "license",
+      "bytes": 1147,
+      "sha256": "438187dca092de4032c1a16524aa4c34c71a0f985a71251a675aad54e77ed561",
+      "source_sha256": "7b1e01aaa7ad8f6fc34b5c7bdf79ebf5189bb09e2c4d2e79fc5d350623d11e83",
+      "notes": "Complete license comment extracted without changing its wording.",
+      "source_commit": "e3ba1016562d6c0868c410d0a71e88bfcdbf691b"
+    },
+    {
+      "file": "KoreanAIR_MIT.txt",
+      "component": "KoreanAIR independently written files",
+      "source_url": "local:KoreanAIR",
+      "version_or_ref": "2026",
+      "role": "project license",
+      "bytes": 1079,
+      "sha256": "6d90bded28d45f48e10292581acf4daa32ba2416f02b212f369ac112c3d49932",
+      "notes": "Applies only to independently written installer, launcher, loader, wrappers and additions. Third-party files retain their own licenses."
+    },
+    {
+      "file": "Lua_5.4.7_MIT.txt",
+      "component": "Lua 5.4.7",
+      "source_url": "https://raw.githubusercontent.com/UE4SS-RE/RE-UE4SS/e3ba1016562d6c0868c410d0a71e88bfcdbf691b/deps/first/LuaRaw/include/lua.h",
+      "version_or_ref": "e3ba1016562d6c0868c410d0a71e88bfcdbf691b",
+      "role": "license",
+      "bytes": 1263,
+      "sha256": "b66c57df1c7de7a62eec9af87d7cde02a2a6ce791758ccc7a79c6781c360526d",
+      "source_sha256": "048c6574ba5e8d225d47b66e83b479832ce353881f263ecf8389247442921f6c",
+      "notes": "Complete license comment extracted without changing its wording.",
+      "source_commit": "e3ba1016562d6c0868c410d0a71e88bfcdbf691b"
+    },
+    {
+      "file": "MinHook_BSD.txt",
+      "component": "MinHook and Hacker Disassembler Engine",
+      "source_url": "https://raw.githubusercontent.com/TsudaKageyu/minhook/c3fcafdc10146beb5919319d0683e44e3c30d537/LICENSE.txt",
+      "version_or_ref": "v1.3.4",
+      "role": "license",
+      "bytes": 4365,
+      "sha256": "d5c2224982b0b95a16b098a561335fa93f3eaf4d0aa964b7843edb986df78dc8",
+      "original_source_url": "https://raw.githubusercontent.com/TsudaKageyu/minhook/v1.3.4/LICENSE.txt",
+      "source_commit": "c3fcafdc10146beb5919319d0683e44e3c30d537"
+    },
+    {
+      "file": "MouseFlight_MIT.txt",
+      "component": "MouseFlight / Brian Hernandez",
+      "source_url": "https://raw.githubusercontent.com/brihernandez/MouseFlight/2172d104ab7ef91beef1fbfd42f2a15c9a99f359/LICENSE",
+      "version_or_ref": "master",
+      "role": "license",
+      "bytes": 1072,
+      "sha256": "fb265cb60057382f5cc1b580701efb0a1ee5c099421dd5c6c5356addfeb74270",
+      "original_source_url": "https://raw.githubusercontent.com/brihernandez/MouseFlight/master/LICENSE",
+      "source_commit": "2172d104ab7ef91beef1fbfd42f2a15c9a99f359"
+    },
+    {
+      "file": "OFL_1.1_Standard.txt",
+      "component": "SIL Open Font License 1.1 standard text",
+      "source_url": "https://raw.githubusercontent.com/UE4SS-RE/RE-UE4SS/e3ba1016562d6c0868c410d0a71e88bfcdbf691b/UE4SS/include/fonts/LICENSE_Roboto.txt",
+      "version_or_ref": "e3ba1016562d6c0868c410d0a71e88bfcdbf691b",
+      "role": "license",
+      "bytes": 4069,
+      "sha256": "f19c674290e5dc79f02e8efe16139ab56a06a7128876f5b1579ffd0db5bc897e",
+      "source_sha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41",
+      "notes": "Standard OFL text extracted from the pinned upstream font license; individual copyright notices remain in the relevant font files.",
+      "source_commit": "e3ba1016562d6c0868c410d0a71e88bfcdbf691b"
+    },
+    {
+      "file": "Patternsleuth_License_Declaration.toml",
+      "component": "patternsleuth / trumank",
+      "source_url": "https://raw.githubusercontent.com/trumank/patternsleuth/1d90b02c7610b595f940af04ce97e0f6feb06923/Cargo.toml",
+      "version_or_ref": "1d90b02c7610b595f940af04ce97e0f6feb06923",
+      "role": "license declaration",
+      "bytes": 816,
+      "sha256": "cf5bc06a91b0e71d8dcae29ba1f615230d49fb21a272ef4727f1deb8f5173717",
+      "source_commit": "1d90b02c7610b595f940af04ce97e0f6feb06923"
+    },
+    {
+      "file": "PolyHook2_MIT.txt",
+      "component": "PolyHook 2",
+      "source_url": "https://raw.githubusercontent.com/stevemk14ebr/PolyHook_2_0/298d56210b9d9e66cde8f96481d6053925c6ae15/LICENSE",
+      "version_or_ref": "298d56210b9d9e66cde8f96481d6053925c6ae15",
+      "role": "license",
+      "bytes": 1071,
+      "sha256": "c0dc0c2a852d986cd736c8bc12f45bf7062179fd84bce5154cfacf1cca228aec",
+      "source_commit": "298d56210b9d9e66cde8f96481d6053925c6ae15"
+    },
+    {
+      "file": "RUST_PACKAGE_MANIFEST.json",
+      "component": "Rust license provenance manifest",
+      "source_url": "local:derived from verified primary registry packages",
+      "version_or_ref": "e3ba1016562d6c0868c410d0a71e88bfcdbf691b",
+      "role": "source provenance",
+      "bytes": 31234,
+      "sha256": "d55839fd9d571add4d31b9ccd82c9bb308a9e9f7c3f40c82b02fc306bacea813"
+    },
+    {
+      "file": "RobotoMono_OFL.txt",
+      "component": "Roboto Mono font",
+      "source_url": "https://raw.githubusercontent.com/googlefonts/RobotoMono/895ec691990d041dd727c7b5afa3ce56525d98e6/OFL.txt",
+      "version_or_ref": "main resolved to 895ec691990d041dd727c7b5afa3ce56525d98e6",
+      "source_commit": "895ec691990d041dd727c7b5afa3ce56525d98e6",
+      "role": "license",
+      "bytes": 4395,
+      "sha256": "50ab8dd54680d3473f649c9db86fece88434d097c7834475c1c72d2f8c429215",
+      "notes": "Additional Roboto Mono project copyright and OFL text retained conservatively alongside the pinned UE4SS font notice."
+    },
+    {
+      "file": "Roboto_OFL.txt",
+      "component": "Roboto and Roboto Mono fonts",
+      "source_url": "https://raw.githubusercontent.com/UE4SS-RE/RE-UE4SS/e3ba1016562d6c0868c410d0a71e88bfcdbf691b/UE4SS/include/fonts/LICENSE_Roboto.txt",
+      "version_or_ref": "e3ba1016562d6c0868c410d0a71e88bfcdbf691b",
+      "role": "license",
+      "bytes": 4394,
+      "sha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41",
+      "source_commit": "e3ba1016562d6c0868c410d0a71e88bfcdbf691b"
+    },
+    {
+      "file": "THIRD_PARTY_NOTICES.txt",
+      "component": "English combined third-party notices",
+      "source_url": "local:license audit",
+      "version_or_ref": "2026-10-10",
+      "role": "combined notices",
+      "bytes": 3440,
+      "sha256": "de56d3814fb3b98a88534eadb19aee3168b6e541985afa7c1ebbe14155ae5bbc"
+    },
+    {
+      "file": "Tracy_BSD.txt",
+      "component": "Tracy optional profiler",
+      "source_url": "https://raw.githubusercontent.com/wolfpld/tracy/37aff70dfa50cf6307b3fee6074d627dc2929143/LICENSE",
+      "version_or_ref": "37aff70dfa50cf6307b3fee6074d627dc2929143",
+      "role": "license",
+      "bytes": 1618,
+      "sha256": "893dc42931375ccf7f0715af482c8d5c6105777c0d04bca39e571eef6dd20f39",
+      "source_commit": "37aff70dfa50cf6307b3fee6074d627dc2929143"
+    },
+    {
+      "file": "UE4SS_MIT.txt",
+      "component": "RE-UE4SS runtime, injection proxy and interfaces",
+      "source_url": "https://raw.githubusercontent.com/UE4SS-RE/RE-UE4SS/e3ba1016562d6c0868c410d0a71e88bfcdbf691b/LICENSE",
+      "version_or_ref": "e3ba1016562d6c0868c410d0a71e88bfcdbf691b",
+      "role": "license",
+      "bytes": 1064,
+      "sha256": "ddc030e25d0ea87aca4ae84c0ed3f868d69273c00c0c12ea1e26f1c6130f5d2e",
+      "source_commit": "e3ba1016562d6c0868c410d0a71e88bfcdbf691b"
+    },
+    {
+      "file": "UE4SS_Patternsleuth_Cargo.lock",
+      "component": "RE-UE4SS patternsleuth binding dependency lock",
+      "source_url": "https://raw.githubusercontent.com/UE4SS-RE/RE-UE4SS/e3ba1016562d6c0868c410d0a71e88bfcdbf691b/deps/first/patternsleuth_bind/Cargo.lock",
+      "version_or_ref": "e3ba1016562d6c0868c410d0a71e88bfcdbf691b",
+      "role": "source provenance",
+      "bytes": 17203,
+      "sha256": "88c3718c03492cdc2650217a9d8bb2a8dbdecdbde1b4ea79e3e529e838b49bbe",
+      "source_commit": "e3ba1016562d6c0868c410d0a71e88bfcdbf691b"
+    },
+    {
+      "file": "UE4SS_ThirdParty_Build_Pins.txt",
+      "component": "RE-UE4SS build dependency declarations",
+      "source_url": "https://raw.githubusercontent.com/UE4SS-RE/RE-UE4SS/e3ba1016562d6c0868c410d0a71e88bfcdbf691b/deps/third/CMakeLists.txt",
+      "version_or_ref": "e3ba1016562d6c0868c410d0a71e88bfcdbf691b",
+      "role": "source provenance",
+      "bytes": 6212,
+      "sha256": "2bff465544f0f48d1de06b3e102857edd227c57050b2b3c198bb83ec9b2ee8d6",
+      "source_commit": "e3ba1016562d6c0868c410d0a71e88bfcdbf691b"
+    },
+    {
+      "file": "USMapGenerator_MIT.txt",
+      "component": "USMapGenerator / Shade",
+      "source_url": "https://raw.githubusercontent.com/UE4SS-RE/RE-UE4SS/e3ba1016562d6c0868c410d0a71e88bfcdbf691b/UE4SS/src/USMapGenerator/LICENSE",
+      "version_or_ref": "e3ba1016562d6c0868c410d0a71e88bfcdbf691b",
+      "role": "license",
+      "bytes": 1062,
+      "sha256": "3e88c592c62eb914921d29b4e1effa09659f85844336b7819be40c82f6da223c",
+      "source_commit": "e3ba1016562d6c0868c410d0a71e88bfcdbf691b"
+    },
+    {
+      "file": "Zycore_MIT.txt",
+      "component": "Zycore / Zydis dependency",
+      "source_url": "https://raw.githubusercontent.com/zyantific/zycore-c/0b2432ced0884fd152b471d97ecf0258ff4d859f/LICENSE",
+      "version_or_ref": "0b2432ced0884fd152b471d97ecf0258ff4d859f",
+      "role": "license",
+      "bytes": 1122,
+      "sha256": "7991ec4481a82c51d196f7440fda34c578aab51f8b9c7023935c6e03b57638bd",
+      "source_commit": "0b2432ced0884fd152b471d97ecf0258ff4d859f"
+    },
+    {
+      "file": "Zydis_MIT.txt",
+      "component": "Zydis",
+      "source_url": "https://raw.githubusercontent.com/zyantific/zydis/a2278f1d254e492f6a6b39f6cb5d1f5d515659dc/LICENSE",
+      "version_or_ref": "v4.1.1",
+      "role": "license",
+      "bytes": 1122,
+      "sha256": "e5e99718209e94baaf3e9cbf6f64aa3329c9e73c63b1ab47e10f29d81974e6f3",
+      "original_source_url": "https://raw.githubusercontent.com/zyantific/zydis/v4.1.1/LICENSE",
+      "source_commit": "a2278f1d254e492f6a6b39f6cb5d1f5d515659dc"
+    },
+    {
+      "file": "fmt_MIT.txt",
+      "component": "fmt",
+      "source_url": "https://raw.githubusercontent.com/fmtlib/fmt/40626af88bd7df9a5fb80be7b25ac85b122d6c21/LICENSE",
+      "version_or_ref": "11.2.0",
+      "role": "license",
+      "bytes": 1431,
+      "sha256": "07580f2a3b35709ce703d523f447b242f6dfec7582a8c0df102c7fa2849375f8",
+      "original_source_url": "https://raw.githubusercontent.com/fmtlib/fmt/11.2.0/LICENSE",
+      "source_commit": "40626af88bd7df9a5fb80be7b25ac85b122d6c21"
+    },
+    {
+      "file": "glad.txt",
+      "component": "glad OpenGL loader generator",
+      "source_url": "https://raw.githubusercontent.com/Dav1dde/glad/1ecd45775d96f35170458e6b148eb0708967e402/LICENSE",
+      "version_or_ref": "v0.1.36",
+      "role": "license",
+      "bytes": 3014,
+      "sha256": "3d6e8bb9a06887b182a1da966937678b69fb8faeacf05dbf058cec8d0e4dc872",
+      "original_source_url": "https://raw.githubusercontent.com/Dav1dde/glad/v0.1.36/LICENSE",
+      "source_commit": "1ecd45775d96f35170458e6b148eb0708967e402"
+    },
+    {
+      "file": "glaze_MIT.txt",
+      "component": "glaze",
+      "source_url": "https://raw.githubusercontent.com/stephenberry/glaze/3a850807501d98d23bab4bdc5af64d8d4e83e6bc/LICENSE",
+      "version_or_ref": "v6.4.0",
+      "role": "license",
+      "bytes": 1080,
+      "sha256": "5d49e66411a0807a7c8d6b911b9a26b59e940c71aebe561a3ad8b0b80ac4b7b6",
+      "original_source_url": "https://raw.githubusercontent.com/stephenberry/glaze/v6.4.0/LICENSE",
+      "source_commit": "3a850807501d98d23bab4bdc5af64d8d4e83e6bc"
+    },
+    {
+      "file": "raw_pdb_BSD.txt",
+      "component": "raw_pdb",
+      "source_url": "https://raw.githubusercontent.com/MolecularMatters/raw_pdb/8c6a7146393c83d27fa101e8bc8017f2a7f151df/LICENSE",
+      "version_or_ref": "8c6a7146393c83d27fa101e8bc8017f2a7f151df",
+      "role": "license",
+      "bytes": 1389,
+      "sha256": "c44b526e4d03c1a7cbf6418e0183a62c7b57714dd7ee55204e1e35b146246634",
+      "source_commit": "8c6a7146393c83d27fa101e8bc8017f2a7f151df"
+    },
+    {
+      "file": "rust/adler2-2.0.1/LICENSE-0BSD",
+      "component": "adler2 2.0.1",
+      "source_url": "https://static.crates.io/crates/adler2/adler2-2.0.1.crate",
+      "version_or_ref": "2.0.1",
+      "role": "license",
+      "bytes": 665,
+      "sha256": "861399f8c21c042b110517e76dc6b63a2b334276c8cf17412fc3c8908ca8dc17",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-0BSD"
+    },
+    {
+      "file": "rust/adler2-2.0.1/LICENSE-APACHE",
+      "component": "adler2 2.0.1",
+      "source_url": "https://static.crates.io/crates/adler2/adler2-2.0.1.crate",
+      "version_or_ref": "2.0.1",
+      "role": "license",
+      "bytes": 10860,
+      "sha256": "8ada45cd9f843acf64e4722ae262c622a2b3b3007c7310ef36ac1061a30f6adb",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/adler2-2.0.1/LICENSE-MIT",
+      "component": "adler2 2.0.1",
+      "source_url": "https://static.crates.io/crates/adler2/adler2-2.0.1.crate",
+      "version_or_ref": "2.0.1",
+      "role": "license",
+      "bytes": 1023,
+      "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/anyhow-1.0.99/LICENSE-APACHE",
+      "component": "anyhow 1.0.99",
+      "source_url": "https://static.crates.io/crates/anyhow/anyhow-1.0.99.crate",
+      "version_or_ref": "1.0.99",
+      "role": "license",
+      "bytes": 9723,
+      "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/anyhow-1.0.99/LICENSE-MIT",
+      "component": "anyhow 1.0.99",
+      "source_url": "https://static.crates.io/crates/anyhow/anyhow-1.0.99.crate",
+      "version_or_ref": "1.0.99",
+      "role": "license",
+      "bytes": 1023,
+      "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/autocfg-1.5.0/LICENSE-APACHE",
+      "component": "autocfg 1.5.0",
+      "source_url": "https://static.crates.io/crates/autocfg/autocfg-1.5.0.crate",
+      "version_or_ref": "1.5.0",
+      "role": "license",
+      "bytes": 10847,
+      "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/autocfg-1.5.0/LICENSE-MIT",
+      "component": "autocfg 1.5.0",
+      "source_url": "https://static.crates.io/crates/autocfg/autocfg-1.5.0.crate",
+      "version_or_ref": "1.5.0",
+      "role": "license",
+      "bytes": 1054,
+      "sha256": "27995d58ad5c1145c1a8cd86244ce844886958a35eb2b78c6b772748669999ac",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/bitflags-2.9.2/LICENSE-APACHE",
+      "component": "bitflags 2.9.2",
+      "source_url": "https://static.crates.io/crates/bitflags/bitflags-2.9.2.crate",
+      "version_or_ref": "2.9.2",
+      "role": "license",
+      "bytes": 10847,
+      "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/bitflags-2.9.2/LICENSE-MIT",
+      "component": "bitflags 2.9.2",
+      "source_url": "https://static.crates.io/crates/bitflags/bitflags-2.9.2.crate",
+      "version_or_ref": "2.9.2",
+      "role": "license",
+      "bytes": 1071,
+      "sha256": "6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/byteorder-1.5.0/COPYING",
+      "component": "byteorder 1.5.0",
+      "source_url": "https://static.crates.io/crates/byteorder/byteorder-1.5.0.crate",
+      "version_or_ref": "1.5.0",
+      "role": "license",
+      "bytes": 126,
+      "sha256": "01c266bced4a434da0051174d6bee16a4c82cf634e2679b6155d40d75012390f",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: COPYING"
+    },
+    {
+      "file": "rust/byteorder-1.5.0/LICENSE-MIT",
+      "component": "byteorder 1.5.0",
+      "source_url": "https://static.crates.io/crates/byteorder/byteorder-1.5.0.crate",
+      "version_or_ref": "1.5.0",
+      "role": "license",
+      "bytes": 1081,
+      "sha256": "0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/byteorder-1.5.0/UNLICENSE",
+      "component": "byteorder 1.5.0",
+      "source_url": "https://static.crates.io/crates/byteorder/byteorder-1.5.0.crate",
+      "version_or_ref": "1.5.0",
+      "role": "license",
+      "bytes": 1211,
+      "sha256": "7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: UNLICENSE"
+    },
+    {
+      "file": "rust/cfg-if-1.0.3/LICENSE-APACHE",
+      "component": "cfg-if 1.0.3",
+      "source_url": "https://static.crates.io/crates/cfg-if/cfg-if-1.0.3.crate",
+      "version_or_ref": "1.0.3",
+      "role": "license",
+      "bytes": 10847,
+      "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/cfg-if-1.0.3/LICENSE-MIT",
+      "component": "cfg-if 1.0.3",
+      "source_url": "https://static.crates.io/crates/cfg-if/cfg-if-1.0.3.crate",
+      "version_or_ref": "1.0.3",
+      "role": "license",
+      "bytes": 1057,
+      "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/crc32fast-1.5.0/LICENSE-APACHE",
+      "component": "crc32fast 1.5.0",
+      "source_url": "https://static.crates.io/crates/crc32fast/crc32fast-1.5.0.crate",
+      "version_or_ref": "1.5.0",
+      "role": "license",
+      "bytes": 11358,
+      "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/crc32fast-1.5.0/LICENSE-MIT",
+      "component": "crc32fast 1.5.0",
+      "source_url": "https://static.crates.io/crates/crc32fast/crc32fast-1.5.0.crate",
+      "version_or_ref": "1.5.0",
+      "role": "license",
+      "bytes": 1097,
+      "sha256": "61d383b05b87d78f94d2937e2580cce47226d17823c0430fbcad09596537efcf",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/crossbeam-channel-0.5.15/LICENSE-APACHE",
+      "component": "crossbeam-channel 0.5.15",
+      "source_url": "https://static.crates.io/crates/crossbeam-channel/crossbeam-channel-0.5.15.crate",
+      "version_or_ref": "0.5.15",
+      "role": "license",
+      "bytes": 10847,
+      "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/crossbeam-channel-0.5.15/LICENSE-MIT",
+      "component": "crossbeam-channel 0.5.15",
+      "source_url": "https://static.crates.io/crates/crossbeam-channel/crossbeam-channel-0.5.15.crate",
+      "version_or_ref": "0.5.15",
+      "role": "license",
+      "bytes": 1099,
+      "sha256": "5734ed989dfca1f625b40281ee9f4530f91b2411ec01cb748223e7eb87e201ab",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/crossbeam-channel-0.5.15/LICENSE-THIRD-PARTY",
+      "component": "crossbeam-channel 0.5.15",
+      "source_url": "https://static.crates.io/crates/crossbeam-channel/crossbeam-channel-0.5.15.crate",
+      "version_or_ref": "0.5.15",
+      "role": "license",
+      "bytes": 33447,
+      "sha256": "b16db96b93b1d7cf7bea533f572091ec6bca3234fbe0a83038be772ff391a44c",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-THIRD-PARTY"
+    },
+    {
+      "file": "rust/crossbeam-deque-0.8.6/LICENSE-APACHE",
+      "component": "crossbeam-deque 0.8.6",
+      "source_url": "https://static.crates.io/crates/crossbeam-deque/crossbeam-deque-0.8.6.crate",
+      "version_or_ref": "0.8.6",
+      "role": "license",
+      "bytes": 10847,
+      "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/crossbeam-deque-0.8.6/LICENSE-MIT",
+      "component": "crossbeam-deque 0.8.6",
+      "source_url": "https://static.crates.io/crates/crossbeam-deque/crossbeam-deque-0.8.6.crate",
+      "version_or_ref": "0.8.6",
+      "role": "license",
+      "bytes": 1099,
+      "sha256": "5734ed989dfca1f625b40281ee9f4530f91b2411ec01cb748223e7eb87e201ab",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/crossbeam-epoch-0.9.18/LICENSE-APACHE",
+      "component": "crossbeam-epoch 0.9.18",
+      "source_url": "https://static.crates.io/crates/crossbeam-epoch/crossbeam-epoch-0.9.18.crate",
+      "version_or_ref": "0.9.18",
+      "role": "license",
+      "bytes": 10847,
+      "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/crossbeam-epoch-0.9.18/LICENSE-MIT",
+      "component": "crossbeam-epoch 0.9.18",
+      "source_url": "https://static.crates.io/crates/crossbeam-epoch/crossbeam-epoch-0.9.18.crate",
+      "version_or_ref": "0.9.18",
+      "role": "license",
+      "bytes": 1099,
+      "sha256": "5734ed989dfca1f625b40281ee9f4530f91b2411ec01cb748223e7eb87e201ab",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/crossbeam-utils-0.8.21/LICENSE-APACHE",
+      "component": "crossbeam-utils 0.8.21",
+      "source_url": "https://static.crates.io/crates/crossbeam-utils/crossbeam-utils-0.8.21.crate",
+      "version_or_ref": "0.8.21",
+      "role": "license",
+      "bytes": 10847,
+      "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/crossbeam-utils-0.8.21/LICENSE-MIT",
+      "component": "crossbeam-utils 0.8.21",
+      "source_url": "https://static.crates.io/crates/crossbeam-utils/crossbeam-utils-0.8.21.crate",
+      "version_or_ref": "0.8.21",
+      "role": "license",
+      "bytes": 1099,
+      "sha256": "5734ed989dfca1f625b40281ee9f4530f91b2411ec01cb748223e7eb87e201ab",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/dashmap-5.5.3/LICENSE",
+      "component": "dashmap 5.5.3",
+      "source_url": "https://static.crates.io/crates/dashmap/dashmap-5.5.3.crate",
+      "version_or_ref": "5.5.3",
+      "role": "license",
+      "bytes": 1064,
+      "sha256": "16692e8cee4aa06e3913787497eba2d47c42002014136f5da67be6ee640e28a3",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE"
+    },
+    {
+      "file": "rust/derive_more-0.99.20/LICENSE",
+      "component": "derive_more 0.99.20",
+      "source_url": "https://static.crates.io/crates/derive_more/derive_more-0.99.20.crate",
+      "version_or_ref": "0.99.20",
+      "role": "license",
+      "bytes": 1080,
+      "sha256": "8a35369f3ca263b3c62fbb5032947e53b6bfebc6c8a4d1bb982de1c069f6fba5",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE"
+    },
+    {
+      "file": "rust/either-1.15.0/LICENSE-APACHE",
+      "component": "either 1.15.0",
+      "source_url": "https://static.crates.io/crates/either/either-1.15.0.crate",
+      "version_or_ref": "1.15.0",
+      "role": "license",
+      "bytes": 10847,
+      "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/either-1.15.0/LICENSE-MIT",
+      "component": "either 1.15.0",
+      "source_url": "https://static.crates.io/crates/either/either-1.15.0.crate",
+      "version_or_ref": "1.15.0",
+      "role": "license",
+      "bytes": 1043,
+      "sha256": "7576269ea71f767b99297934c0b2367532690f8c4badc695edf8e04ab6a1e545",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/flate2-1.1.2/LICENSE-APACHE",
+      "component": "flate2 1.1.2",
+      "source_url": "https://static.crates.io/crates/flate2/flate2-1.1.2.crate",
+      "version_or_ref": "1.1.2",
+      "role": "license",
+      "bytes": 10847,
+      "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/flate2-1.1.2/LICENSE-MIT",
+      "component": "flate2 1.1.2",
+      "source_url": "https://static.crates.io/crates/flate2/flate2-1.1.2.crate",
+      "version_or_ref": "1.1.2",
+      "role": "license",
+      "bytes": 1062,
+      "sha256": "75d3bf11a47fed60aee0a6cc56a97b896b470ee8fb52d6cd553bd8348337f422",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/futures-0.3.31/LICENSE-APACHE",
+      "component": "futures 0.3.31",
+      "source_url": "https://static.crates.io/crates/futures/futures-0.3.31.crate",
+      "version_or_ref": "0.3.31",
+      "role": "license",
+      "bytes": 10874,
+      "sha256": "275c491d6d1160553c32fd6127061d7f9606c3ea25abfad6ca3f6ed088785427",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/futures-0.3.31/LICENSE-MIT",
+      "component": "futures 0.3.31",
+      "source_url": "https://static.crates.io/crates/futures/futures-0.3.31.crate",
+      "version_or_ref": "0.3.31",
+      "role": "license",
+      "bytes": 1094,
+      "sha256": "6652c868f35dfe5e8ef636810a4e576b9d663f3a17fb0f5613ad73583e1b88fd",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/futures-channel-0.3.31/LICENSE-APACHE",
+      "component": "futures-channel 0.3.31",
+      "source_url": "https://static.crates.io/crates/futures-channel/futures-channel-0.3.31.crate",
+      "version_or_ref": "0.3.31",
+      "role": "license",
+      "bytes": 10874,
+      "sha256": "275c491d6d1160553c32fd6127061d7f9606c3ea25abfad6ca3f6ed088785427",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/futures-channel-0.3.31/LICENSE-MIT",
+      "component": "futures-channel 0.3.31",
+      "source_url": "https://static.crates.io/crates/futures-channel/futures-channel-0.3.31.crate",
+      "version_or_ref": "0.3.31",
+      "role": "license",
+      "bytes": 1094,
+      "sha256": "6652c868f35dfe5e8ef636810a4e576b9d663f3a17fb0f5613ad73583e1b88fd",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/futures-core-0.3.31/LICENSE-APACHE",
+      "component": "futures-core 0.3.31",
+      "source_url": "https://static.crates.io/crates/futures-core/futures-core-0.3.31.crate",
+      "version_or_ref": "0.3.31",
+      "role": "license",
+      "bytes": 10874,
+      "sha256": "275c491d6d1160553c32fd6127061d7f9606c3ea25abfad6ca3f6ed088785427",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/futures-core-0.3.31/LICENSE-MIT",
+      "component": "futures-core 0.3.31",
+      "source_url": "https://static.crates.io/crates/futures-core/futures-core-0.3.31.crate",
+      "version_or_ref": "0.3.31",
+      "role": "license",
+      "bytes": 1094,
+      "sha256": "6652c868f35dfe5e8ef636810a4e576b9d663f3a17fb0f5613ad73583e1b88fd",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/futures-executor-0.3.31/LICENSE-APACHE",
+      "component": "futures-executor 0.3.31",
+      "source_url": "https://static.crates.io/crates/futures-executor/futures-executor-0.3.31.crate",
+      "version_or_ref": "0.3.31",
+      "role": "license",
+      "bytes": 10874,
+      "sha256": "275c491d6d1160553c32fd6127061d7f9606c3ea25abfad6ca3f6ed088785427",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/futures-executor-0.3.31/LICENSE-MIT",
+      "component": "futures-executor 0.3.31",
+      "source_url": "https://static.crates.io/crates/futures-executor/futures-executor-0.3.31.crate",
+      "version_or_ref": "0.3.31",
+      "role": "license",
+      "bytes": 1094,
+      "sha256": "6652c868f35dfe5e8ef636810a4e576b9d663f3a17fb0f5613ad73583e1b88fd",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/futures-io-0.3.31/LICENSE-APACHE",
+      "component": "futures-io 0.3.31",
+      "source_url": "https://static.crates.io/crates/futures-io/futures-io-0.3.31.crate",
+      "version_or_ref": "0.3.31",
+      "role": "license",
+      "bytes": 10874,
+      "sha256": "275c491d6d1160553c32fd6127061d7f9606c3ea25abfad6ca3f6ed088785427",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/futures-io-0.3.31/LICENSE-MIT",
+      "component": "futures-io 0.3.31",
+      "source_url": "https://static.crates.io/crates/futures-io/futures-io-0.3.31.crate",
+      "version_or_ref": "0.3.31",
+      "role": "license",
+      "bytes": 1094,
+      "sha256": "6652c868f35dfe5e8ef636810a4e576b9d663f3a17fb0f5613ad73583e1b88fd",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/futures-macro-0.3.31/LICENSE-APACHE",
+      "component": "futures-macro 0.3.31",
+      "source_url": "https://static.crates.io/crates/futures-macro/futures-macro-0.3.31.crate",
+      "version_or_ref": "0.3.31",
+      "role": "license",
+      "bytes": 10874,
+      "sha256": "275c491d6d1160553c32fd6127061d7f9606c3ea25abfad6ca3f6ed088785427",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/futures-macro-0.3.31/LICENSE-MIT",
+      "component": "futures-macro 0.3.31",
+      "source_url": "https://static.crates.io/crates/futures-macro/futures-macro-0.3.31.crate",
+      "version_or_ref": "0.3.31",
+      "role": "license",
+      "bytes": 1094,
+      "sha256": "6652c868f35dfe5e8ef636810a4e576b9d663f3a17fb0f5613ad73583e1b88fd",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/futures-scopes-0.2.0/LICENSE",
+      "component": "futures-scopes 0.2.0",
+      "source_url": "https://static.crates.io/crates/futures-scopes/futures-scopes-0.2.0.crate",
+      "version_or_ref": "0.2.0",
+      "role": "license",
+      "bytes": 1071,
+      "sha256": "68af33cdcdf3c16005e906a2a4fd61ddf133e9d1feeaadda7549c6cd376b4c5a",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE"
+    },
+    {
+      "file": "rust/futures-sink-0.3.31/LICENSE-APACHE",
+      "component": "futures-sink 0.3.31",
+      "source_url": "https://static.crates.io/crates/futures-sink/futures-sink-0.3.31.crate",
+      "version_or_ref": "0.3.31",
+      "role": "license",
+      "bytes": 10874,
+      "sha256": "275c491d6d1160553c32fd6127061d7f9606c3ea25abfad6ca3f6ed088785427",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/futures-sink-0.3.31/LICENSE-MIT",
+      "component": "futures-sink 0.3.31",
+      "source_url": "https://static.crates.io/crates/futures-sink/futures-sink-0.3.31.crate",
+      "version_or_ref": "0.3.31",
+      "role": "license",
+      "bytes": 1094,
+      "sha256": "6652c868f35dfe5e8ef636810a4e576b9d663f3a17fb0f5613ad73583e1b88fd",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/futures-task-0.3.31/LICENSE-APACHE",
+      "component": "futures-task 0.3.31",
+      "source_url": "https://static.crates.io/crates/futures-task/futures-task-0.3.31.crate",
+      "version_or_ref": "0.3.31",
+      "role": "license",
+      "bytes": 10874,
+      "sha256": "275c491d6d1160553c32fd6127061d7f9606c3ea25abfad6ca3f6ed088785427",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/futures-task-0.3.31/LICENSE-MIT",
+      "component": "futures-task 0.3.31",
+      "source_url": "https://static.crates.io/crates/futures-task/futures-task-0.3.31.crate",
+      "version_or_ref": "0.3.31",
+      "role": "license",
+      "bytes": 1094,
+      "sha256": "6652c868f35dfe5e8ef636810a4e576b9d663f3a17fb0f5613ad73583e1b88fd",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/futures-util-0.3.31/LICENSE-APACHE",
+      "component": "futures-util 0.3.31",
+      "source_url": "https://static.crates.io/crates/futures-util/futures-util-0.3.31.crate",
+      "version_or_ref": "0.3.31",
+      "role": "license",
+      "bytes": 10874,
+      "sha256": "275c491d6d1160553c32fd6127061d7f9606c3ea25abfad6ca3f6ed088785427",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/futures-util-0.3.31/LICENSE-MIT",
+      "component": "futures-util 0.3.31",
+      "source_url": "https://static.crates.io/crates/futures-util/futures-util-0.3.31.crate",
+      "version_or_ref": "0.3.31",
+      "role": "license",
+      "bytes": 1094,
+      "sha256": "6652c868f35dfe5e8ef636810a4e576b9d663f3a17fb0f5613ad73583e1b88fd",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/hashbrown-0.14.5/LICENSE-APACHE",
+      "component": "hashbrown 0.14.5",
+      "source_url": "https://static.crates.io/crates/hashbrown/hashbrown-0.14.5.crate",
+      "version_or_ref": "0.14.5",
+      "role": "license",
+      "bytes": 10847,
+      "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/hashbrown-0.14.5/LICENSE-MIT",
+      "component": "hashbrown 0.14.5",
+      "source_url": "https://static.crates.io/crates/hashbrown/hashbrown-0.14.5.crate",
+      "version_or_ref": "0.14.5",
+      "role": "license",
+      "bytes": 1060,
+      "sha256": "ff8f68cb076caf8cefe7a6430d4ac086ce6af2ca8ce2c4e5a2004d4552ef52a2",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/heck-0.4.1/LICENSE-APACHE",
+      "component": "heck 0.4.1",
+      "source_url": "https://static.crates.io/crates/heck/heck-0.4.1.crate",
+      "version_or_ref": "0.4.1",
+      "role": "license",
+      "bytes": 10847,
+      "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/heck-0.4.1/LICENSE-MIT",
+      "component": "heck 0.4.1",
+      "source_url": "https://static.crates.io/crates/heck/heck-0.4.1.crate",
+      "version_or_ref": "0.4.1",
+      "role": "license",
+      "bytes": 1071,
+      "sha256": "7b63ecd5f1902af1b63729947373683c32745c16a10e8e6292e2e2dcd7e90ae0",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/iced-x86-1.21.0/LICENSE.txt",
+      "component": "iced-x86 1.21.0",
+      "source_url": "https://raw.githubusercontent.com/icedland/iced/c50f29b7bc305696895c075f3fc7719751426b12/LICENSE.txt",
+      "version_or_ref": "v1.21.0",
+      "role": "license",
+      "bytes": 1114,
+      "sha256": "93a47598376fd3f276b631e75149340087153c6ff1635a53c5790249e9124e2d",
+      "notes": "Matching upstream repository license; this file is omitted from the primary registry archive.",
+      "original_source_url": "https://raw.githubusercontent.com/icedland/iced/v1.21.0/LICENSE.txt",
+      "source_commit": "c50f29b7bc305696895c075f3fc7719751426b12"
+    },
+    {
+      "file": "rust/inventory-0.3.21/LICENSE-APACHE",
+      "component": "inventory 0.3.21",
+      "source_url": "https://static.crates.io/crates/inventory/inventory-0.3.21.crate",
+      "version_or_ref": "0.3.21",
+      "role": "license",
+      "bytes": 9723,
+      "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/inventory-0.3.21/LICENSE-MIT",
+      "component": "inventory 0.3.21",
+      "source_url": "https://static.crates.io/crates/inventory/inventory-0.3.21.crate",
+      "version_or_ref": "0.3.21",
+      "role": "license",
+      "bytes": 1023,
+      "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/itertools-0.12.1/LICENSE-APACHE",
+      "component": "itertools 0.12.1",
+      "source_url": "https://static.crates.io/crates/itertools/itertools-0.12.1.crate",
+      "version_or_ref": "0.12.1",
+      "role": "license",
+      "bytes": 10847,
+      "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/itertools-0.12.1/LICENSE-MIT",
+      "component": "itertools 0.12.1",
+      "source_url": "https://static.crates.io/crates/itertools/itertools-0.12.1.crate",
+      "version_or_ref": "0.12.1",
+      "role": "license",
+      "bytes": 1043,
+      "sha256": "7576269ea71f767b99297934c0b2367532690f8c4badc695edf8e04ab6a1e545",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/lazy_static-1.5.0/LICENSE-APACHE",
+      "component": "lazy_static 1.5.0",
+      "source_url": "https://static.crates.io/crates/lazy_static/lazy_static-1.5.0.crate",
+      "version_or_ref": "1.5.0",
+      "role": "license",
+      "bytes": 10847,
+      "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/lazy_static-1.5.0/LICENSE-MIT",
+      "component": "lazy_static 1.5.0",
+      "source_url": "https://static.crates.io/crates/lazy_static/lazy_static-1.5.0.crate",
+      "version_or_ref": "1.5.0",
+      "role": "license",
+      "bytes": 1071,
+      "sha256": "0621878e61f0d0fda054bcbe02df75192c28bde1ecc8289cbd86aeba2dd72720",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/libc-0.2.175/LICENSE-APACHE",
+      "component": "libc 0.2.175",
+      "source_url": "https://static.crates.io/crates/libc/libc-0.2.175.crate",
+      "version_or_ref": "0.2.175",
+      "role": "license",
+      "bytes": 9723,
+      "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/libc-0.2.175/LICENSE-MIT",
+      "component": "libc 0.2.175",
+      "source_url": "https://static.crates.io/crates/libc/libc-0.2.175.crate",
+      "version_or_ref": "0.2.175",
+      "role": "license",
+      "bytes": 1076,
+      "sha256": "a8d47ff51ca256f56a8932dba07660672dbfe3004257ca8de708aac1415937a1",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/lock_api-0.4.13/LICENSE-APACHE",
+      "component": "lock_api 0.4.13",
+      "source_url": "https://static.crates.io/crates/lock_api/lock_api-0.4.13.crate",
+      "version_or_ref": "0.4.13",
+      "role": "license",
+      "bytes": 10847,
+      "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/lock_api-0.4.13/LICENSE-MIT",
+      "component": "lock_api 0.4.13",
+      "source_url": "https://static.crates.io/crates/lock_api/lock_api-0.4.13.crate",
+      "version_or_ref": "0.4.13",
+      "role": "license",
+      "bytes": 1071,
+      "sha256": "c9a75f18b9ab2927829a208fc6aa2cf4e63b8420887ba29cdb265d6619ae82d5",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/memchr-2.7.5/COPYING",
+      "component": "memchr 2.7.5",
+      "source_url": "https://static.crates.io/crates/memchr/memchr-2.7.5.crate",
+      "version_or_ref": "2.7.5",
+      "role": "license",
+      "bytes": 126,
+      "sha256": "01c266bced4a434da0051174d6bee16a4c82cf634e2679b6155d40d75012390f",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: COPYING"
+    },
+    {
+      "file": "rust/memchr-2.7.5/LICENSE-MIT",
+      "component": "memchr 2.7.5",
+      "source_url": "https://static.crates.io/crates/memchr/memchr-2.7.5.crate",
+      "version_or_ref": "2.7.5",
+      "role": "license",
+      "bytes": 1081,
+      "sha256": "0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/memchr-2.7.5/UNLICENSE",
+      "component": "memchr 2.7.5",
+      "source_url": "https://static.crates.io/crates/memchr/memchr-2.7.5.crate",
+      "version_or_ref": "2.7.5",
+      "role": "license",
+      "bytes": 1211,
+      "sha256": "7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: UNLICENSE"
+    },
+    {
+      "file": "rust/miniz_oxide-0.8.9/LICENSE",
+      "component": "miniz_oxide 0.8.9",
+      "source_url": "https://static.crates.io/crates/miniz_oxide/miniz_oxide-0.8.9.crate",
+      "version_or_ref": "0.8.9",
+      "role": "license",
+      "bytes": 1213,
+      "sha256": "4108245a1f2df9d4e94df8abed5b4ba0759bb2f9b40a6b939f1be141077ae50b",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE"
+    },
+    {
+      "file": "rust/miniz_oxide-0.8.9/LICENSE-APACHE.md",
+      "component": "miniz_oxide 0.8.9",
+      "source_url": "https://static.crates.io/crates/miniz_oxide/miniz_oxide-0.8.9.crate",
+      "version_or_ref": "0.8.9",
+      "role": "license",
+      "bytes": 10174,
+      "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE.md"
+    },
+    {
+      "file": "rust/miniz_oxide-0.8.9/LICENSE-MIT.md",
+      "component": "miniz_oxide 0.8.9",
+      "source_url": "https://static.crates.io/crates/miniz_oxide/miniz_oxide-0.8.9.crate",
+      "version_or_ref": "0.8.9",
+      "role": "license",
+      "bytes": 1212,
+      "sha256": "799e9ca9d179295ef372f25d3769cdda7d25bb2668add6a6a1e22d1e4c678b8d",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT.md"
+    },
+    {
+      "file": "rust/miniz_oxide-0.8.9/LICENSE-ZLIB.md",
+      "component": "miniz_oxide 0.8.9",
+      "source_url": "https://static.crates.io/crates/miniz_oxide/miniz_oxide-0.8.9.crate",
+      "version_or_ref": "0.8.9",
+      "role": "license",
+      "bytes": 984,
+      "sha256": "0a54e647fe54104658b5e563c04c6f9edf251710e47bce692e0bd990a4ddaa39",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-ZLIB.md"
+    },
+    {
+      "file": "rust/object-0.32.2/LICENSE-APACHE",
+      "component": "object 0.32.2",
+      "source_url": "https://static.crates.io/crates/object/object-0.32.2.crate",
+      "version_or_ref": "0.32.2",
+      "role": "license",
+      "bytes": 10847,
+      "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/object-0.32.2/LICENSE-MIT",
+      "component": "object 0.32.2",
+      "source_url": "https://static.crates.io/crates/object/object-0.32.2.crate",
+      "version_or_ref": "0.32.2",
+      "role": "license",
+      "bytes": 1064,
+      "sha256": "0b74dfa0bcee5c420c6b7f67b4b2658f9ab8388c97b8e733975f2cecbdd668a6",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/once_cell-1.21.3/LICENSE-APACHE",
+      "component": "once_cell 1.21.3",
+      "source_url": "https://static.crates.io/crates/once_cell/once_cell-1.21.3.crate",
+      "version_or_ref": "1.21.3",
+      "role": "license",
+      "bytes": 10847,
+      "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/once_cell-1.21.3/LICENSE-MIT",
+      "component": "once_cell 1.21.3",
+      "source_url": "https://static.crates.io/crates/once_cell/once_cell-1.21.3.crate",
+      "version_or_ref": "1.21.3",
+      "role": "license",
+      "bytes": 1023,
+      "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/parking_lot_core-0.9.11/LICENSE-APACHE",
+      "component": "parking_lot_core 0.9.11",
+      "source_url": "https://static.crates.io/crates/parking_lot_core/parking_lot_core-0.9.11.crate",
+      "version_or_ref": "0.9.11",
+      "role": "license",
+      "bytes": 10847,
+      "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/parking_lot_core-0.9.11/LICENSE-MIT",
+      "component": "parking_lot_core 0.9.11",
+      "source_url": "https://static.crates.io/crates/parking_lot_core/parking_lot_core-0.9.11.crate",
+      "version_or_ref": "0.9.11",
+      "role": "license",
+      "bytes": 1071,
+      "sha256": "c9a75f18b9ab2927829a208fc6aa2cf4e63b8420887ba29cdb265d6619ae82d5",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/paste-1.0.15/LICENSE-APACHE",
+      "component": "paste 1.0.15",
+      "source_url": "https://static.crates.io/crates/paste/paste-1.0.15.crate",
+      "version_or_ref": "1.0.15",
+      "role": "license",
+      "bytes": 9723,
+      "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/paste-1.0.15/LICENSE-MIT",
+      "component": "paste 1.0.15",
+      "source_url": "https://static.crates.io/crates/paste/paste-1.0.15.crate",
+      "version_or_ref": "1.0.15",
+      "role": "license",
+      "bytes": 1023,
+      "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/pin-project-1.1.10/LICENSE-APACHE",
+      "component": "pin-project 1.1.10",
+      "source_url": "https://static.crates.io/crates/pin-project/pin-project-1.1.10.crate",
+      "version_or_ref": "1.1.10",
+      "role": "license",
+      "bytes": 10174,
+      "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/pin-project-1.1.10/LICENSE-MIT",
+      "component": "pin-project 1.1.10",
+      "source_url": "https://static.crates.io/crates/pin-project/pin-project-1.1.10.crate",
+      "version_or_ref": "1.1.10",
+      "role": "license",
+      "bytes": 1023,
+      "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/pin-project-internal-1.1.10/LICENSE-APACHE",
+      "component": "pin-project-internal 1.1.10",
+      "source_url": "https://static.crates.io/crates/pin-project-internal/pin-project-internal-1.1.10.crate",
+      "version_or_ref": "1.1.10",
+      "role": "license",
+      "bytes": 10174,
+      "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/pin-project-internal-1.1.10/LICENSE-MIT",
+      "component": "pin-project-internal 1.1.10",
+      "source_url": "https://static.crates.io/crates/pin-project-internal/pin-project-internal-1.1.10.crate",
+      "version_or_ref": "1.1.10",
+      "role": "license",
+      "bytes": 1023,
+      "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/pin-project-lite-0.2.16/LICENSE-APACHE",
+      "component": "pin-project-lite 0.2.16",
+      "source_url": "https://static.crates.io/crates/pin-project-lite/pin-project-lite-0.2.16.crate",
+      "version_or_ref": "0.2.16",
+      "role": "license",
+      "bytes": 10174,
+      "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/pin-project-lite-0.2.16/LICENSE-MIT",
+      "component": "pin-project-lite 0.2.16",
+      "source_url": "https://static.crates.io/crates/pin-project-lite/pin-project-lite-0.2.16.crate",
+      "version_or_ref": "0.2.16",
+      "role": "license",
+      "bytes": 1023,
+      "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/pin-utils-0.1.0/LICENSE-APACHE",
+      "component": "pin-utils 0.1.0",
+      "source_url": "https://static.crates.io/crates/pin-utils/pin-utils-0.1.0.crate",
+      "version_or_ref": "0.1.0",
+      "role": "license",
+      "bytes": 10841,
+      "sha256": "a4db788775cb25f2da419a7ccd3f1f89c3d2cfa8748fb25257596b88183b4c77",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/pin-utils-0.1.0/LICENSE-MIT",
+      "component": "pin-utils 0.1.0",
+      "source_url": "https://static.crates.io/crates/pin-utils/pin-utils-0.1.0.crate",
+      "version_or_ref": "0.1.0",
+      "role": "license",
+      "bytes": 1065,
+      "sha256": "28802412d2bfbafe432b305634413b41a984d30fba0df41d30aa2c8a2077c5b1",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/proc-macro2-1.0.101/LICENSE-APACHE",
+      "component": "proc-macro2 1.0.101",
+      "source_url": "https://static.crates.io/crates/proc-macro2/proc-macro2-1.0.101.crate",
+      "version_or_ref": "1.0.101",
+      "role": "license",
+      "bytes": 9723,
+      "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/proc-macro2-1.0.101/LICENSE-MIT",
+      "component": "proc-macro2 1.0.101",
+      "source_url": "https://static.crates.io/crates/proc-macro2/proc-macro2-1.0.101.crate",
+      "version_or_ref": "1.0.101",
+      "role": "license",
+      "bytes": 1023,
+      "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/quote-1.0.40/LICENSE-APACHE",
+      "component": "quote 1.0.40",
+      "source_url": "https://static.crates.io/crates/quote/quote-1.0.40.crate",
+      "version_or_ref": "1.0.40",
+      "role": "license",
+      "bytes": 9723,
+      "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/quote-1.0.40/LICENSE-MIT",
+      "component": "quote 1.0.40",
+      "source_url": "https://static.crates.io/crates/quote/quote-1.0.40.crate",
+      "version_or_ref": "1.0.40",
+      "role": "license",
+      "bytes": 1023,
+      "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/rayon-1.11.0/LICENSE-APACHE",
+      "component": "rayon 1.11.0",
+      "source_url": "https://static.crates.io/crates/rayon/rayon-1.11.0.crate",
+      "version_or_ref": "1.11.0",
+      "role": "license",
+      "bytes": 10847,
+      "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/rayon-1.11.0/LICENSE-MIT",
+      "component": "rayon 1.11.0",
+      "source_url": "https://static.crates.io/crates/rayon/rayon-1.11.0.crate",
+      "version_or_ref": "1.11.0",
+      "role": "license",
+      "bytes": 1071,
+      "sha256": "0621878e61f0d0fda054bcbe02df75192c28bde1ecc8289cbd86aeba2dd72720",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/rayon-core-1.13.0/LICENSE-APACHE",
+      "component": "rayon-core 1.13.0",
+      "source_url": "https://static.crates.io/crates/rayon-core/rayon-core-1.13.0.crate",
+      "version_or_ref": "1.13.0",
+      "role": "license",
+      "bytes": 10847,
+      "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/rayon-core-1.13.0/LICENSE-MIT",
+      "component": "rayon-core 1.13.0",
+      "source_url": "https://static.crates.io/crates/rayon-core/rayon-core-1.13.0.crate",
+      "version_or_ref": "1.13.0",
+      "role": "license",
+      "bytes": 1071,
+      "sha256": "0621878e61f0d0fda054bcbe02df75192c28bde1ecc8289cbd86aeba2dd72720",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/redox_syscall-0.5.17/LICENSE",
+      "component": "redox_syscall 0.5.17",
+      "source_url": "https://static.crates.io/crates/redox_syscall/redox_syscall-0.5.17.crate",
+      "version_or_ref": "0.5.17",
+      "role": "license",
+      "bytes": 1076,
+      "sha256": "efcfee7981ff72431fffb06925cad00a23dce079ed4354f61030ad5abdb78829",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE"
+    },
+    {
+      "file": "rust/rustversion-1.0.22/LICENSE-APACHE",
+      "component": "rustversion 1.0.22",
+      "source_url": "https://static.crates.io/crates/rustversion/rustversion-1.0.22.crate",
+      "version_or_ref": "1.0.22",
+      "role": "license",
+      "bytes": 9723,
+      "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/rustversion-1.0.22/LICENSE-MIT",
+      "component": "rustversion 1.0.22",
+      "source_url": "https://static.crates.io/crates/rustversion/rustversion-1.0.22.crate",
+      "version_or_ref": "1.0.22",
+      "role": "license",
+      "bytes": 1023,
+      "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/ruzstd-0.5.0/LICENSE",
+      "component": "ruzstd 0.5.0",
+      "source_url": "https://static.crates.io/crates/ruzstd/ruzstd-0.5.0.crate",
+      "version_or_ref": "0.5.0",
+      "role": "license",
+      "bytes": 1075,
+      "sha256": "d715eb0d9cfe1cc0cc22577e387436aa568b31ca272a7c837004dc0cdde925b5",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE"
+    },
+    {
+      "file": "rust/scopeguard-1.2.0/LICENSE-APACHE",
+      "component": "scopeguard 1.2.0",
+      "source_url": "https://static.crates.io/crates/scopeguard/scopeguard-1.2.0.crate",
+      "version_or_ref": "1.2.0",
+      "role": "license",
+      "bytes": 10847,
+      "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/scopeguard-1.2.0/LICENSE-MIT",
+      "component": "scopeguard 1.2.0",
+      "source_url": "https://static.crates.io/crates/scopeguard/scopeguard-1.2.0.crate",
+      "version_or_ref": "1.2.0",
+      "role": "license",
+      "bytes": 1097,
+      "sha256": "fb77f0a9c53e473abe5103c8632ef9f0f2874d4fb3f17cb2d8c661aab9cee9d7",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/slab-0.4.11/LICENSE",
+      "component": "slab 0.4.11",
+      "source_url": "https://static.crates.io/crates/slab/slab-0.4.11.crate",
+      "version_or_ref": "0.4.11",
+      "role": "license",
+      "bytes": 1055,
+      "sha256": "8ce0830173fdac609dfb4ea603fdc002c2f4af0dc9b1a005653f5da9cf534b18",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE"
+    },
+    {
+      "file": "rust/smallvec-1.15.1/LICENSE-APACHE",
+      "component": "smallvec 1.15.1",
+      "source_url": "https://static.crates.io/crates/smallvec/smallvec-1.15.1.crate",
+      "version_or_ref": "1.15.1",
+      "role": "license",
+      "bytes": 10847,
+      "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/smallvec-1.15.1/LICENSE-MIT",
+      "component": "smallvec 1.15.1",
+      "source_url": "https://static.crates.io/crates/smallvec/smallvec-1.15.1.crate",
+      "version_or_ref": "1.15.1",
+      "role": "license",
+      "bytes": 1072,
+      "sha256": "0b28172679e0009b655da42797c03fd163a3379d5cfa67ba1f1655e974a2a1a9",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/static_assertions-1.1.0/LICENSE-APACHE",
+      "component": "static_assertions 1.1.0",
+      "source_url": "https://static.crates.io/crates/static_assertions/static_assertions-1.1.0.crate",
+      "version_or_ref": "1.1.0",
+      "role": "license",
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/static_assertions-1.1.0/LICENSE-MIT",
+      "component": "static_assertions 1.1.0",
+      "source_url": "https://static.crates.io/crates/static_assertions/static_assertions-1.1.0.crate",
+      "version_or_ref": "1.1.0",
+      "role": "license",
+      "bytes": 1072,
+      "sha256": "ea084a2373ebc1f0902c09266e7bf25a05ab3814c1805bb017ffa7308f90c061",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/strum-0.25.0/LICENSE",
+      "component": "strum 0.25.0",
+      "source_url": "https://static.crates.io/crates/strum/strum-0.25.0.crate",
+      "version_or_ref": "0.25.0",
+      "role": "license",
+      "bytes": 1072,
+      "sha256": "8bce3b45e49ecd1461f223b46de133d8f62cd39f745cfdaf81bee554b908bd42",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE"
+    },
+    {
+      "file": "rust/strum_macros-0.25.3/LICENSE",
+      "component": "strum_macros 0.25.3",
+      "source_url": "https://static.crates.io/crates/strum_macros/strum_macros-0.25.3.crate",
+      "version_or_ref": "0.25.3",
+      "role": "license",
+      "bytes": 1072,
+      "sha256": "8bce3b45e49ecd1461f223b46de133d8f62cd39f745cfdaf81bee554b908bd42",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE"
+    },
+    {
+      "file": "rust/syn-2.0.106/LICENSE-APACHE",
+      "component": "syn 2.0.106",
+      "source_url": "https://static.crates.io/crates/syn/syn-2.0.106.crate",
+      "version_or_ref": "2.0.106",
+      "role": "license",
+      "bytes": 9723,
+      "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/syn-2.0.106/LICENSE-MIT",
+      "component": "syn 2.0.106",
+      "source_url": "https://static.crates.io/crates/syn/syn-2.0.106.crate",
+      "version_or_ref": "2.0.106",
+      "role": "license",
+      "bytes": 1023,
+      "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/tracing-0.1.41/LICENSE",
+      "component": "tracing 0.1.41",
+      "source_url": "https://static.crates.io/crates/tracing/tracing-0.1.41.crate",
+      "version_or_ref": "0.1.41",
+      "role": "license",
+      "bytes": 1062,
+      "sha256": "898b1ae9821e98daf8964c8d6c7f61641f5f5aa78ad500020771c0939ee0dea1",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE"
+    },
+    {
+      "file": "rust/tracing-attributes-0.1.30/LICENSE",
+      "component": "tracing-attributes 0.1.30",
+      "source_url": "https://static.crates.io/crates/tracing-attributes/tracing-attributes-0.1.30.crate",
+      "version_or_ref": "0.1.30",
+      "role": "license",
+      "bytes": 1062,
+      "sha256": "898b1ae9821e98daf8964c8d6c7f61641f5f5aa78ad500020771c0939ee0dea1",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE"
+    },
+    {
+      "file": "rust/tracing-core-0.1.34/LICENSE",
+      "component": "tracing-core 0.1.34",
+      "source_url": "https://static.crates.io/crates/tracing-core/tracing-core-0.1.34.crate",
+      "version_or_ref": "0.1.34",
+      "role": "license",
+      "bytes": 1062,
+      "sha256": "898b1ae9821e98daf8964c8d6c7f61641f5f5aa78ad500020771c0939ee0dea1",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE"
+    },
+    {
+      "file": "rust/tracing-core-0.1.34/src_spin_LICENSE",
+      "component": "tracing-core 0.1.34",
+      "source_url": "https://static.crates.io/crates/tracing-core/tracing-core-0.1.34.crate",
+      "version_or_ref": "0.1.34",
+      "role": "license",
+      "bytes": 1085,
+      "sha256": "58545fed1565e42d687aecec6897d35c6d37ccb71479a137c0deb2203e125c79",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: src/spin/LICENSE"
+    },
+    {
+      "file": "rust/twox-hash-1.6.3/LICENSE.txt",
+      "component": "twox-hash 1.6.3",
+      "source_url": "https://static.crates.io/crates/twox-hash/twox-hash-1.6.3.crate",
+      "version_or_ref": "1.6.3",
+      "role": "license",
+      "bytes": 1080,
+      "sha256": "f59bcb1c02654665f78a5f290bae76b6358137675f6459f51e6d474a4623d8ea",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE.txt"
+    },
+    {
+      "file": "rust/unicode-ident-1.0.18/LICENSE-APACHE",
+      "component": "unicode-ident 1.0.18",
+      "source_url": "https://static.crates.io/crates/unicode-ident/unicode-ident-1.0.18.crate",
+      "version_or_ref": "1.0.18",
+      "role": "license",
+      "bytes": 9723,
+      "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-APACHE"
+    },
+    {
+      "file": "rust/unicode-ident-1.0.18/LICENSE-MIT",
+      "component": "unicode-ident 1.0.18",
+      "source_url": "https://static.crates.io/crates/unicode-ident/unicode-ident-1.0.18.crate",
+      "version_or_ref": "1.0.18",
+      "role": "license",
+      "bytes": 1023,
+      "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-MIT"
+    },
+    {
+      "file": "rust/unicode-ident-1.0.18/LICENSE-UNICODE",
+      "component": "unicode-ident 1.0.18",
+      "source_url": "https://static.crates.io/crates/unicode-ident/unicode-ident-1.0.18.crate",
+      "version_or_ref": "1.0.18",
+      "role": "license",
+      "bytes": 1995,
+      "sha256": "f7db81051789b729fea528a63ec4c938fdcb93d9d61d97dc8cc2e9df6d47f2a1",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: LICENSE-UNICODE"
+    },
+    {
+      "file": "rust/windows-0.52.0/license-apache-2.0",
+      "component": "windows 0.52.0",
+      "source_url": "https://static.crates.io/crates/windows/windows-0.52.0.crate",
+      "version_or_ref": "0.52.0",
+      "role": "license",
+      "bytes": 11351,
+      "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: license-apache-2.0"
+    },
+    {
+      "file": "rust/windows-0.52.0/license-mit",
+      "component": "windows 0.52.0",
+      "source_url": "https://static.crates.io/crates/windows/windows-0.52.0.crate",
+      "version_or_ref": "0.52.0",
+      "role": "license",
+      "bytes": 1141,
+      "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: license-mit"
+    },
+    {
+      "file": "rust/windows-core-0.52.0/license-apache-2.0",
+      "component": "windows-core 0.52.0",
+      "source_url": "https://static.crates.io/crates/windows-core/windows-core-0.52.0.crate",
+      "version_or_ref": "0.52.0",
+      "role": "license",
+      "bytes": 11351,
+      "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: license-apache-2.0"
+    },
+    {
+      "file": "rust/windows-core-0.52.0/license-mit",
+      "component": "windows-core 0.52.0",
+      "source_url": "https://static.crates.io/crates/windows-core/windows-core-0.52.0.crate",
+      "version_or_ref": "0.52.0",
+      "role": "license",
+      "bytes": 1141,
+      "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: license-mit"
+    },
+    {
+      "file": "rust/windows-targets-0.52.6/license-apache-2.0",
+      "component": "windows-targets 0.52.6",
+      "source_url": "https://static.crates.io/crates/windows-targets/windows-targets-0.52.6.crate",
+      "version_or_ref": "0.52.6",
+      "role": "license",
+      "bytes": 11351,
+      "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: license-apache-2.0"
+    },
+    {
+      "file": "rust/windows-targets-0.52.6/license-mit",
+      "component": "windows-targets 0.52.6",
+      "source_url": "https://static.crates.io/crates/windows-targets/windows-targets-0.52.6.crate",
+      "version_or_ref": "0.52.6",
+      "role": "license",
+      "bytes": 1141,
+      "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: license-mit"
+    },
+    {
+      "file": "rust/windows_aarch64_gnullvm-0.52.6/license-apache-2.0",
+      "component": "windows_aarch64_gnullvm 0.52.6",
+      "source_url": "https://static.crates.io/crates/windows_aarch64_gnullvm/windows_aarch64_gnullvm-0.52.6.crate",
+      "version_or_ref": "0.52.6",
+      "role": "license",
+      "bytes": 11351,
+      "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: license-apache-2.0"
+    },
+    {
+      "file": "rust/windows_aarch64_gnullvm-0.52.6/license-mit",
+      "component": "windows_aarch64_gnullvm 0.52.6",
+      "source_url": "https://static.crates.io/crates/windows_aarch64_gnullvm/windows_aarch64_gnullvm-0.52.6.crate",
+      "version_or_ref": "0.52.6",
+      "role": "license",
+      "bytes": 1141,
+      "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: license-mit"
+    },
+    {
+      "file": "rust/windows_aarch64_msvc-0.52.6/license-apache-2.0",
+      "component": "windows_aarch64_msvc 0.52.6",
+      "source_url": "https://static.crates.io/crates/windows_aarch64_msvc/windows_aarch64_msvc-0.52.6.crate",
+      "version_or_ref": "0.52.6",
+      "role": "license",
+      "bytes": 11351,
+      "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: license-apache-2.0"
+    },
+    {
+      "file": "rust/windows_aarch64_msvc-0.52.6/license-mit",
+      "component": "windows_aarch64_msvc 0.52.6",
+      "source_url": "https://static.crates.io/crates/windows_aarch64_msvc/windows_aarch64_msvc-0.52.6.crate",
+      "version_or_ref": "0.52.6",
+      "role": "license",
+      "bytes": 1141,
+      "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: license-mit"
+    },
+    {
+      "file": "rust/windows_i686_gnu-0.52.6/license-apache-2.0",
+      "component": "windows_i686_gnu 0.52.6",
+      "source_url": "https://static.crates.io/crates/windows_i686_gnu/windows_i686_gnu-0.52.6.crate",
+      "version_or_ref": "0.52.6",
+      "role": "license",
+      "bytes": 11351,
+      "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: license-apache-2.0"
+    },
+    {
+      "file": "rust/windows_i686_gnu-0.52.6/license-mit",
+      "component": "windows_i686_gnu 0.52.6",
+      "source_url": "https://static.crates.io/crates/windows_i686_gnu/windows_i686_gnu-0.52.6.crate",
+      "version_or_ref": "0.52.6",
+      "role": "license",
+      "bytes": 1141,
+      "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: license-mit"
+    },
+    {
+      "file": "rust/windows_i686_gnullvm-0.52.6/license-apache-2.0",
+      "component": "windows_i686_gnullvm 0.52.6",
+      "source_url": "https://static.crates.io/crates/windows_i686_gnullvm/windows_i686_gnullvm-0.52.6.crate",
+      "version_or_ref": "0.52.6",
+      "role": "license",
+      "bytes": 11351,
+      "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: license-apache-2.0"
+    },
+    {
+      "file": "rust/windows_i686_gnullvm-0.52.6/license-mit",
+      "component": "windows_i686_gnullvm 0.52.6",
+      "source_url": "https://static.crates.io/crates/windows_i686_gnullvm/windows_i686_gnullvm-0.52.6.crate",
+      "version_or_ref": "0.52.6",
+      "role": "license",
+      "bytes": 1141,
+      "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: license-mit"
+    },
+    {
+      "file": "rust/windows_i686_msvc-0.52.6/license-apache-2.0",
+      "component": "windows_i686_msvc 0.52.6",
+      "source_url": "https://static.crates.io/crates/windows_i686_msvc/windows_i686_msvc-0.52.6.crate",
+      "version_or_ref": "0.52.6",
+      "role": "license",
+      "bytes": 11351,
+      "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: license-apache-2.0"
+    },
+    {
+      "file": "rust/windows_i686_msvc-0.52.6/license-mit",
+      "component": "windows_i686_msvc 0.52.6",
+      "source_url": "https://static.crates.io/crates/windows_i686_msvc/windows_i686_msvc-0.52.6.crate",
+      "version_or_ref": "0.52.6",
+      "role": "license",
+      "bytes": 1141,
+      "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: license-mit"
+    },
+    {
+      "file": "rust/windows_x86_64_gnu-0.52.6/license-apache-2.0",
+      "component": "windows_x86_64_gnu 0.52.6",
+      "source_url": "https://static.crates.io/crates/windows_x86_64_gnu/windows_x86_64_gnu-0.52.6.crate",
+      "version_or_ref": "0.52.6",
+      "role": "license",
+      "bytes": 11351,
+      "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: license-apache-2.0"
+    },
+    {
+      "file": "rust/windows_x86_64_gnu-0.52.6/license-mit",
+      "component": "windows_x86_64_gnu 0.52.6",
+      "source_url": "https://static.crates.io/crates/windows_x86_64_gnu/windows_x86_64_gnu-0.52.6.crate",
+      "version_or_ref": "0.52.6",
+      "role": "license",
+      "bytes": 1141,
+      "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: license-mit"
+    },
+    {
+      "file": "rust/windows_x86_64_gnullvm-0.52.6/license-apache-2.0",
+      "component": "windows_x86_64_gnullvm 0.52.6",
+      "source_url": "https://static.crates.io/crates/windows_x86_64_gnullvm/windows_x86_64_gnullvm-0.52.6.crate",
+      "version_or_ref": "0.52.6",
+      "role": "license",
+      "bytes": 11351,
+      "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: license-apache-2.0"
+    },
+    {
+      "file": "rust/windows_x86_64_gnullvm-0.52.6/license-mit",
+      "component": "windows_x86_64_gnullvm 0.52.6",
+      "source_url": "https://static.crates.io/crates/windows_x86_64_gnullvm/windows_x86_64_gnullvm-0.52.6.crate",
+      "version_or_ref": "0.52.6",
+      "role": "license",
+      "bytes": 1141,
+      "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: license-mit"
+    },
+    {
+      "file": "rust/windows_x86_64_msvc-0.52.6/license-apache-2.0",
+      "component": "windows_x86_64_msvc 0.52.6",
+      "source_url": "https://static.crates.io/crates/windows_x86_64_msvc/windows_x86_64_msvc-0.52.6.crate",
+      "version_or_ref": "0.52.6",
+      "role": "license",
+      "bytes": 11351,
+      "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: license-apache-2.0"
+    },
+    {
+      "file": "rust/windows_x86_64_msvc-0.52.6/license-mit",
+      "component": "windows_x86_64_msvc 0.52.6",
+      "source_url": "https://static.crates.io/crates/windows_x86_64_msvc/windows_x86_64_msvc-0.52.6.crate",
+      "version_or_ref": "0.52.6",
+      "role": "license",
+      "bytes": 1141,
+      "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+      "notes": "License/notice extracted from the primary crates.io archive; archive SHA256 verified against Cargo.lock. Member: license-mit"
+    }
+  ],
+  "audit_notes": []
+}

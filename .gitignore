@@ -1,0 +1,21 @@
+# Local build outputs and release payloads
+/build/
+/runtime/
+/campaign-loader/
+/campaign-source/
+/Payload.zip
+/legacy_inventory.json
+*.exe
+*.dll
+*.pak
+*.zip
+*.obj
+*.pdb
+*.log
+__pycache__/
+
+# Generated synthetic fixtures and validation artifacts
+/tests/update_settings_*/
+/tests/loader_compatibility_*/
+/tests/fixtures_*/
+/tests/audit_*/

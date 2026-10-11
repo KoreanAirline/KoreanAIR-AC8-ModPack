@@ -1,0 +1,70 @@
+ACE COMBAT 8 Customization Suite — Third-Party Notices
+
+License scope
+-------------
+KoreanAIR_MIT.txt applies only to the independently written installer, launcher,
+loader, wrappers, and new additions. Copyright (c) 2026 KoreanAIR contributors.
+It does not replace the licenses or ownership of any third-party component.
+
+AC8 Mouse Aim
+-------------
+The original AC8 Mouse Aim code by FletcherMiya is declared CC0 1.0.
+See AC8MouseAim_CC0_Declaration.txt.
+https://github.com/FletcherMiya/AC8-Mouse-Aim
+
+MouseFlight reference
+---------------------
+MouseFlight by Brian Hernandez is MIT licensed. Its preserved copyright and
+permission notice are in MouseFlight_MIT.txt.
+https://github.com/brihernandez/MouseFlight
+
+Native hooking
+--------------
+MinHook v1.3.4 and Hacker Disassembler Engine are covered by the complete
+BSD notices in MinHook_BSD.txt, including Tsuda Kageyu and Vyacheslav Patkov.
+https://github.com/TsudaKageyu/minhook
+
+RE-UE4SS runtime, proxy and interface headers
+--------------------------------------------
+The supplied UE4SS.dll and dwmapi.dll injection proxy originate from RE-UE4SS.
+Runtime: UE4SS_v3.0.1-1152-ge3ba1016 (experimental-latest).
+Source revision: e3ba1016562d6c0868c410d0a71e88bfcdbf691b.
+RE-UE4SS is MIT licensed; see UE4SS_MIT.txt.
+https://github.com/UE4SS-RE/RE-UE4SS
+The LuaMadeSimple interface snapshot retains the UE4SS MIT notice. Existing
+header adaptations use explicit standard includes and std::format.
+
+Additional RE-UE4SS components
+-----------------------------
+This directory conservatively preserves licenses for the pinned runtime's
+known dependencies, including Dear ImGui, ImGuiColorTextEdit, IconFontCppHeaders,
+Lua 5.4.7, fmt, glaze, GLFW, glad/Khronos, PolyHook 2, AsmJit, AsmTk, Zydis,
+Zycore, raw_pdb, the optional Tracy profiler, and the USMapGenerator.
+The related full license files retain their upstream copyright notices.
+
+Embedded fonts
+--------------
+Font Awesome 5 Free Solid 5.15.4: see FontAwesome_Free_5.15.4.txt and
+OFL_1.1_Standard.txt. The applicable font license is SIL OFL 1.1.
+Roboto: see Roboto_OFL.txt. Roboto Mono: see RobotoMono_OFL.txt.
+Droid Sans Fallback: see Droid_Apache-2.0.txt and Droid_NOTICE.txt.
+Font copyright notices and any reserved font names remain governed by these
+licenses. Including these fonts does not transfer ownership to KoreanAIR.
+
+Rust scanning dependencies
+--------------------------
+patternsleuth and patternsleuth_scanner by trumank declare MIT OR Apache-2.0
+in Patternsleuth_License_Declaration.toml. Apache-2.0 terms are reproduced in
+Droid_Apache-2.0.txt. The runtime binding's lockfile is preserved as
+UE4SS_Patternsleuth_Cargo.lock. The rust/ directory contains full upstream
+notices extracted from every registry package in that lockfile. This is a
+conservative collection and includes optional, build, and alternate-platform
+packages; it is not a claim that every listed crate is present in the DLL.
+
+Source and verification records
+-------------------------------
+LICENSE_MANIFEST.json records source URLs, versions/revisions, file SHA256
+checksums, and source extraction details. RUST_PACKAGE_MANIFEST.json records
+registry license expressions and archive checksums verified against Cargo.lock.
+UE4SS_ThirdParty_Build_Pins.txt preserves the source build dependency pins.
+The full upstream license texts control the permissions for their components.
