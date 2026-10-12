@@ -11,7 +11,7 @@ using System.Web.Script.Serialization;
 
 [assembly:System.Reflection.AssemblyVersion("1.3.0.0")]
 [assembly:System.Reflection.AssemblyFileVersion("1.3.0.0")]
-[assembly:System.Reflection.AssemblyInformationalVersion("1.3+b2026101202")]
+[assembly:System.Reflection.AssemblyInformationalVersion("1.3+b2026101203")]
 [assembly:System.Reflection.AssemblyProduct("KoreanAIR AC8 Mod Pack")]
 
 namespace KoreanAIR {
@@ -26,7 +26,7 @@ public sealed class PackWriteException : IOException {
 }
 public static class Core {
  public const string Brand="KoreanAIR_AC8_ModPack_1.3";
- public const long ReleaseBuild=2026101202;
+ public const long ReleaseBuild=2026101203;
  public const string Folder="KoreanAIR_AC8_ModPack";
  public const string Mod="Game/Binaries/Win64/UE4SS/Mods/AC8MouseAim/";
  public const string CampaignLoader="Game/Binaries/Win64/dinput8.dll";
