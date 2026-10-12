@@ -30,6 +30,7 @@ prefix = r'''
 struct Features {bool mouse_flight=true;} pack_features;
 std::atomic<bool> zoom_enabled{true},zoom_requested{false},zoom_binding_blocked{false},free_look_binding_blocked{false},manual_free_look{false};
 std::atomic<int> free_look_binding{18},zoom_binding{2};
+std::atomic<float> zoom_magnification{1};
 std::atomic<bool> active{true},enabled{true},game_paused{false},gaze_active{false},hud_enabled{true},recenter_requested{false},reload_requested{false};
 ac8keys::Bindings key_bindings;ac8keys::Edges key_edges;
 bool key_bindings_initialized=false,free_look_key_blocked=false,free_look_key_pressed=false,focused=true;
@@ -59,7 +60,7 @@ int main(){
     require(zoom_requested.load(),"rapid third click requests zoom again");
     const float third=blend.step(zoom_requested.load(),.001f);
     require(third>=second&&third-second<.001f,"rapid reclick remains continuous");
-    focused=false;poll_mod_keys();require(!zoom_requested.load(),"focus loss cancels toggle");
+    zoom_magnification.store(2);focused=false;poll_mod_keys();require(!zoom_requested.load()&&zoom_magnification.load()==1,"focus loss cancels toggle and optical input");
     focused=true;poll_mod_keys();require(!zoom_requested.load(),"held button on refocus cannot restore old toggle");
     physical[2]=false;poll_mod_keys();physical[2]=true;poll_mod_keys();require(zoom_requested.load(),"fresh focused click activates zoom");
     configured_zoom=int('Z');physical['Z']=true;load_hud_keys();
@@ -69,7 +70,7 @@ int main(){
     require(!zoom_requested.load(),"old mouse binding no longer toggles");
     physical['Z']=true;poll_mod_keys();require(zoom_requested.load(),"fresh remapped keyboard click toggles");
     physical['Z']=false;poll_mod_keys();require(zoom_requested.load(),"remapped key release preserves toggle");
-    physical[18]=true;poll_mod_keys();require(!zoom_requested.load(),"ALT cancels toggle immediately");
+    zoom_magnification.store(8);physical[18]=true;poll_mod_keys();require(!zoom_requested.load()&&zoom_magnification.load()==1,"ALT cancels toggle and optical input immediately");
     physical[18]=false;poll_mod_keys();physical['Z']=true;poll_mod_keys();require(zoom_requested.load(),"new click after ALT activates");
     zoom_enabled.store(false);poll_mod_keys();require(!zoom_requested.load(),"live disable cancels toggle");zoom_enabled.store(true);
     physical['Z']=false;poll_mod_keys();physical['Z']=true;poll_mod_keys();game_paused.store(true);poll_mod_keys();require(!zoom_requested.load(),"pause cancels toggle");game_paused.store(false);

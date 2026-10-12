@@ -6,6 +6,7 @@ flight claim. The EXE admission executes without replacing any native helper.
 from pathlib import Path
 import ctypes
 import hashlib
+import json
 import subprocess
 import sys
 
@@ -21,6 +22,10 @@ while depth:
     depth += (source[end] == "{") - (source[end] == "}")
     end += 1
 sampler = source[start:end]
+start = source.index("for(int i=0;i<3;++i)trace.raw_before[i]=axes[i];")
+end = source.index("const auto* settings=", start)
+ownership = source[start:end]
+assert source.index("manual_rotation.retain_keyboard(axes,user_enabled);") < source.index("player_maneuver_sample=sample_player_maneuver(pawn,axes,settings,flags);")
 start = source.index("for(int i=0;i<3;++i) {", source.index("const bool held_axis[]={held_pitch,held_yaw,held_roll};"))
 end = source.index("{", start) + 1
 depth = 1
@@ -41,12 +46,13 @@ prefix = r'''
 #include "native_raw_input.h"
 #include "native_actuator.h"
 #include "native_maneuver_guard.h"
+#include "manual_rotation_input.h"
 native_input::RawOwnership native_raw;
 bool player_maneuver_code_verified=true;
 player_maneuver::Control control;
 auto& player_maneuver_control=control;
 native_maneuver::Guard maneuver_guard;
-struct Trace {double before[3]{};float raw_sent[3]{},predicted[3]{};unsigned mode=1u<<17;};
+struct Trace {double before[3]{};float raw_before[3]{},raw_sent[3]{},predicted[3]{};unsigned mode=1u<<17;};
 '''
 fixture = r'''
 extern "C" __declspec(dllexport) void reset_control(){control.reset();native_raw.reset();}
@@ -58,11 +64,14 @@ extern "C" __declspec(dllexport) unsigned packet(float pitch,float previous,int 
     memcpy(dynamics+0xa8,&previous,4);memcpy(dynamics+0x18,&speed,4);memcpy(pawn_storage.data()+0x1178,&grace,4);
     settings[0x3cc]=static_cast<unsigned char>(capability);memcpy(settings.data()+0x3d0,&maximum,4);memcpy(settings.data()+0x384,&minimum,4);
     float axes[6]={pitch,native_yaw,native_roll,1,1,1};native_raw.mappings=mapping;
+    const bool keyboard_pitch=(keyboard&1)!=0,keyboard_yaw=(keyboard&4)!=0,keyboard_roll=(keyboard&2)!=0,user_enabled=true;
+    Trace trace;
+    /* ACTUAL_PRODUCTION_OWNERSHIP */
     const auto sample=sample_player_maneuver(pawn,axes,settings.data(),flags);
-    control.observe(sample,0,1,keyboard!=0);
+    control.observe(sample,0,1,keyboard_pitch);
     const bool apply_guidance=true,native_ownership=control.owns_rotation(),valid=true;
-    const bool held_axis[]={keyboard!=0||axes[0]!=0,axes[1]!=0,axes[2]!=0};
-    const float requested[]={1,-1,1};Trace trace;
+    const bool held_axis[]={held_pitch,held_yaw,held_roll};
+    const float requested[]={1,-1,1};
     native_input::Params params{.016f,0,10,10,10,10,10,10};
     /* ACTUAL_PRODUCTION_SELECTOR */
     unsigned sync_commits=0;unsigned char* context=nullptr;
@@ -71,8 +80,38 @@ extern "C" __declspec(dllexport) unsigned packet(float pitch,float previous,int 
     memcpy(sent,axes,sizeof(axes));
     return (sample.prepare_edge_allowed?1u:0u)|(control.neutral_edge?2u:0u)|(control.active?4u:0u)|(sync_commits?8u:0u);
 }
+// Ordinary/Alt/F8 path executes the identical ownership and writeback blocks.
+extern "C" __declspec(dllexport) void rotation_packet(float* axes,const double* before,const float* requested,
+    int keyboard,int enabled,int looking,int fresh_mapping,float dt,float modifier,float* predicted){
+    control.reset();maneuver_guard.reset();
+    const auto pawn=reinterpret_cast<uintptr_t>(axes)-0x2268;
+    if(fresh_mapping)native_raw.mapping(pawn+0x2268);
+    native_raw.begin(pawn+0x2268,axes);
+    const bool keyboard_pitch=(keyboard&1)!=0,keyboard_yaw=(keyboard&4)!=0,keyboard_roll=(keyboard&2)!=0,user_enabled=enabled!=0;
+    Trace trace;for(int i=0;i<3;++i)trace.before[i]=before[i];
+    /* ACTUAL_PRODUCTION_OWNERSHIP */
+    const bool apply_guidance=user_enabled&&!looking,native_ownership=false,valid=true;
+    const bool held_axis[]={held_pitch,held_yaw,held_roll};
+    native_input::Params params{dt,modifier,15,8,10,4,6,5};
+    /* ACTUAL_PRODUCTION_SELECTOR */
+    for(int i=0;i<3;++i)predicted[i]=trace.predicted[i];
+}
+extern "C" __declspec(dllexport) void legacy_packet(float* axes,int keyboard,float input_scale){
+    control.reset();maneuver_guard.reset();native_raw.reset();
+    const auto pawn=reinterpret_cast<uintptr_t>(axes)-0x2268;
+    native_raw.mapping(pawn+0x2268);native_raw.begin(pawn+0x2268,axes);
+    const bool keyboard_pitch=(keyboard&1)!=0,keyboard_yaw=(keyboard&4)!=0,keyboard_roll=(keyboard&2)!=0,user_enabled=true;
+    Trace trace;
+    /* ACTUAL_PRODUCTION_OWNERSHIP */
+    maneuver_guard.observe({1u<<23,0,input_scale,true},0,1);
+    const bool apply_guidance=true,native_ownership=maneuver_guard.active,valid=true;
+    const bool held_axis[]={held_pitch,held_yaw,held_roll};
+    const float requested[]={1,-1,1};
+    native_input::Params params{.016f,0,10,10,10,10,10,10};
+    /* ACTUAL_PRODUCTION_SELECTOR */
+}
 '''
-fixture = fixture.replace("/* ACTUAL_PRODUCTION_SELECTOR */", selector).replace("/* ACTUAL_PRODUCTION_SYNC_GATE */", sync_line)
+fixture = fixture.replace("/* ACTUAL_PRODUCTION_OWNERSHIP */", ownership).replace("/* ACTUAL_PRODUCTION_SELECTOR */", selector).replace("/* ACTUAL_PRODUCTION_SYNC_GATE */", sync_line)
 build = here / "input_zoom_build"
 build.mkdir(exist_ok=True)
 (build / "native_psm_pipeline.cpp").write_text(prefix + sampler + fixture, encoding="utf-8")
@@ -87,6 +126,8 @@ dll.packet.argtypes = [ctypes.c_float, ctypes.c_float, ctypes.c_int, ctypes.c_in
                       ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float,
                       ctypes.c_uint, ctypes.c_int, ctypes.c_ulonglong, ctypes.c_float, ctypes.c_float, ctypes.POINTER(ctypes.c_float)]
 dll.packet.restype = ctypes.c_uint
+dll.legacy_packet.argtypes = [ctypes.POINTER(ctypes.c_float),ctypes.c_int,ctypes.c_float]
+dll.legacy_packet.restype = None
 checks = 0
 
 def require(ok, label):
@@ -100,13 +141,30 @@ def packet(pitch, previous, *, mode=0, capability=1, speed=100, maximum=200,
     state = dll.packet(pitch, previous, mode, capability, speed, maximum, minimum,
                        grace, flags, keyboard, mapping, yaw, roll, sent)
     require(list(sent)[3:] == [1,1,1], "throttle/brake/highG retained exactly")
-    if state&6 or (yaw!=0 and roll!=0):require(list(sent)[1:3] == [yaw,roll], "actual native yaw/roll retained on preparation/native ownership")
+    if state&6:
+        require(list(sent)[1:3] == [yaw if keyboard&4 else 0,roll if keyboard&2 else 0], "claimed keyboard lateral axes retained; unclaimed base mouse excluded during preparation/native ownership")
     return (state,float(sent[0]),list(sent)) if full else (state,float(sent[0]))
 
 executable = Executable(Path("E:/SteamLibrary/steamapps/common/ACE COMBAT 8/Game/Binaries/Win64/AceCombat8.exe"))
 try:
     for _, first, last, expected in PINNED_RANGES:
         require(hashlib.sha256(executable.read(first,last-first)).hexdigest() == expected, "pinned native instruction fingerprint")
+    # Aggregate game mouse axes are not physical press provenance, even when
+    # freshly mapped, positive, full-scale, or paired with throttle/brake.
+    for pitch in [.1,.2,.8,1,-1]:
+        dll.reset_control();packet(0,1,keyboard=False,mapping=1)
+        state,sent,axes=packet(pitch,1,keyboard=False,mapping=2,yaw=.2,roll=.8,full=True)
+        require(not state&6 and state&8 and sent==1 and axes[1]!=0 and axes[2]!=0,"base mouse cannot create PSM neutral edge or reserve pursuit axes")
+    for keys in [0,2,4,6,7]:
+        dll.reset_control()
+        state,sent,axes=packet(.1,1,mode=2,keyboard=keys,mapping=1,yaw=.3125,roll=-.4375,full=True)
+        require(state&4 and not state&2 and abs(sent-(.1 if keys&1 else 1))<1e-7,"observed native mode2 retains keyboard pull or existing mouse elevator intent")
+    for keys in range(8):
+        for scale in [0,.4,1]:
+            raw=(ctypes.c_float*6)(.1,.3125,-.4375,1,1,1)
+            expected=[raw[0] if keys&1 else float(ctypes.c_float(scale).value),raw[1] if keys&4 else 0,raw[2] if keys&2 else 0,1,1,1]
+            dll.legacy_packet(raw,keys,scale)
+            require(list(raw)==expected,"legacy dispatcher retains held keyboard axes, native-scaled mouse elevator and neutral unheld lateral axes")
     for capability, flags, grace in [(1,0,.4),(2,0,.4),(1,1<<8,0),(2,1<<8,0)]:
         dll.reset_control()
         packet(.1,1,capability=capability,flags=flags,grace=grace,keyboard=False,mapping=1)
@@ -151,6 +209,8 @@ try:
         state,sent,axes=packet(1,0,capability=capability,mapping=3,yaw=0,roll=0,full=True)
         require(not state&6 and axes[1]!=0 and axes[2]!=0,"automatic outputs resume after single preparation callback")
         native.input(sent,high_g=1,yaw=axes[1],roll=axes[2]);require(native.admission()==2,"held physical S admits actual Cobra/Kulbit after coherent native preparation")
-    print(f"PASS native PSM input pipeline: {checks} checks; actual runtime sampler/Control/process selector/sync gate and unmodified native admission; positive mouse -> new S -> neutral once -> held mode2; generic-highG roll race prevented; Cobra/Kulbit/flag8; W/down and ineligible gates retain physical axes/auxiliary flags. Synthetic memory only, no live-flight claim.")
+    report={"passed":True,"checks":checks,"production_fragments":["ManualRotation boundary before PSM sampler","sample_player_maneuver","Control","raw selector","response sync gate"],"source_sha256":hashlib.sha256((runtime/'src/mouse_aim.cpp').read_bytes()).hexdigest(),"ownership_sha256":hashlib.sha256((runtime/'src/manual_rotation_input.h').read_bytes()).hexdigest(),"scope":"Synthetic memory; exact native PSM admission; base mouse excluded before snapshots; no live-flight claim."}
+    (here/'native_psm_input_pipeline_evidence.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
+    print(f"PASS native PSM input pipeline: {checks} checks; actual ownership boundary/sampler/Control/raw selector/sync gate and unmodified native admission; aggregate mouse cannot fake native press; new S -> neutral once -> held mode2; keyboard/mouse mode2 elevator; generic-highG race prevented; auxiliary inputs retained. Synthetic memory only, no live-flight claim.")
 finally:
     executable.close()

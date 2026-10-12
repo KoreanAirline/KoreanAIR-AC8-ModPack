@@ -68,7 +68,7 @@ reload shortcut; it is not required to apply saved changes.
 
 Aim zoom is on by default. During ordinary flight, click the right mouse button to
 point the camera toward the mouse steering target and magnify the view; click again
-to return to the normal flight camera. Both transitions take 180 ms and are smooth.
+to return to the normal flight camera. Both transitions take 140 ms and are smooth.
 Releasing the button keeps zoom active. Zoom does not select a locked target.
 Enable aim zoom on Controls turns the feature on/off.
 Adjust Aim zoom magnification with the slider or numeric field from 1× to 8×,

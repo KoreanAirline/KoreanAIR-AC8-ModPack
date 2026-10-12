@@ -39,11 +39,13 @@ prefix = r'''
 #include "scene_mouse.h"
 #include "free_look.h"
 #include "geometric_guidance.h"
+#include "aim_zoom.h"
 struct Features {bool mouse_flight=true,diagnostics=false;} pack_features;
 std::atomic<bool> running{true},enabled{true},active{true},game_paused{false},gaze_active{false};
 std::atomic<long> mouse_dx{0},mouse_dy{0};ac8scene::Mouse scene_mouse;
 struct Config {float look_sensitivity=.03f,sensitivity=.1f;} config;
 std::atomic<bool> zoom_requested{false},manual_free_look{false},native_maneuver_active{false},recenter_requested{false},resume_center_requested{false};
+std::atomic<float> zoom_magnification{1};
 std::atomic<float> command_pitch{0},command_roll{0},command_yaw{0},pose_pitch{0},pose_yaw{0},pose_roll{0},camera_pitch{0},camera_yaw{0},camera_roll{0},target_pitch{0},target_yaw{0},look_pitch{0},look_yaw{0};
 std::atomic<uint64_t> maneuver_pitch_motion{0};std::atomic<unsigned> keyboard_mask{0};
 flight::FreeLook free_look;flight::GeometricGuidance guidance;
@@ -109,7 +111,21 @@ int main(){
     free_look.reset();free_look_key_pressed=false;target_pitch.store(0);target_yaw.store(0);
     for(int frame=0;frame<40;++frame){clock_tick+=16;capture(7,-3);scene();require(mouse_dx.load()==7&&mouse_dy.load()==-3,"fresh flight deltas survive repeated idle release after real scene exit");update_commands();}
     require(dot(goal(),view.f)<.9f,"actual ordinary aim resumes after scene exit and repeated idle releases");
-    std::printf("PASS scene input release pipeline: %u checks; actual raw capture/scene bridge/update_commands/FreeLook; 40 ordinary, 40 ALT and 40 post-scene frames; real entry/pause/stale/reactivation/exit boundaries discard once; main.lua idle headlook release precedes flight frame.\n",checks);
+    for(float ratio:{1.f,2.f,8.f})for(float amount:{0.f,.25f,.5f,1.f})for(bool vertical:{false,true}) {
+        free_look.reset();free_look_key_pressed=false;target_pitch.store(0);target_yaw.store(0);
+        camera_pitch.store(0);camera_yaw.store(0);camera_roll.store(0);
+        const float baseline_fov=100,rendered_fov=ac8zoom::lens(baseline_fov,std::pow(ratio,amount));
+        zoom_magnification.store(ac8zoom::magnification(baseline_fov,rendered_fov));
+        clock_tick+=16;capture(vertical?0:10,vertical?10:0);scene();update_commands();
+        const float world_angle=vertical?std::abs(pitch(goal())):std::abs(yaw(goal()));
+        const float original_pixels=960*std::tan(10*config.sensitivity*rad)/std::tan(baseline_fov*.5f*rad);
+        const float zoom_pixels=960*std::tan(world_angle*rad)/std::tan(rendered_fov*.5f*rad);
+        require(std::abs(original_pixels-zoom_pixels)<.001f,"actual update_commands retains original x/y pixel response at each current optical transition");
+    }
+    free_look.reset();free_look_key_pressed=true;zoom_magnification.store(8);capture(0,0);update_commands();
+    clock_tick+=16;capture(10,0);update_commands();
+    require(std::abs(yaw(camera())-10*config.look_sensitivity)<.00001f,"actual ALT look sensitivity remains unscaled");
+    std::printf("PASS scene input release pipeline: %u checks; actual raw capture/scene bridge/update_commands/FreeLook; 40 ordinary, 40 ALT and 40 post-scene frames; real entry/pause/stale/reactivation/exit boundaries discard once; current optical zoom mouse displacement and unscaled ALT; main.lua idle headlook release precedes flight frame.\n",checks);
 }
 '''
 build = here / "input_zoom_build"
