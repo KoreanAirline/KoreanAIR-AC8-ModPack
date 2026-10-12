@@ -12,17 +12,17 @@ From this repository's root:
 python build_pack.py --launcher-only
 ```
 
-The output is `build/KoreanAIR_AC8_ModPack_1.2.exe`. The compiler is resolved from the Windows directory. If necessary, pass `--csc <compiler-path>` or set the `CSC` environment variable.
+The output is `build/KoreanAIR_AC8_ModPack_1.3.exe`. The compiler is resolved from the Windows directory. If necessary, pass `--csc <compiler-path>` or set the `CSC` environment variable.
 
 ## Installer with the release payload
 
-Download `KoreanAIR_AC8_ModPack_1.2_Sources.zip` from the [matching release](https://github.com/KoreanAirline/KoreanAIR-AC8-ModPack/releases). Extract its `Payload.zip` into this repository's root, then run:
+Download `KoreanAIR_AC8_ModPack_1.3_Sources.zip` from the [matching release](https://github.com/KoreanAirline/KoreanAIR-AC8-ModPack/releases). Extract its `Payload.zip` into this repository's root, then run:
 
 ```powershell
 python build_pack.py --payload-zip Payload.zip
 ```
 
-This verifies the input payload file hashes, replaces the launcher and English/Korean manuals with the current build, updates their manifest hashes, and compiles `build/KoreanAIR_AC8_ModPack_1.2_Setup.exe`. Use the source archive belonging to the same public version and internal build recorded in `release.json`.
+This verifies the input payload file hashes, replaces the launcher and English/Korean manuals with the current build, updates their manifest hashes, and compiles `build/KoreanAIR_AC8_ModPack_1.3_Setup.exe`. Use the source archive belonging to the same public version and internal build recorded in `release.json`.
 
 The release source archive also contains `runtime/`, `campaign-loader/` and `campaign-source/`. Native rebuilds require the Visual Studio 2022 C++ tools and the vendor dependencies included or pinned in that archive. Follow its `BUILDING.txt` and individual component build instructions. The Git repository focuses on the managed launcher/installer source; the release source archive carries the complete native and translation inputs.
 

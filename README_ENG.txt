@@ -1,12 +1,12 @@
-KoreanAIR_AC8_ModPack_1.2
+KoreanAIR_AC8_ModPack_1.3
 English user guide
 
 INSTALL AND PLAY
 
 1. Start ACE COMBAT 8 normally through Steam at least once, then close the game.
-2. Run KoreanAIR_AC8_ModPack_1.2_Setup.exe. Select the game folder containing
+2. Run KoreanAIR_AC8_ModPack_1.3_Setup.exe. Select the game folder containing
    start_protected_game.exe, then choose the modules and click Install / Update.
-3. Open KoreanAIR_AC8_ModPack_1.2.exe in the game folder. Keep Steam open and
+3. Open KoreanAIR_AC8_ModPack_1.3.exe in the game folder. Keep Steam open and
    choose Play with selected mods.
 
 Close the game before installing, removing or changing modules. A writable Steam
@@ -32,8 +32,9 @@ downloads and verifies the update, applies it and restarts. A newer bug-fix buil
 keep the same displayed version number; these updates also appear in the banner.
 
 Updates preserve your selected modules, saved INI settings, controls and keybindings,
-HUD and crosshair settings, FOV and camera settings, subtitle position and interface
-language. If the pack is disabled for standard play, it stays disabled after updating.
+HUD and crosshair settings, aim zoom, FOV and camera settings, subtitle position
+and interface language. If the pack is disabled for standard play, it stays
+disabled after updating.
 While offline or if an update check or download fails, you can still use the launcher
 to play with your installed mods.
 
@@ -41,7 +42,8 @@ MODULES
 
 - Korean campaign subtitles: improves campaign subtitles using the English source.
   Online dialogue remains unchanged.
-- Mouse flight controls: mouse steering, Alt free look and the flight helper HUD.
+- Mouse flight controls: mouse steering, Alt free look, hold-to-zoom toward mouse
+  aim and the flight helper HUD.
 - Triple monitor span and FOV: single-display flight FOV or a window spanning
   three displays, plus chase camera distance/height when Mouse flight is installed.
 
@@ -51,7 +53,8 @@ Numeric settings have a slider and a matching numeric entry field. Drag the slid
 for quick changes, or focus it and use the Left/Right arrow keys. Click the numeric
 field to type a precise value, or use its Up/Down arrows. Both controls show the
 same setting. Values stay within the range displayed by the controls.
-Fine adjustments use steps of 0.001 for sensitivity and 0.1 degree for FOV.
+Fine adjustments use steps of 0.001 for sensitivity, 0.01× for aim zoom and
+0.1 degree for FOV.
 Camera distance and height use steps of 1.
 Use the tab's Save button to store your changes.
 
@@ -59,9 +62,22 @@ MOUSE FLIGHT (Controls)
 
 Adjust Mouse steering sensitivity and Free look sensitivity separately.
 Hold the free-look key during flight to look around. WASD remains available for
-direct control. Save changes, then focus the game; sensitivity and mod shortcut
-settings reload automatically in about 0.5 seconds. F10 is an optional manual
+direct control. Save changes, then focus the game; sensitivity, aim zoom and mod
+shortcut settings reload automatically in about 0.5 seconds. F10 is an optional manual
 reload shortcut; it is not required to apply saved changes.
+
+Aim zoom is on by default. During ordinary flight, hold the right mouse button to
+point the camera toward the mouse steering target and magnify the view; release
+to return to the normal flight camera. Both transitions are quick and smooth.
+This is a hold action. It does not toggle
+or select a locked target. Enable aim zoom on Controls turns the feature on/off.
+Adjust Aim zoom magnification with the slider or numeric field from 1× to 8×,
+in 0.01× steps; the default is 2×. Change Aim zoom (hold) to a keyboard key or a
+right, middle or side mouse button. Free look takes priority while its key is held.
+Mouse flight is required; zoom also works when Screen & camera settings are off.
+It does not replace target-view, free-look or cinematic camera behavior. If the
+same button also triggers a game action, change that binding in the game's controls
+menu. Save controls & keys applies zoom changes automatically without pressing F10.
 
 Use the game's view-switch control for first-person, cockpit and third-person
 views. First-person and cockpit retain their native camera position and roll.
@@ -97,8 +113,10 @@ Default mod shortcuts (change them on Controls):
 - F9: recenter mouse steering.
 - F10: reload saved control settings.
 - Alt (hold): free look.
+- Right mouse button (hold): aim zoom, 2× by default.
 
-Choose keys from the list or use Press key to capture one. Each mod action needs
+Choose keys from the list or use Press key to capture one. Aim zoom also accepts
+the right, middle and side mouse buttons. Each of the six mod actions needs
 a different key. WASD/QE, Escape, Enter, Tab and Windows keys are reserved.
 Avoid conflicts with the game's other bindings.
 Set the game's own flight and target-selection keys in its controls menu.

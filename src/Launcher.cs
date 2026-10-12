@@ -97,9 +97,14 @@ partial class Launcher : Form {
   var d=Core.ReadIni(Core.Config(root,"config.ini"),"control");
   var sensitivity=Number(p,"sensitivity","Mouse steering sensitivity","마우스 조종 감도",Value(d,"sensitivity",0.01M),0.01M,0.2M,3,0.001M);
   var look=Number(p,"lookSensitivity","Free look sensitivity","자유 시점 감도",Value(d,"look_sensitivity",0.03M),0.01M,0.2M,3,0.001M);
+  var zoom=Core.ReadIni(Core.Config(root,"config.ini"),"zoom");
+  var zoomEnabled=Check(p,"zoomEnabled","Enable aim zoom (hold)","조준 방향 확대 사용 (누르고 있기)",Value(zoom,"enabled",1)!=0);
+  var zoomRatio=Number(p,"zoomRatio","Aim zoom magnification (×)","조준 방향 확대 배율 (×)",Value(zoom,"ratio",2),1,8,2,0.01M);
+  ui.OnChange(()=>{string tip=ui.T("On by default. Hold Right mouse button to look toward the mouse aim and zoom in; release to return. Default: 2×. Free look takes priority.","기본으로 켜져 있습니다. 마우스 오른쪽 버튼을 누르고 있으면 마우스 조준 방향을 확대하고, 놓으면 돌아옵니다. 기본 배율: 2배. 자유 시점이 우선합니다.");help.SetToolTip(zoomEnabled,tip);help.SetToolTip(zoomRatio,tip);help.SetToolTip(zoomRatio.Slider,tip+" "+ui.T("Range: 1–8×; fine steps: 0.01×.","범위: 1~8배, 미세 조절: 0.01배."));help.SetToolTip(zoomRatio.Number,tip+" "+ui.T("Type a value and press Enter to confirm.","숫자를 입력한 뒤 Enter로 확정하세요."));});
+  Paragraph(p,"Aim zoom follows the mouse steering target during flight. Hold its key to zoom; release to return.\nIt works with Mouse flight even when Screen & camera is off. Change its key below.","비행 중 마우스 조종 목표 방향을 확대합니다. 확대 키를 누르고 있다가 놓으면 돌아옵니다.\n화면·카메라 설정을 꺼도 마우스 조종 모듈에서 사용할 수 있습니다. 확대 키는 아래에서 변경하세요.");
   Paragraph(p,"Saved changes apply automatically while playing. WASD remains direct aircraft control.\nSet the game's own flight and target-selection keys in its controls menu.","저장하면 게임 중에도 자동으로 적용됩니다. WASD는 기체 직접 조종을 유지합니다.\n게임 자체의 비행·타겟 선택 키는 게임 안의 조작 설정에서 변경하세요.");
   var bindings=Hotkeys(p);
-  Button(Actions(p),"saveControls","Save controls & keys","조종·키 설정 저장",()=>{var keyValues=ReadHotkeys(bindings);Core.WriteIni(Core.Config(root,"config.ini"),"keys",keyValues);Core.WriteIni(Core.Config(root,"config.ini"),"control",new Dictionary<string,string>{{"sensitivity",V(sensitivity.Number)},{"look_sensitivity",V(look.Number)}});Status("Controls and keys saved; changes apply automatically in the game.","조종·키 설정을 저장했습니다. 게임 중 자동으로 적용됩니다.");});
+  Button(Actions(p),"saveControls","Save controls & keys","조종·키 설정 저장",()=>{var keyValues=ReadHotkeys(bindings);Core.WriteIni(Core.Config(root,"config.ini"),"keys",keyValues);Core.WriteIni(Core.Config(root,"config.ini"),"control",new Dictionary<string,string>{{"sensitivity",V(sensitivity.Number)},{"look_sensitivity",V(look.Number)}});Core.WriteIni(Core.Config(root,"config.ini"),"zoom",new Dictionary<string,string>{{"enabled",zoomEnabled.Checked?"1":"0"},{"ratio",V(zoomRatio.Number)}});Status("Controls, zoom and keys saved; changes apply automatically in the game.","조종·확대·키 설정을 저장했습니다. 게임 중 자동으로 적용됩니다.");});
  }
  void RefreshMode(){state=Core.ReadState(root);ui.Change(ui.Language,false);}
  string Geometry(out bool ok){

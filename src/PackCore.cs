@@ -9,15 +9,15 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web.Script.Serialization;
 
-[assembly:System.Reflection.AssemblyVersion("1.2.0.0")]
-[assembly:System.Reflection.AssemblyFileVersion("1.2.0.0")]
-[assembly:System.Reflection.AssemblyInformationalVersion("1.2+b2026101101")]
+[assembly:System.Reflection.AssemblyVersion("1.3.0.0")]
+[assembly:System.Reflection.AssemblyFileVersion("1.3.0.0")]
+[assembly:System.Reflection.AssemblyInformationalVersion("1.3+b2026101201")]
 [assembly:System.Reflection.AssemblyProduct("KoreanAIR AC8 Mod Pack")]
 
 namespace KoreanAIR {
 public sealed class Item { public string path; public string source; public string hash; public string group; public bool mutable; }
 public sealed class FileState { public string path; public string hash; public string original; public bool mutable; }
-public sealed class State { public string version="1.2"; public long build; public string root; public bool campaign; public bool mouse; public bool display; public bool suspended; public string backup; public string campaignLoaderHash; public string legacyCampaignLoaderHash; public List<FileState> files=new List<FileState>(); }
+public sealed class State { public string version="1.3"; public long build; public string root; public bool campaign; public bool mouse; public bool display; public bool suspended; public string backup; public string campaignLoaderHash; public string legacyCampaignLoaderHash; public List<FileState> files=new List<FileState>(); }
 public sealed class Manifest { public List<Item> files; public Dictionary<string,string> legacy; }
 public sealed class LoaderCompatibility { public bool ForeignLoader; public string Path; public string Hash; public string Kind; }
 public sealed class PackWriteException : IOException {
@@ -25,8 +25,8 @@ public sealed class PackWriteException : IOException {
  public PackWriteException(string target,string stage,Exception cause):base("Unable to write installed file: "+target+"\n"+cause.Message,cause){Target=target;Stage=stage;}
 }
 public static class Core {
- public const string Brand="KoreanAIR_AC8_ModPack_1.2";
- public const long ReleaseBuild=2026101101;
+ public const string Brand="KoreanAIR_AC8_ModPack_1.3";
+ public const long ReleaseBuild=2026101201;
  public const string Folder="KoreanAIR_AC8_ModPack";
  public const string Mod="Game/Binaries/Win64/UE4SS/Mods/AC8MouseAim/";
  public const string CampaignLoader="Game/Binaries/Win64/dinput8.dll";

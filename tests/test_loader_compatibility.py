@@ -3,7 +3,7 @@ import argparse,hashlib,json,subprocess,tempfile,time,uuid,zipfile
 
 D=Path(__file__).resolve().parents[1]
 parser=argparse.ArgumentParser(description='Test the actual Setup assembly through a standalone reflection adapter.')
-parser.add_argument('--setup',type=Path,default=D/'build/KoreanAIR_AC8_ModPack_1.2_Setup.exe')
+parser.add_argument('--setup',type=Path,default=D/'build/KoreanAIR_AC8_ModPack_1.3_Setup.exe')
 args=parser.parse_args()
 setup=args.setup.resolve(strict=True)
 setup_hash=hashlib.sha256(setup.read_bytes()).hexdigest()
