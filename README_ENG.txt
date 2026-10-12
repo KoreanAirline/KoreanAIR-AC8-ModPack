@@ -42,7 +42,7 @@ MODULES
 
 - Korean campaign subtitles: improves campaign subtitles using the English source.
   Online dialogue remains unchanged.
-- Mouse flight controls: mouse steering, Alt free look, hold-to-zoom toward mouse
+- Mouse flight controls: mouse steering, Alt free look, toggle zoom toward mouse
   aim and the flight helper HUD.
 - Triple monitor span and FOV: single-display flight FOV or a window spanning
   three displays, plus chase camera distance/height when Mouse flight is installed.
@@ -66,14 +66,15 @@ direct control. Save changes, then focus the game; sensitivity, aim zoom and mod
 shortcut settings reload automatically in about 0.5 seconds. F10 is an optional manual
 reload shortcut; it is not required to apply saved changes.
 
-Aim zoom is on by default. During ordinary flight, hold the right mouse button to
-point the camera toward the mouse steering target and magnify the view; release
-to return to the normal flight camera. Both transitions are quick and smooth.
-This is a hold action. It does not toggle
-or select a locked target. Enable aim zoom on Controls turns the feature on/off.
+Aim zoom is on by default. During ordinary flight, click the right mouse button to
+point the camera toward the mouse steering target and magnify the view; click again
+to return to the normal flight camera. Both transitions take 120 ms and are smooth.
+Releasing the button keeps zoom active. Zoom does not select a locked target.
+Enable aim zoom on Controls turns the feature on/off.
 Adjust Aim zoom magnification with the slider or numeric field from 1× to 8×,
-in 0.01× steps; the default is 2×. Change Aim zoom (hold) to a keyboard key or a
-right, middle or side mouse button. Free look takes priority while its key is held.
+in 0.01× steps; the default is 2×. Change Aim zoom (toggle) to a keyboard key or a
+right, middle or side mouse button. Free look, menus and cinematic cameras cancel
+zoom; click again to zoom after normal flight resumes.
 Mouse flight is required; zoom also works when Screen & camera settings are off.
 It does not replace target-view, free-look or cinematic camera behavior. If the
 same button also triggers a game action, change that binding in the game's controls
@@ -113,7 +114,7 @@ Default mod shortcuts (change them on Controls):
 - F9: recenter mouse steering.
 - F10: reload saved control settings.
 - Alt (hold): free look.
-- Right mouse button (hold): aim zoom, 2× by default.
+- Right mouse button (click): toggle aim zoom, 2× by default; click again to return.
 
 Choose keys from the list or use Press key to capture one. Aim zoom also accepts
 the right, middle and side mouse buttons. Each of the six mod actions needs

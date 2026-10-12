@@ -3,7 +3,7 @@
 An offline mod pack for **ACE COMBAT 8** with a Windows installer and bilingual launcher.
 
 - **Korean campaign subtitles** based on the English dialogue.
-- **Mouse flight controls**, configurable free look, smooth hold-to-zoom toward mouse aim, flight helper HUD and crosshairs.
+- **Mouse flight controls**, configurable free look, smooth click-to-toggle zoom toward mouse aim, flight helper HUD and crosshairs.
 - **Screen and camera options** for flight FOV, three-display span and third-person camera distance/height.
 - **Subtitle position**, module management and updates that preserve saved settings.
 

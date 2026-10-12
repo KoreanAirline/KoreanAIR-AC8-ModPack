@@ -30,8 +30,8 @@ partial class Launcher {
  Dictionary<string,ComboBox> Hotkeys(TableLayoutPanel p){
   var d=Core.ReadIni(Core.Config(root,"config.ini"),"keys");var result=new Dictionary<string,ComboBox>();
   string[] keys={"free_look","hud_toggle","steering_toggle","recenter","reload","zoom"};
-  string[] en={"Free look (hold)","Show / hide crosshairs","Mouse steering on / off","Center mouse aim on aircraft","Reload mod settings","Aim zoom (hold)"};
-  string[] ko={"자유 시점 (누르고 있기)","크로스헤어 표시·숨기기","마우스 조종 켜기·끄기","조준점을 기수 방향에 맞추기","모드 설정 다시 읽기","조준 방향 확대 (누르고 있기)"};
+  string[] en={"Free look (hold)","Show / hide crosshairs","Mouse steering on / off","Center mouse aim on aircraft","Reload mod settings","Aim zoom (toggle)"};
+  string[] ko={"자유 시점 (누르고 있기)","크로스헤어 표시·숨기기","마우스 조종 켜기·끄기","조준점을 기수 방향에 맞추기","모드 설정 다시 읽기","조준 방향 확대 (전환)"};
   int[] defaults={18,118,119,120,121,2};
   for(int i=0;i<keys.Length;i++){
    var row=new TableLayoutPanel{AutoSize=true,AutoSizeMode=AutoSizeMode.GrowAndShrink,ColumnCount=3,RowCount=1,Margin=new Padding(0,3,0,6)};
@@ -42,7 +42,7 @@ partial class Launcher {
    int code=ModKey.Normalize((int)Value(d,keys[i],defaults[i]));box.SelectedItem=options.FirstOrDefault(x=>x.Code==code)??options.First(x=>x.Code==defaults[i]);row.Controls.Add(box,1,0);result.Add(keys[i],box);
    var capture=new Button{Name="capture_"+keys[i],AutoSize=true,AutoSizeMode=AutoSizeMode.GrowAndShrink,Dock=DockStyle.Top,Margin=new Padding(0),Padding=new Padding(4,1,4,1)};ui.Bind(capture,"Press key…","키 입력…");row.Controls.Add(capture,2,0);Row(p,row);
    var select=box;capture.Click+=(s,e)=>CaptureHotkey(select);
-   if(mouse)ui.OnChange(()=>{int selected=((ModKey)select.SelectedItem).Code;select.BeginUpdate();select.Items.Clear();foreach(var item in ModKey.Options(true,ui.Language))select.Items.Add(item);select.SelectedItem=select.Items.Cast<ModKey>().First(x=>x.Code==selected);select.EndUpdate();string tip=ui.T("Default: hold Right mouse button for 2× aim zoom. Keyboard keys and right, middle or side mouse buttons are available. A game's binding on the same button can still react; change it in the game if needed.","기본: 마우스 오른쪽 버튼을 누르고 있으면 조준 방향을 2배 확대합니다. 키보드 키 또는 마우스 오른쪽·가운데·옆 버튼을 지정할 수 있습니다. 같은 버튼에 지정한 게임 기능도 반응할 수 있으므로 필요하면 게임에서 변경하세요.");help.SetToolTip(select,tip);help.SetToolTip(capture,tip);});
+   if(mouse)ui.OnChange(()=>{int selected=((ModKey)select.SelectedItem).Code;select.BeginUpdate();select.Items.Clear();foreach(var item in ModKey.Options(true,ui.Language))select.Items.Add(item);select.SelectedItem=select.Items.Cast<ModKey>().First(x=>x.Code==selected);select.EndUpdate();string tip=ui.T("Default: click Right mouse button for 2× aim zoom; click again to return. Keyboard keys and right, middle or side mouse buttons are available. A game's binding on the same button can still react; change it in the game if needed.","기본: 마우스 오른쪽 버튼을 한 번 누르면 조준 방향을 2배 확대하고, 다시 누르면 돌아옵니다. 키보드 키 또는 마우스 오른쪽·가운데·옆 버튼을 지정할 수 있습니다. 같은 버튼에 지정한 게임 기능도 반응할 수 있으므로 필요하면 게임에서 변경하세요.");help.SetToolTip(select,tip);help.SetToolTip(capture,tip);});
   }
   Paragraph(p,"Select a key or use ‘Press key’. Aim zoom also supports right, middle and side mouse buttons.\nEach action needs a different key. WASD/QE, Escape, Enter, Tab and Windows keys are reserved.\nIf a mod key also triggers a game action, change that binding in the game's controls menu.","목록에서 선택하거나 ‘키 입력’을 누르세요. 확대에는 마우스 오른쪽·가운데·옆 버튼도 지정할 수 있습니다.\n기능마다 서로 다른 키를 사용하세요. WASD/QE·Esc·Enter·Tab·Windows 키는 지정할 수 없습니다.\n모드 키가 게임 기능도 실행한다면 게임의 조작 설정에서 해당 단축키를 변경하세요.");
   return result;

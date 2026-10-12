@@ -63,7 +63,7 @@ class ZoomUiAudit {
    foreach(int code in new[]{2,4,5,6})Check("zoom_mouse_option_"+code,box.Items.Cast<object>().Any(x=>Code(x)==code));
    foreach(string action in new[]{"free_look","hud_toggle","steering_toggle","recenter","reload"})Check("existing_action_keyboard_only_"+action,!((ComboBox)Find(f,"key_"+action)).Items.Cast<object>().Any(x=>new[]{1,2,4,5,6}.Contains(Code(x))));
    foreach(int code in new[]{1,65,68,69,81,83,87,27,13,9,91,92})Check("zoom_reserved_excluded_"+code,!box.Items.Cast<object>().Any(x=>Code(x)==code));
-   Language(f,"en");var help=(ToolTip)f.GetType().GetField("help",instance).GetValue(f);Check("english_zoom_defaults_tooltip",help.GetToolTip(number).Contains("2×")&&help.GetToolTip(enabled).Contains("Hold Right mouse button"));
+   Language(f,"en");var help=(ToolTip)f.GetType().GetField("help",instance).GetValue(f);Check("english_zoom_defaults_tooltip",help.GetToolTip(number).Contains("2×")&&help.GetToolTip(enabled).Contains("Click Right mouse button")&&help.GetToolTip(enabled).Contains("click again")&&help.GetToolTip(enabled).Contains("120 ms"));
    enabled.Checked=false;Choose(f,"zoom",71);number.Text="2.87";Language(f,"ko");Language(f,"en");Language(f,"ko");
    Check("language_preserves_unsaved_zoom",!enabled.Checked&&Code(f,"zoom")==71&&number.Text=="2.87",number.Text);
    Check("korean_zoom_labels_tooltips",enabled.Text.Contains("확대")&&help.GetToolTip(number).Contains("2배")&&box.Items.Cast<object>().First(x=>Code(x)==2).ToString().Contains("오른쪽"));
