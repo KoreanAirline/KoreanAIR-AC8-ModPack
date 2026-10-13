@@ -10,7 +10,7 @@ An offline mod pack for **ACE COMBAT 8** with a Windows installer and bilingual 
 ## Download and instructions
 
 [Download the latest release](https://github.com/KoreanAirline/KoreanAIR-AC8-ModPack/releases/latest).
-Run the installer from the release and follow the [English manual](README_ENG.txt) or [한국어 사용 안내](README_KOR.txt).
+Extract the complete main ZIP, keeping `Payload.zip` beside the installer, and follow the [English manual](README_ENG.txt) or [한국어 사용 안내](README_KOR.txt). The standalone installer downloads its matching verified payload when needed.
 
 The modules are intended for offline play. Use the launcher's **Disable pack for standard play** option before launching standard or online play through Steam. The supported game build and installation details are described in the manuals.
 

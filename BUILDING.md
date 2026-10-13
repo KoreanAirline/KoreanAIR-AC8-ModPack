@@ -24,6 +24,8 @@ python build_pack.py --payload-zip Payload.zip
 
 This verifies the input payload file hashes, replaces the launcher and English/Korean manuals with the current build, updates their manifest hashes, and compiles `build/KoreanAIR_AC8_ModPack_1.3_Setup.exe`. Use the source archive belonging to the same public version and internal build recorded in `release.json`.
 
+Keep the generated `Payload.zip` beside the installer. Setup embeds only its small manifest and payload descriptor; it verifies the separate ZIP before installing. Official standalone update installers can obtain their exact SHA-pinned payload from the matching GitHub release. Locally rebuilt packages should distribute both files together.
+
 The release source archive also contains `runtime/`, `campaign-loader/` and `campaign-source/`. Native rebuilds require the Visual Studio 2022 C++ tools and the vendor dependencies included or pinned in that archive. Follow its `BUILDING.txt` and individual component build instructions. The Git repository focuses on the managed launcher/installer source; the release source archive carries the complete native and translation inputs.
 
 The prepared-payload route in `build_pack.py` remains available when the required `runtime/` and `campaign-source/` files, campaign loader DLL and compatible redistributable runtime files are present locally:

@@ -122,10 +122,25 @@ int main(){
         const float zoom_pixels=960*std::tan(world_angle*rad)/std::tan(rendered_fov*.5f*rad);
         require(std::abs(original_pixels-zoom_pixels)<.001f,"actual update_commands retains original x/y pixel response at each current optical transition");
     }
-    free_look.reset();free_look_key_pressed=true;zoom_magnification.store(8);capture(0,0);update_commands();
-    clock_tick+=16;capture(10,0);update_commands();
-    require(std::abs(yaw(camera())-10*config.look_sensitivity)<.00001f,"actual ALT look sensitivity remains unscaled");
-    std::printf("PASS scene input release pipeline: %u checks; actual raw capture/scene bridge/update_commands/FreeLook; 40 ordinary, 40 ALT and 40 post-scene frames; real entry/pause/stale/reactivation/exit boundaries discard once; current optical zoom mouse displacement and unscaled ALT; main.lua idle headlook release precedes flight frame.\n",checks);
+    for(float ratio:{1.f,2.f,8.f})for(float amount:{0.f,.25f,.5f,1.f})for(bool vertical:{false,true}) {
+        free_look.reset();free_look_key_pressed=true;target_pitch.store(17);target_yaw.store(30);
+        camera_pitch.store(0);camera_yaw.store(0);camera_roll.store(0);zoom_requested.store(true);
+        const auto held_goal=goal();const float rendered_fov=ac8zoom::lens(100,std::pow(ratio,amount));
+        zoom_magnification.store(ac8zoom::magnification(100,rendered_fov));
+        capture(100,-100);update_commands();
+        require(dot(camera(),view.f)>.999999f&&dot(goal(),held_goal)>.999999f,"zoomed ALT entry discards boundary packet without moving aim");
+        clock_tick+=16;capture(vertical?0:10,vertical?10:0);update_commands();
+        const float world_angle=vertical?std::abs(pitch(camera())):std::abs(yaw(camera()));
+        const float ordinary_pixels=960*std::tan(10*config.look_sensitivity*rad)/std::tan(50*rad);
+        const float zoom_pixels=960*std::tan(world_angle*rad)/std::tan(rendered_fov*.5f*rad);
+        require(std::abs(ordinary_pixels-zoom_pixels)<.001f,"actual ALT uses configured look sensitivity with matching current-lens pixel response");
+        require(dot(goal(),held_goal)>.999999f&&zoom_requested.load(),"zoomed ALT movement leaves clicked zoom and flight goal intact");
+        free_look_key_pressed=false;clock_tick+=16;capture(100,-100);update_commands();
+        require(dot(goal(),held_goal)>.999999f&&zoom_requested.load()&&!manual_free_look.load(),"ALT release discards boundary packet and retains zoom/flight goal");
+        clock_tick+=16;capture(10,0);update_commands();
+        require(dot(goal(),held_goal)<.999999f&&zoom_requested.load(),"ordinary aim movement resumes after ALT while zoom remains requested");
+    }
+    std::printf("PASS scene input release pipeline: %u checks; actual raw capture/scene bridge/update_commands/FreeLook; 40 ordinary, 40 ALT and 40 post-scene frames; real entry/pause/stale/reactivation/exit boundaries discard once; flight and ALT current-lens mouse displacement at 1x/2x/8x; ALT enter/move/release preserves clicked zoom and flight goal; main.lua idle headlook release precedes flight frame.\n",checks);
 }
 '''
 build = here / "input_zoom_build"

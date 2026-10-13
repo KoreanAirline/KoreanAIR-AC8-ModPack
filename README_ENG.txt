@@ -4,10 +4,13 @@ English user guide
 INSTALL AND PLAY
 
 1. Start ACE COMBAT 8 normally through Steam at least once, then close the game.
-2. Run KoreanAIR_AC8_ModPack_1.3_Setup.exe. Select the game folder containing
+2. Extract the complete ZIP, keeping Payload.zip beside the installer, then run
+   KoreanAIR_AC8_ModPack_1.3_Setup.exe. Select the game folder containing
    start_protected_game.exe, then choose the modules and click Install / Update.
 3. Open KoreanAIR_AC8_ModPack_1.3.exe in the game folder. Keep Steam open and
    choose Play with selected mods.
+
+The standalone installer downloads the matching verified mod files when needed.
 
 Close the game before installing, removing or changing modules. A writable Steam
 library does not need administrator rights; a protected folder may require running
@@ -73,8 +76,11 @@ Releasing the button keeps zoom active. Zoom does not select a locked target.
 Enable aim zoom on Controls turns the feature on/off.
 Adjust Aim zoom magnification with the slider or numeric field from 1× to 8×,
 in 0.01× steps; the default is 2×. Change Aim zoom (toggle) to a keyboard key or a
-right, middle or side mouse button. Free look, menus and cinematic cameras cancel
-zoom; click again to zoom after normal flight resumes.
+right, middle or side mouse button. Hold Alt while zoomed to look around at the
+same magnification. Releasing Alt smoothly returns the camera toward mouse aim
+while keeping zoom active. Click the zoom button again at any time, including
+during Alt free look, to return to normal magnification. Menus and cinematic
+cameras cancel zoom; click again after normal flight resumes.
 Mouse flight is required; zoom also works when Screen & camera settings are off.
 It does not replace target-view, free-look or cinematic camera behavior. If the
 same button also triggers a game action, change that binding in the game's controls

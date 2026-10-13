@@ -48,7 +48,7 @@ $expectedNativeHash = (Get-FileHash -LiteralPath (Join-Path $distributionRoot 'r
 $freshNative = $mouseLog.LastWriteTime -ge $launchedAt
 $renderSamples = @([regex]::Matches($mouseText,'DISPLAY native render viewport: (\d+)x(\d+)') | ForEach-Object { @{width=[int]$_.Groups[1].Value;height=[int]$_.Groups[2].Value} })
 $wideRenderSamples = @($renderSamples | Where-Object { $_.width -gt 2*$_.height })
-$errors = 'Recovering after runtime error|native camera refused|native camera disabled|bridge refused|input processor signature missing|error native raw input|direct bridge unavailable|Failed to execute main script|DISPLAY camera disabled|Unhandled Exception|Fatal error'
+$errors = 'Recovering after runtime error|native camera refused|native camera disabled|bridge refused|input processor signature missing|error native raw input|error native PSM admission|direct bridge unavailable|Failed to execute main script|DISPLAY camera disabled|Unhandled Exception|Fatal error'
 $report = @{
     started_at=$launchedAt.ToString('o');checked_at=(Get-Date).ToString('o')
     running=($modules.Count -eq 4);pid=$gameProcess.Id;window=$windowTitle
@@ -63,6 +63,7 @@ $report = @{
     native_maneuver_guard_verified=$mouseText.Contains('native maneuver input build guard: verified')
     native_player_maneuver_guard_verified=$mouseText.Contains('native player maneuver build guard: verified')
     native_raw_provenance_verified=$mouseText.Contains('native raw input provenance hook: verified mapper and synchronous physics order')
+    native_psm_admission_provenance_verified=$mouseText.Contains('native PSM admission provenance hook: verified; automatic pursuit excluded from PSM candidate only')
     native_render_viewport_samples=$renderSamples
     native_render_viewport_observed=($renderSamples.Count -gt 0)
     native_wide_render_viewport_observed=($wideRenderSamples.Count -gt 0)
@@ -71,7 +72,7 @@ $report = @{
     mission_piloted=$false;game_closed_normally=($closeRequested -and -not $stillRunning)
 }
 $report | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $reportFolder 'live_game_launch.json') -Encoding utf8
-if (-not $report.running -or -not $report.campaign_log_fresh -or -not $report.campaign_pak_mounted -or -not $report.lua_modules_loaded -or $report.new_runtime_errors -or -not $report.native_dll_matches -or -not $report.native_log_fresh -or -not $report.native_camera_registered -or -not $report.native_maneuver_guard_verified -or -not $report.native_player_maneuver_guard_verified -or -not $report.native_raw_provenance_verified -or -not $report.game_closed_normally) {
+if (-not $report.running -or -not $report.campaign_log_fresh -or -not $report.campaign_pak_mounted -or -not $report.lua_modules_loaded -or $report.new_runtime_errors -or -not $report.native_dll_matches -or -not $report.native_log_fresh -or -not $report.native_camera_registered -or -not $report.native_maneuver_guard_verified -or -not $report.native_player_maneuver_guard_verified -or -not $report.native_raw_provenance_verified -or -not $report.native_psm_admission_provenance_verified -or -not $report.game_closed_normally) {
     throw 'Startup verification failed; see live_game_launch.json.'
 }
 Write-Output 'PASS: installed launcher startup, current native camera/maneuver guards, revised campaign PAK mount and normal exit. No mission piloting.'

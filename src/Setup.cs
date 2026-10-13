@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
+using System.Threading;
 using KoreanAIR;
 class Setup : Form {
  bool busy;
@@ -23,7 +24,12 @@ class Setup : Form {
   try {
    if(args.Length>0&&args[0]!="--ui-root") {
     if(args[0]=="--apply-update"&&args.Length==4) { UpdateCore.ApplyInstaller(args[1],args[2],args[3],Assembly.GetExecutingAssembly()); }
-    else if(args[0]=="--install"&&args.Length==5) {using(var p=Assembly.GetExecutingAssembly().GetManifestResourceStream("Payload.zip"))Core.Install(args[1],args[2]=="1",args[3]=="1",args[4]=="1",p,Assembly.GetExecutingAssembly().Location);}
+    else if(args[0]=="--install"&&args.Length==5) {
+     bool cp=args[2]=="1",m=args[3]=="1",d=args[4]=="1";
+     if(!cp&&!m&&!d)Core.Uninstall(args[1]);
+     else {Core.VerifyGame(args[1]);if(Core.Running(args[1]))throw new Exception("Close ACE COMBAT 8 before changing installed modules.");
+      using(var p=ReleasePayload.OpenPayload(Assembly.GetExecutingAssembly(),null,CancellationToken.None))Core.Install(args[1],cp,m,d,p,Assembly.GetExecutingAssembly().Location);}
+    }
     else if(args[0]=="--uninstall"&&args.Length==2)Core.Uninstall(args[1]);else throw new Exception("Invalid command line.");return 0;
    }
    try{SetThreadDpiAwarenessContext(new IntPtr(-4));}catch{}
@@ -64,12 +70,14 @@ class Setup : Form {
  }
  void Row(TableLayoutPanel parent,Control control){control.Dock=DockStyle.Top;int row=parent.RowCount++;parent.RowStyles.Add(new RowStyle(SizeType.AutoSize));parent.Controls.Add(control,0,row);}
  void Status(string en,string ko){ui.Bind(status,en,ko);}
- void LoadState(bool updateStatus){try{var s=Core.ReadState(path.Text);if(s!=null){campaign.Checked=s.campaign;mouse.Checked=s.mouse;display.Checked=s.display;if(updateStatus)Status("Existing installation detected","기존 설치를 확인했습니다.");}using(var p=Assembly.GetExecutingAssembly().GetManifestResourceStream("Payload.zip")){loaderStatus.Visible=Core.InspectCampaignLoader(path.Text,p).ForeignLoader;}ui.Bind(loaderStatus,"Another mod uses Game/Binaries/Win64/dinput8.dll. Keep Korean campaign subtitles OFF to preserve it while installing Mouse/Screen. In-game coexistence is unverified.","다른 모드가 Game/Binaries/Win64/dinput8.dll을 사용합니다. 해당 파일을 보존하려면 캠페인 한국어 자막을 끄고 마우스·화면 기능을 설치하세요. 실제 게임에서의 동시 사용은 검증되지 않았습니다.");}catch{loaderStatus.Visible=false;}}
+ void LoadState(bool updateStatus){try{var s=Core.ReadState(path.Text);if(s!=null){campaign.Checked=s.campaign;mouse.Checked=s.mouse;display.Checked=s.display;if(updateStatus)Status("Existing installation detected","기존 설치를 확인했습니다.");}using(var p=ReleasePayload.OpenManifest(Assembly.GetExecutingAssembly())){loaderStatus.Visible=Core.InspectCampaignLoader(path.Text,p).ForeignLoader;}ui.Bind(loaderStatus,"Another mod uses Game/Binaries/Win64/dinput8.dll. Keep Korean campaign subtitles OFF to preserve it while installing Mouse/Screen. In-game coexistence is unverified.","다른 모드가 Game/Binaries/Win64/dinput8.dll을 사용합니다. 해당 파일을 보존하려면 캠페인 한국어 자막을 끄고 마우스·화면 기능을 설치하세요. 실제 게임에서의 동시 사용은 검증되지 않았습니다.");}catch{loaderStatus.Visible=false;}}
+ void PayloadProgress(int percent){if(IsDisposed||!IsHandleCreated)return;BeginInvoke(new Action(()=>{if(!IsDisposed)Status("Downloading installation files… "+percent+"%","설치 파일 다운로드 중… "+percent+"%");}));}
  async Task Work(bool uninstall){
   if(busy)return;
   string root=path.Text;bool cp=campaign.Checked,m=mouse.Checked,d=display.Checked;
+  uninstall=uninstall||!(cp||m||d);
   if(!uninstall&&cp) {
-   try { using(var p=Assembly.GetExecutingAssembly().GetManifestResourceStream("Payload.zip")) {
+   try { using(var p=ReleasePayload.OpenManifest(Assembly.GetExecutingAssembly())) {
     if(Core.InspectCampaignLoader(root,p).ForeignLoader) {
      string warning=ui.T("Another mod uses Game/Binaries/Win64/dinput8.dll. Korean campaign subtitles need the same file, so both loaders cannot occupy this path. Your existing loader and mod files will be preserved.\n\nTurn Korean campaign subtitles OFF and continue with the selected Mouse/Screen modules? In-game coexistence is unverified. After removing the other loader yourself, use Installation to add Korean subtitles.\n\nYes: continue with Korean campaign subtitles OFF. No: cancel without changing files.","다른 모드가 Game/Binaries/Win64/dinput8.dll을 사용합니다. 캠페인 한국어 자막도 같은 파일이 필요하므로 두 로더를 이 경로에 함께 설치할 수 없습니다. 기존 로더와 모드 파일은 보존합니다.\n\n캠페인 한국어 자막을 끄고 선택한 마우스·화면 기능으로 계속할까요? 실제 게임에서의 동시 사용은 검증되지 않았습니다. 기존 로더를 직접 제거한 뒤 ‘설치’에서 한국어 자막을 추가할 수 있습니다.\n\n예: 캠페인 한국어 자막을 끄고 계속합니다. 아니요: 파일 변경 없이 취소합니다.");
      if(ConfirmCoexistence(warning)!=DialogResult.Yes){Status("Cancelled; no files changed","취소했습니다. 파일은 변경되지 않았습니다.");return;}
@@ -81,7 +89,10 @@ class Setup : Form {
   busy=true;foreach(Control c in new Control[]{path,browse,campaign,mouse,display,install,remove})c.Enabled=false;
   Status(uninstall?"Removing…":"Installing…",uninstall?"제거 중…":"설치 중…");
   try {
-   await Task.Run(()=>{if(uninstall)Core.Uninstall(root);else using(var p=Assembly.GetExecutingAssembly().GetManifestResourceStream("Payload.zip"))Core.Install(root,cp,m,d,p,Assembly.GetExecutingAssembly().Location);});
+   await Task.Run(()=>{if(uninstall)Core.Uninstall(root);else {
+    Core.VerifyGame(root);if(Core.Running(root))throw new Exception("Close ACE COMBAT 8 before changing installed modules.");
+    using(var p=ReleasePayload.OpenPayload(Assembly.GetExecutingAssembly(),PayloadProgress,CancellationToken.None))Core.Install(root,cp,m,d,p,Assembly.GetExecutingAssembly().Location);
+   }});
    Status(uninstall||!(cp||m||d)?"Removed":"Installation complete",uninstall||!(cp||m||d)?"제거를 완료했습니다.":"설치를 완료했습니다.");
    if(!uninstall&&(cp||m||d))Dialog(ui.T("Open "+Core.Brand+".exe in the game folder to play and change settings.","게임 폴더의 "+Core.Brand+".exe를 열어 게임을 실행하고 설정을 조절하세요."),MessageBoxIcon.Information);
   }catch(Exception ex){Status("Not completed","완료하지 못했습니다.");string log=Core.RecordInstallError(ex);Dialog(ui.Error(ex)+(log==null?"":"\n\n"+ui.T("Details: ","오류 기록: ")+log),MessageBoxIcon.Error);}

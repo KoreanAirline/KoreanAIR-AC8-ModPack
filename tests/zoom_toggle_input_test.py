@@ -70,13 +70,25 @@ int main(){
     require(!zoom_requested.load(),"old mouse binding no longer toggles");
     physical['Z']=true;poll_mod_keys();require(zoom_requested.load(),"fresh remapped keyboard click toggles");
     physical['Z']=false;poll_mod_keys();require(zoom_requested.load(),"remapped key release preserves toggle");
-    zoom_magnification.store(8);physical[18]=true;poll_mod_keys();require(!zoom_requested.load()&&zoom_magnification.load()==1,"ALT cancels toggle and optical input immediately");
-    physical[18]=false;poll_mod_keys();physical['Z']=true;poll_mod_keys();require(zoom_requested.load(),"new click after ALT activates");
+    zoom_magnification.store(8);physical[18]=true;poll_mod_keys();
+    require(zoom_requested.load()&&zoom_magnification.load()==8&&manual_free_look.load(),"ALT keeps clicked zoom and actual optical input while owning free look");
+    physical['Z']=true;poll_mod_keys();require(!zoom_requested.load()&&manual_free_look.load(),"rebound keyboard zoom can toggle off while ALT stays held");
+    physical['Z']=false;poll_mod_keys();physical['Z']=true;poll_mod_keys();require(zoom_requested.load(),"rebound keyboard zoom can toggle on while ALT stays held");
+    physical['Z']=false;physical[18]=false;poll_mod_keys();require(zoom_requested.load()&&zoom_magnification.load()==8&&!manual_free_look.load(),"ALT release keeps clicked zoom and measured magnification");
+    configured_zoom=2;physical[2]=false;load_hud_keys();poll_mod_keys();
+    physical[18]=true;poll_mod_keys();physical[2]=true;poll_mod_keys();
+    require(zoom_requested.load()&&manual_free_look.load(),"default RMB click activates zoom during held ALT");
+    for(int i=0;i<50;++i)poll_mod_keys();require(zoom_requested.load(),"holding RMB with ALT cannot repeat toggle");
+    physical[2]=false;poll_mod_keys();require(zoom_requested.load(),"RMB release during ALT keeps clicked zoom");
+    physical[2]=true;poll_mod_keys();require(!zoom_requested.load()&&manual_free_look.load(),"default RMB second click turns zoom off during held ALT");
+    physical[18]=false;poll_mod_keys();require(!zoom_requested.load(),"ALT release after RMB toggle-off cannot resurrect zoom");
+    configured_zoom=int('Z');physical['Z']=false;load_hud_keys();poll_mod_keys();physical['Z']=true;poll_mod_keys();
+    require(zoom_requested.load(),"fresh keyboard click still activates after default binding regression");
     zoom_enabled.store(false);poll_mod_keys();require(!zoom_requested.load(),"live disable cancels toggle");zoom_enabled.store(true);
     physical['Z']=false;poll_mod_keys();physical['Z']=true;poll_mod_keys();game_paused.store(true);poll_mod_keys();require(!zoom_requested.load(),"pause cancels toggle");game_paused.store(false);
     physical['Z']=false;poll_mod_keys();physical['Z']=true;poll_mod_keys();gaze_active.store(true);poll_mod_keys();require(!zoom_requested.load(),"native scene cancels toggle");gaze_active.store(false);
     physical['Z']=false;poll_mod_keys();physical['Z']=true;poll_mod_keys();active.store(false);poll_mod_keys();require(!zoom_requested.load(),"menu/inactive state cancels toggle");
-    std::printf("PASS zoom toggle input: %u checks; actual production key poll and INI rebind; first-click/release persists, hold no repeat, second-click smooth out, rapid reclick continuity, keyboard remap and focus/ALT/disable/pause/scene/menu guards.\n",checks);
+    std::printf("PASS zoom toggle input: %u checks; actual production key poll and INI rebind; first-click/release persists, hold no repeat, second-click smooth out, rapid reclick continuity, keyboard remap, ALT keeps zoom and optical input, RMB/keyboard toggle during ALT, focus/disable/pause/scene/menu guards.\n",checks);
 }
 '''
 build = here / "input_zoom_build"

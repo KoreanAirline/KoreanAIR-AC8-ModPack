@@ -23,6 +23,19 @@ def compile(name,source,resources=[]):
     args=[str(CSC),'/nologo','/target:winexe','/optimize+','/platform:x64','/out:'+str(BIN/name)]+['/reference:'+r for r in refs]+resources+[str(D/'src/PackCore.cs'),str(D/'src/Ui.cs'),str(D/'src/UpdateCore.cs'),str(D/'src'/source)]
     if source=='Launcher.cs':args.extend(str(D/'src'/p) for p in ('Hud.cs','Keys.cs','UpdateUI.cs'))
     subprocess.run(args,check=True)
+
+def installer_resources():
+    payload=BIN/'Payload.zip'
+    with zipfile.ZipFile(payload) as z:
+        manifest_bytes=z.read('manifest.json')
+    descriptor=dict(schema=1,version=release['version'],build=release['build'],
+                    tag=f'v{release["version"]}-b{release["build"]}',filename='Payload.zip',
+                    sha256=hashlib.sha256(payload.read_bytes()).hexdigest(),size=payload.stat().st_size,
+                    url=f'https://github.com/{release["repository"]}/releases/download/v{release["version"]}-b{release["build"]}/Payload.zip',
+                    manifest_sha256=hashlib.sha256(manifest_bytes).hexdigest())
+    (BIN/'PayloadDescriptor.json').write_text(json.dumps(descriptor,indent=2)+'\n',encoding='utf-8')
+    (BIN/'PayloadManifest.json').write_bytes(manifest_bytes)
+    return ['/resource:'+str(BIN/name)+','+name for name in ('PayloadDescriptor.json','PayloadManifest.json')]
 compile(BRAND+'.exe','Launcher.cs')
 if options.launcher_only:
     print(json.dumps({'launcher':str(BIN/(BRAND+'.exe'))}))
@@ -45,7 +58,7 @@ if options.payload_zip:
     with zipfile.ZipFile(BIN/'Payload.zip','w',zipfile.ZIP_DEFLATED,compresslevel=6) as z:
         z.writestr('manifest.json',json.dumps(manifest,ensure_ascii=False).encode())
         for name,content in data.items():z.writestr(name,content)
-    compile(BRAND+'_Setup.exe','Setup.cs',['/resource:'+str(BIN/'Payload.zip')+',Payload.zip'])
+    compile(BRAND+'_Setup.exe','Setup.cs',installer_resources())
     print(json.dumps({'files':len(manifest['files']),'payload_size':(BIN/'Payload.zip').stat().st_size,'setup_size':(BIN/(BRAND+'_Setup.exe')).stat().st_size}))
     raise SystemExit(0)
 if G is None:parser.error('Full payload rebuild requires --game-root or AC8_GAME_ROOT. Use --launcher-only or --payload-zip with release sources.')
@@ -94,5 +107,5 @@ manifest=dict(brand=BRAND,files=files,legacy=legacy)
 with zipfile.ZipFile(BIN/'Payload.zip','w',zipfile.ZIP_DEFLATED,compresslevel=6) as z:
     z.writestr('manifest.json',json.dumps(manifest,ensure_ascii=False).encode())
     for name,content in data.items():z.writestr(name,content)
-compile(BRAND+'_Setup.exe','Setup.cs',['/resource:'+str(BIN/'Payload.zip')+',Payload.zip'])
+compile(BRAND+'_Setup.exe','Setup.cs',installer_resources())
 print(json.dumps({'files':len(files),'legacy_files':len(legacy),'payload_size':(BIN/'Payload.zip').stat().st_size,'setup_size':(BIN/(BRAND+'_Setup.exe')).stat().st_size}))
