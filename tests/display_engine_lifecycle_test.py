@@ -188,7 +188,7 @@ void scenario(int w,int h){
     require(!restore_engine_span(plan.serial,w*3,h,2)&&engine_calls==before+1,"unmeasured render viewport refuses engine call");
 }
 int main(){
-    scenario(1920,1080);scenario(2560,1440);
+    scenario(1920,1080);scenario(2560,1440);scenario(3840,2160);
     reset(1920,1080);uintptr_t native=0;
     require(guarded_engine_window(live_engine_viewport(),native)==fixture_owner&&native==reinterpret_cast<uintptr_t>(fixture_native),"actual live-owner guard validates pinned viewport/native vtables");
     put(fixture_viewport,uintptr_t(0));require(!guarded_engine_window(live_engine_viewport(),native)&&native==0,"actual guard rejects unpinned viewport");bind_owner();
@@ -209,7 +209,7 @@ int main(){
     reset(1920,1080);plan=poll();fixture_now+=2000;
     for(int i=0;i<5;++i){poll();fixture_now+=750;plan=poll();fixture_now+=61000;}
     poll();fixture_now+=750;require(poll().serial==plan.serial&&engine_span_recovery.exhausted(),"five unresolved commands stop even across minute boundaries");
-    std::printf("PASS: %u actual engine poll/ack/ResizeFrame/reshape lifecycle checks for 5760x1080 and 7680x1440; mocked platform boundaries, no game hardware claim.\n",checks);
+    std::printf("PASS: %u actual engine poll/ack/ResizeFrame/reshape lifecycle checks for 5760x1080, 7680x1440 and 11520x2160; mocked platform boundaries, no game hardware claim.\n",checks);
 }
 '''
 
@@ -240,7 +240,7 @@ evidence = dict(
         'tests/display_engine_lifecycle_test.py', 'runtime/lua_display_resolution_lifecycle_test.lua')},
     compiled_fixture_sha256=hashlib.sha256((build / 'display_engine_lifecycle_test.cpp').read_bytes()).hexdigest(),
     tested_production_functions=['guarded_engine_window', 'poll_engine_span', 'restore_engine_span', 'resize_game_frame', 'reshape_engine_span', 'EngineSpanRecovery.observe'],
-    viewport_cases=['5760x1080', '7680x1440'],
+    viewport_cases=['5760x1080', '7680x1440', '11520x2160'],
     scope='Actual production engine-span functions compiled/executed with pinned owner memory fixtures and mocked clock, native engine/reshape delegates and physical client measurements; no game process, real HWND or graphics hardware touched.',
     live_fhd_verified=False, live_qhd_after_change_verified=False,
     limitations=['Latest real log observed only the existing QHD path; reported FHD menu reset was not physically reproduced.',

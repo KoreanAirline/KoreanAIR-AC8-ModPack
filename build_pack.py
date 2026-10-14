@@ -21,7 +21,7 @@ assert release['repository'] in (D/'src/UpdateCore.cs').read_text(encoding='utf-
 refs=['System.Windows.Forms.dll','System.Drawing.dll','System.Web.Extensions.dll','System.IO.Compression.dll','System.IO.Compression.FileSystem.dll']
 def compile(name,source,resources=[]):
     args=[str(CSC),'/nologo','/target:winexe','/optimize+','/platform:x64','/out:'+str(BIN/name)]+['/reference:'+r for r in refs]+resources+[str(D/'src/PackCore.cs'),str(D/'src/Ui.cs'),str(D/'src/UpdateCore.cs'),str(D/'src'/source)]
-    if source=='Launcher.cs':args.extend(str(D/'src'/p) for p in ('Hud.cs','Keys.cs','UpdateUI.cs'))
+    if source=='Launcher.cs':args.extend(str(D/'src'/p) for p in ('Hud.cs','Keys.cs','UpdateUI.cs','MouseInputWorker.cs'))
     subprocess.run(args,check=True)
 
 def installer_resources():

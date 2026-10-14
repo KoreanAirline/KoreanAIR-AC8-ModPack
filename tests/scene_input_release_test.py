@@ -12,9 +12,12 @@ runtime = here.parent / "runtime"
 source = (runtime / "src/mouse_aim.cpp").read_text(encoding="utf-8")
 main = (runtime / "scripts/main.lua").read_text(encoding="utf-8")
 headlook = (runtime / "scripts/headlook.lua").read_text(encoding="utf-8")
-assert main.index("local headlooking=headlook.update()") < main.index("frame_native(address,")
+assert main.index("local headlooking=headlook.update(cached_controller)") < main.index("frame_native(address,")
 assert "function M.release() native(0,0) end" in headlook
-assert "if count~=1 then M.release();return false end" in headlook
+assert "if count~=1 then controller=nil end" in headlook
+assert "if not valid(controller) then M.release();return false end" in headlook
+assert "local selected=controller:GetViewTarget()" in headlook
+assert "FindAllOf('LiveCinematicsCameraPawn')" not in headlook
 
 def function(name):
     start = source.index(name + "(")
@@ -40,6 +43,11 @@ prefix = r'''
 #include "free_look.h"
 #include "geometric_guidance.h"
 #include "aim_zoom.h"
+#include "aim_input_state.h"
+std::recursive_mutex pointing_mutex;ac8pointing::Snapshot pointing_snapshot;
+std::atomic<bool> independent_mouse_capture{false};
+std::atomic<long> independent_trace_dx{0},independent_trace_dy{0};
+std::atomic<uintptr_t> aircraft{1234};std::atomic<uint64_t> input_generation{1};
 struct Features {bool mouse_flight=true,diagnostics=false;} pack_features;
 std::atomic<bool> running{true},enabled{true},active{true},game_paused{false},gaze_active{false};
 std::atomic<bool> native_landing_owned{false};

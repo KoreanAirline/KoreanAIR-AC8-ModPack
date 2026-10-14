@@ -4,7 +4,7 @@ D=Path(__file__).resolve().parents[1]
 out=D/'tests'/('frame_generation_'+time.strftime('%Y%m%d_%H%M%S'));out.mkdir()
 dll=out/'FrameGenerationAudit.dll'
 refs=['System.Windows.Forms.dll','System.Drawing.dll','System.Web.Extensions.dll','System.IO.Compression.dll','System.IO.Compression.FileSystem.dll']
-sources=['src/PackCore.cs','src/Ui.cs','src/UpdateCore.cs','src/Launcher.cs','src/Hud.cs','src/Keys.cs','src/UpdateUI.cs','tests/FrameGenerationAudit.cs']
+sources=['src/PackCore.cs','src/Ui.cs','src/UpdateCore.cs','src/Launcher.cs','src/Hud.cs','src/Keys.cs','src/UpdateUI.cs','src/MouseInputWorker.cs','tests/FrameGenerationAudit.cs']
 subprocess.run(['C:/Windows/Microsoft.NET/Framework64/v4.0.30319/csc.exe','/nologo','/target:library','/platform:x64','/define:FRAME_GENERATION_TEST','/out:'+str(dll),*['/reference:'+r for r in refs],*[str(D/p) for p in sources]],check=True)
 run=subprocess.run(['powershell.exe','-NoProfile','-STA','-File',str(D/'tests/InvokeFrameGenerationAudit.ps1'),str(dll),str(out)],creationflags=subprocess.CREATE_NO_WINDOW)
 report=json.loads((out/'results.json').read_text(encoding='utf-8-sig'))

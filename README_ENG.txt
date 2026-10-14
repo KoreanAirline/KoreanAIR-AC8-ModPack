@@ -132,7 +132,8 @@ Set the game's own flight and target-selection keys in its controls menu.
 CROSSHAIRS (Crosshairs)
 
 Mouse flight provides two anti-aliased markers: the mouse steering target and the
-aircraft's nose direction. The mouse steering target is always a circle. Choose
+aircraft's nose direction. The mouse steering target is always a circle, updated
+from new mouse input at the refresh rate of the displays covered by the game window. Choose
 its size and color separately from the aircraft direction marker. Only the aircraft
 direction marker has selectable styles: Circle, Cross + dot, X, Cross and Ring +
 cross. Line thickness, optional

@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "scope": "Exact unchanged native guidance/actuator math, keyboard/PSM/landing ownership and camera optics against published1401. Target ingestion and overlay cadence intentionally changed; actual recompiled fixtures, no live performance claim.",
+  "immutable_baseline_archive_sha256": "71870f39397b96375e4b5415061a7db17ae27bd0a53dba71187d74da50b2cb2d",
+  "prior_hud_function_sha256": {
+    "draw_overlay": "ef2368b200e514541d538232c33cc450ae8ac4f7d8b715e9ee9f35a2bd5211a6",
+    "overlay_loop": "4651a0ad281cb7e1d810f3c80732556d2f1d30165301205b8338265ddf0031f0",
+    "capture_get_raw_input_data": "afd6354907a555c0b7a091c2ee08af20b797164423010dd9966ab79c011f89ad",
+    "mouse_loop": "3ae6e5c334a84421cc509ebba1a56cfb8cafb5fb15b2dac80464db0eb14358dd",
+    "ac8_mouseaim_targetscore": "83e0a3e53f8e1814dd403bf82202b604829ea9fc124bba717348f3a2eb127f66"
+  },
+  "source_sha256": {
+    "runtime\\src\\mouse_aim.cpp": "a58623910778656a753b29c2c7b696b9b1dc3643b53f0908302b03efdbb9353e",
+    "runtime\\src\\native_camera.h": "1af80b3fc8084b4099b103adf71db7cd9019e55d9087128df4201d68e734f76c",
+    "runtime\\src\\overlay_update_policy.h": "2dad4ea31e7bda24a33c5a0a26a6f63c958065a21394d66ec1473109f6b27c7f",
+    "runtime\\src\\overlay_refresh.h": "c145bc8d82b43c208a9eb187d4755f6e480568f1ba30b3d85671729bcf8d7983",
+    "runtime\\src\\aim_input_state.h": "8295cb928c70f6e47446caa4cc867665d9a8dfd7fcbb87e24a52af042b2161ed",
+    "runtime\\src\\raw_mouse_worker.h": "dd5a7212fd55c7e8ff62d1a244ebcb75db296f69bf8190dea273fe673858b214",
+    "runtime\\src\\async_diagnostics.h": "0262e9a2ba70af4dbf995b5af574fd341d90522f55953115d8c3ee36521ee475",
+    "runtime\\scripts\\headlook.lua": "63cdc6fa2bc58d1948ffb9731b73450ebf08422a6501528e2450d193dc1589ce",
+    "runtime\\scripts\\main.lua": "f2fb05020b83dc2fe5abbe4a0b26d3945862105137d2539e65f3450379d1a902",
+    "runtime\\scripts\\subtitle.lua": "ee7e30d1b1701418f0bbafbe87bc02a5dc85ad7d86fce8adcf987ad687691797"
+  }
+}

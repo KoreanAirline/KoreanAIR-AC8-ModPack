@@ -1,0 +1,48 @@
+{
+  "scope": "mouse-only separate process; unchanged native guidance",
+  "checks": 3011,
+  "cumulative_source_checks": 1121,
+  "standalone_hidden_collector": {
+    "validated_game_fixture": true,
+    "ready": true,
+    "raw_registration_preserved": true,
+    "inactive_mouse_packets": 0,
+    "startup_ms": 31
+  },
+  "rejected_wrong_game": {
+    "validated_game_fixture": false,
+    "ready": false,
+    "raw_registration_preserved": true,
+    "inactive_mouse_packets": 0,
+    "startup_ms": 47
+  },
+  "process_permissions": "PROCESS_QUERY_LIMITED_INFORMATION | SYNCHRONIZE; token query only",
+  "ipc_permissions": "current user only; session random nonce",
+  "keyboard_reads": false,
+  "game_memory_reads": false,
+  "physical_mouse_sampling_performed": false,
+  "live_game_cadence_verified": false,
+  "files": [
+    {
+      "path": "src/MouseInputWorker.cs",
+      "sha256": "5bd7ae25f4c0170f1dc434025a4371168ab4eb1cb63a2ca23388bd98ae1b103c"
+    },
+    {
+      "path": "runtime/src/raw_mouse_worker.h",
+      "sha256": "dd5a7212fd55c7e8ff62d1a244ebcb75db296f69bf8190dea273fe673858b214"
+    },
+    {
+      "path": "runtime/src/mouse_counter_state.h",
+      "sha256": "84b116a9ade26bd8e87e4615e1ab10f1d9bfa393ae70faae0ffdadeb4069ae85"
+    },
+    {
+      "path": "runtime/raw_mouse_worker_test.cpp",
+      "sha256": "41fc373d589712cabdf135f493b438a2af8476bed6509d7768750a772bdf2c49"
+    },
+    {
+      "path": "runtime/raw_mouse_worker_smoke.cpp",
+      "sha256": "6ff38ea77dc3bf018db3c7eccb0f987c31ef1eab684491138492eb601aa3d3dd"
+    }
+  ],
+  "source": "https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-registerrawinputdevices"
+}

@@ -19,6 +19,7 @@ partial class Launcher : Form {
  internal Action<string,MessageBoxIcon> Dialog;
  [DllImport("user32.dll")] static extern IntPtr SetThreadDpiAwarenessContext(IntPtr context);
  [STAThread] static int Main(string[] args) {
+  if(args.Length>0&&args[0]=="--mouse-input-worker")return MouseInputWorker.Run(args);
   try {
    string r=AppDomain.CurrentDomain.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar);
    if(args.Length>0) {

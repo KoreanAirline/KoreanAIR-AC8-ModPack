@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "game_sha256": "51510e2a520565dbe81fb0d569e95cd4393077acaaa859371489b80b8128829f",
+  "native_slice_sha256": {
+    "0x7a652b7:0x27": "d9f126b8574c09e2b70aaafb411159514b5c76d9510b6800b12b22d4a396856b",
+    "0x7a65633:0x38": "663b1da253c628b4a2897409db7effdf4dfc6972e1211e22ff86a74a29f7b19f",
+    "0x7a65ca3:0x77": "78c231187fba0a0c33e1dbebe5ef5271b4445cf5ab3b4cd8ccda191c6a02d4c5",
+    "0x7a63dcc:0x2a": "4d615bf6b239dd116d3a83746c32d95d3641f31ad9f77aa0c9d75f291f76acc8",
+    "0xcbb4820:0x3e": "7263da116b1f541de72f058e8eded88cfb0e558e484bb1656d4edb1e3c47dd40"
+  },
+  "source_sha256": {
+    "runtime/scripts/subtitle.lua": "ee7e30d1b1701418f0bbafbe87bc02a5dc85ad7d86fce8adcf987ad687691797",
+    "runtime/lua_subtitle_test.lua": "4cff4eac31692f22090da5eeecc52eef437f51f0add7decb435319fbcb3ce3b7"
+  },
+  "native_findings": {
+    "position_rate_scope": "Free-position cinematic caption option only; the main caption branch does not call SetPosition.",
+    "lowered_flag_option": "Display_SpeakerNameSubtitlesOn"
+  },
+  "checks": 99,
+  "test_log": "runtime/build/lua_subtitle_test.txt",
+  "native_layout_rule": "Only the exact Main/Local text CanvasPanelSlots under the reflected main canvas, with matching authored vertical layout and measured viewport bounds, receive normalized bottom anchors once. Native Canvas layout then handles wrapping and viewport changes.",
+  "fallback": "Unknown or authored stacked dialogue remains on the guarded compact-container translation route; title and free-position captions are excluded.",
+  "validation_limit": "Pinned executable dispatch and actual shipped Lua fixtures were checked. No game was launched; instantiated cinematic widget slots have not been visually validated."
+}

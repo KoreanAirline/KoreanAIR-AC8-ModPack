@@ -58,6 +58,8 @@ prelude = r'''
 #include "native_landing_guard.h"
 #include "native_raw_input.h"
 #include "input_lifecycle.h"
+#include "aim_input_state.h"
+ac8pointing::Snapshot pointing_snapshot;
 struct Resettable {unsigned resets=0;void reset(){++resets;}};
 Resettable native_rudder,live_guidance,maneuver_guard,player_maneuver_control,free_look,guidance;
 struct Origin {bool automatic=false;unsigned clears=0;void clear(){automatic=false;++clears;}};
@@ -77,6 +79,7 @@ std::atomic<long> mouse_dx{},mouse_dy{};
 unsigned long long previous_pose_tick=0,telemetry_tick=0,perf_player_inputs=0,perf_other_inputs=0;
 bool landing_code_verified=true;
 std::mutex camera_command_mutex,target_vector_mutex;
+std::recursive_mutex pointing_mutex;
 flight::V live_target{1,0,0};
 struct CameraCommand {uintptr_t manager=0,pawn=0;double p=0,y=0,r=0;flight::V aim{1,0,0};ULONGLONG tick=0;};
 CameraCommand camera_command;
