@@ -149,7 +149,7 @@ in about 0.5 seconds without restarting. The HUD shortcut hides/shows both marke
 SCREEN AND CAMERA (Screen & camera)
 
 Enable camera settings to apply this tab's camera options. FOV uses a 16:9 reference
-and affects flight only. Menus and prerecorded videos retain their original view.
+and affects flight only. Prerecorded videos retain their original view.
 Chase camera distance and height require the Mouse flight module and affect
 third-person view only.
 
@@ -159,8 +159,9 @@ display, and all three must align along the top with no gaps. NVIDIA Surround is
 not required. If the layout is unsuitable, triple span is unavailable but
 single-display FOV remains available. Save changes, then focus the game to see them.
 
-When triple span is enabled, supported real-time rendered cinematics, T target-view
-scenes and interactive head-look scenes also use the full span. The mod extends
+When triple span is enabled, supported rendered hangar aircraft/weapon selection,
+sortie and departure scenes, real-time cinematics, T target-view and interactive
+head-look scenes also use the full span. The mod extends
 the horizontal view while preserving native camera motion and animated zoom; the
 flight FOV slider does not replace the cinematic lens. This requires a positively
 identified active camera and a matching wide render viewport. Unrecognized

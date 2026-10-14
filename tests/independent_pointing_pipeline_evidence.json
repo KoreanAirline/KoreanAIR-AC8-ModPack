@@ -3,7 +3,7 @@
   "scope": "Actual extracted production pointing pipeline, synthetic numeric/OS inputs only; no live flight or monitor FPS claim.",
   "result": "PASS actual independent target pipeline: 415 checks; true 180/36 updates, exact count conservation, exclusive capture, ALT/mission/pause/landing/scene gates, unchanged native maneuver commands. No live flight claim.",
   "source_sha256": {
-    "runtime\\src\\mouse_aim.cpp": "a58623910778656a753b29c2c7b696b9b1dc3643b53f0908302b03efdbb9353e",
+    "runtime\\src\\mouse_aim.cpp": "3b28f84f7c883f22f2a3e84c77c5d46204d05fcfb7a7e7d25a79d0b258501235",
     "runtime\\src\\aim_input_state.h": "8295cb928c70f6e47446caa4cc867665d9a8dfd7fcbb87e24a52af042b2161ed",
     "tests\\independent_pointing_pipeline_test.py": "6e25d148c3ca148bea6286f6a7cc84ad3d2cdfba0f96b0688f0e1966846b4a79"
   }

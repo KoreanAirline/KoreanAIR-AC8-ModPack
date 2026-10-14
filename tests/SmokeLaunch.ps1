@@ -67,7 +67,7 @@ $report = @{
     new_runtime_errors=($ueText -match $errors -or $mouseText -match $errors)
     modules=$modules;native_dll_matches=(@($modules | Where-Object { $_.name -eq 'ac8_mouse_aim_010.dll' -and $_.sha256 -eq $expectedNativeHash }).Count -eq 1)
     native_log_fresh=$freshNative
-    native_camera_registered=$mouseText.Contains('native camera post-update registered;')
+    native_camera_registered=$mouseText.Contains('native camera post-update registered: live and engine managers;')
     native_maneuver_guard_verified=$mouseText.Contains('native maneuver input build guard: verified')
     native_player_maneuver_guard_verified=$mouseText.Contains('native player maneuver build guard: verified')
     native_landing_guard_verified=$mouseText.Contains('native landing build guard: verified')

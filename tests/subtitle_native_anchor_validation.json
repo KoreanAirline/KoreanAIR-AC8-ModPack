@@ -6,19 +6,23 @@
     "0x7a65633:0x38": "663b1da253c628b4a2897409db7effdf4dfc6972e1211e22ff86a74a29f7b19f",
     "0x7a65ca3:0x77": "78c231187fba0a0c33e1dbebe5ef5271b4445cf5ab3b4cd8ccda191c6a02d4c5",
     "0x7a63dcc:0x2a": "4d615bf6b239dd116d3a83746c32d95d3641f31ad9f77aa0c9d75f291f76acc8",
-    "0xcbb4820:0x3e": "7263da116b1f541de72f058e8eded88cfb0e558e484bb1656d4edb1e3c47dd40"
+    "0xcbb4820:0x3e": "7263da116b1f541de72f058e8eded88cfb0e558e484bb1656d4edb1e3c47dd40",
+    "0xc74c2b0:0x40": "f4e770cf8b91ec9bcbcc87086857ab26c475d2c01b5a30074a52f6ab1ef024d9",
+    "0x3cfdf30:0x5": "c818fe9d9bcf2ba793a6db3be221701d164093713d3f1b7190ad2d17e9e5ee2b",
+    "0xba26052:0x18": "ef8710ec28a52572175b77f2513c751df88d5d6fb8f79b5e7ab644dc6be9dbb8"
   },
   "source_sha256": {
-    "runtime/scripts/subtitle.lua": "ee7e30d1b1701418f0bbafbe87bc02a5dc85ad7d86fce8adcf987ad687691797",
-    "runtime/lua_subtitle_test.lua": "4cff4eac31692f22090da5eeecc52eef437f51f0add7decb435319fbcb3ce3b7"
+    "runtime/scripts/subtitle.lua": "e6078d702fd1dd86476ccb437234351a1662a58f1c932bd2f256801c2bd3fcb2",
+    "runtime/lua_subtitle_test.lua": "dbaac86f5dd4b0775218450198bed15fd74cfb441090520d249ba905c7bf7900"
   },
   "native_findings": {
     "position_rate_scope": "Free-position cinematic caption option only; the main caption branch does not call SetPosition.",
-    "lowered_flag_option": "Display_SpeakerNameSubtitlesOn"
+    "lowered_flag_option": "Display_SpeakerNameSubtitlesOn",
+    "radio_box": "Native RadioBox at offset0x340 is a VerticalBox. Only the exact box under RadioPanel containing both exact radio text references is eligible for a compact Canvas slot."
   },
-  "checks": 99,
+  "checks": 132,
   "test_log": "runtime/build/lua_subtitle_test.txt",
-  "native_layout_rule": "Only the exact Main/Local text CanvasPanelSlots under the reflected main canvas, with matching authored vertical layout and measured viewport bounds, receive normalized bottom anchors once. Native Canvas layout then handles wrapping and viewport changes.",
+  "native_layout_rule": "Exact Main/Local text or compact radio dialogue Canvas slots receive normalized bottom anchors. Four measured corners must prove axis-aligned full viewport vertical extent, allowing a horizontally inset16:9 parent and different UMG DPI local units. Authored horizontal fields are retained. Cached native fields are checked for caption resets; stable anchors require no geometry or setter calls.",
   "fallback": "Unknown or authored stacked dialogue remains on the guarded compact-container translation route; title and free-position captions are excluded.",
   "validation_limit": "Pinned executable dispatch and actual shipped Lua fixtures were checked. No game was launched; instantiated cinematic widget slots have not been visually validated."
 }
