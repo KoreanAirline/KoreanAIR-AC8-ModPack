@@ -32,6 +32,7 @@ std::atomic<bool> zoom_enabled{true},zoom_requested{false},zoom_binding_blocked{
 std::atomic<int> free_look_binding{18},zoom_binding{2};
 std::atomic<float> zoom_magnification{1};
 std::atomic<bool> active{true},enabled{true},game_paused{false},gaze_active{false},hud_enabled{true},recenter_requested{false},reload_requested{false};
+std::atomic<bool> native_landing_owned{false};
 ac8keys::Bindings key_bindings;ac8keys::Edges key_edges;
 bool key_bindings_initialized=false,free_look_key_blocked=false,free_look_key_pressed=false,focused=true;
 std::array<bool,256> physical{};int configured_zoom=2;wchar_t config_path[1]{};

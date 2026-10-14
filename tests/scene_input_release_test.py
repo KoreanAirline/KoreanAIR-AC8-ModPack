@@ -42,6 +42,7 @@ prefix = r'''
 #include "aim_zoom.h"
 struct Features {bool mouse_flight=true,diagnostics=false;} pack_features;
 std::atomic<bool> running{true},enabled{true},active{true},game_paused{false},gaze_active{false};
+std::atomic<bool> native_landing_owned{false};
 std::atomic<long> mouse_dx{0},mouse_dy{0};ac8scene::Mouse scene_mouse;
 struct Config {float look_sensitivity=.03f,sensitivity=.1f;} config;
 std::atomic<bool> zoom_requested{false},manual_free_look{false},native_maneuver_active{false},recenter_requested{false},resume_center_requested{false};
@@ -140,7 +141,14 @@ int main(){
         clock_tick+=16;capture(10,0);update_commands();
         require(dot(goal(),held_goal)<.999999f&&zoom_requested.load(),"ordinary aim movement resumes after ALT while zoom remains requested");
     }
-    std::printf("PASS scene input release pipeline: %u checks; actual raw capture/scene bridge/update_commands/FreeLook; 40 ordinary, 40 ALT and 40 post-scene frames; real entry/pause/stale/reactivation/exit boundaries discard once; flight and ALT current-lens mouse displacement at 1x/2x/8x; ALT enter/move/release preserves clicked zoom and flight goal; main.lua idle headlook release precedes flight frame.\n",checks);
+    const auto prior_goal=goal();native_landing_owned.store(true);zoom_requested.store(true);zoom_magnification.store(8);
+    command_pitch.store(1);command_yaw.store(1);command_roll.store(1);capture(11,-5);update_commands();
+    require(command_pitch.load()==0&&command_yaw.load()==0&&command_roll.load()==0&&!zoom_requested.load()&&zoom_magnification.load()==1&&!manual_free_look.load(),"actual update_commands yields command/free-look/zoom ownership to published native landing");
+    require(dot(goal(),prior_goal)>.999999f&&previous_pose_tick==0,"published landing preserves target and invalidates ordinary input timing");
+    // The game-thread landing boundary clears pending deltas before resuming.
+    native_landing_owned.store(false);mouse_dx.store(0);mouse_dy.store(0);clock_tick+=16;capture(10,0);update_commands();
+    require(dot(goal(),prior_goal)<.999999f,"actual ordinary mouse input resumes after landing ownership clears");
+    std::printf("PASS scene input release pipeline: %u checks; actual raw capture/scene bridge/update_commands/FreeLook; 40 ordinary, 40 ALT and 40 post-scene frames; real entry/pause/stale/reactivation/exit boundaries discard once; flight and ALT current-lens mouse displacement at 1x/2x/8x; ALT enter/move/release preserves clicked zoom and flight goal; published native landing gate yields/resumes; main.lua idle headlook release precedes flight frame.\n",checks);
 }
 '''
 build = here / "input_zoom_build"

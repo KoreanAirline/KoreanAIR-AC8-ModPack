@@ -1,13 +1,13 @@
-KoreanAIR_AC8_ModPack_1.3
+KoreanAIR_AC8_ModPack_1.4
 English user guide
 
 INSTALL AND PLAY
 
 1. Start ACE COMBAT 8 normally through Steam at least once, then close the game.
 2. Extract the complete ZIP, keeping Payload.zip beside the installer, then run
-   KoreanAIR_AC8_ModPack_1.3_Setup.exe. Select the game folder containing
+   KoreanAIR_AC8_ModPack_1.4_Setup.exe. Select the game folder containing
    start_protected_game.exe, then choose the modules and click Install / Update.
-3. Open KoreanAIR_AC8_ModPack_1.3.exe in the game folder. Keep Steam open and
+3. Open KoreanAIR_AC8_ModPack_1.4.exe in the game folder. Keep Steam open and
    choose Play with selected mods.
 
 The standalone installer downloads the matching verified mod files when needed.
@@ -35,7 +35,8 @@ downloads and verifies the update, applies it and restarts. A newer bug-fix buil
 keep the same displayed version number; these updates also appear in the banner.
 
 Updates preserve your selected modules, saved INI settings, controls and keybindings,
-HUD and crosshair settings, aim zoom, FOV and camera settings, subtitle position
+HUD and crosshair settings, aim zoom, FOV and camera settings, frame generation
+selection, subtitle position
 and interface language. If the pack is disabled for standard play, it stays
 disabled after updating.
 While offline or if an update check or download fails, you can still use the launcher
@@ -164,6 +165,26 @@ flight FOV slider does not replace the cinematic lens. This requires a positivel
 identified active camera and a matching wide render viewport. Unrecognized
 cameras, prerecorded videos and separately drawn black-bar overlays are unchanged.
 
+FRAME GENERATION (Frame generation)
+
+The saved override protects its settings file while managed by the launcher.
+Restore original setting returns the original contents and file attributes.
+
+Close the game, select On or Off on the Frame generation tab, then click Save
+frame generation. Your selection applies on the next game launch. Restart the
+game after each change; settings cannot be changed while the game is running.
+If the pack is disabled, choose Resume mod pack before saving.
+
+The initial setting inherits your existing game preference; updates preserve
+your saved choice. Restore original setting removes this mod's override and uses
+the game's original setting. Saving On may not activate frame generation if the
+game, graphics card or driver does not support it. A saved selection alone does
+not verify actual activation or a frame-rate improvement.
+
+Use the game's graphics menu for ordinary DLSS, graphics quality, frame limits,
+VSync and other graphics options. This launcher tab controls frame generation
+on/off only.
+
 SUBTITLE POSITION (Subtitles)
 
 Choose Original position to keep the game's dialogue subtitle placement, or Bottom
@@ -175,7 +196,7 @@ elements keep their original placement.
 
 GAME SETTINGS
 
-Use the game's own menus for graphics quality, DLSS, frame rate, VSync and other
+Use the game's own menus for graphics quality, ordinary DLSS, frame rate, VSync and other
 game options. The launcher provides only settings specific to this mod pack.
 
 STANDARD / ONLINE PLAY

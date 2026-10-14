@@ -15,6 +15,7 @@ partial class Launcher : Form {
  readonly TabControl tabs=new LauncherTabs{Name="settingsTabs",Dock=DockStyle.Fill,Margin=new Padding(0)};
  readonly Label message=new Label{Name="launcherStatus",AutoSize=true,Dock=DockStyle.Fill,Margin=new Padding(0,12,0,0),Padding=new Padding(12,8,12,8),Tag="muted"};
  readonly ToolTip help=new ToolTip();
+ System.Windows.Forms.Timer fgStatusTimer;
  internal Action<string,MessageBoxIcon> Dialog;
  [DllImport("user32.dll")] static extern IntPtr SetThreadDpiAwarenessContext(IntPtr context);
  [STAThread] static int Main(string[] args) {
@@ -60,7 +61,7 @@ partial class Launcher : Form {
   language.RowCount=2;language.RowStyles.Add(new RowStyle(SizeType.AutoSize));language.RowStyles.Add(new RowStyle(SizeType.AutoSize));
   language.Controls.Add(new Label{Text="Language / 언어",AutoSize=true,Font=new Font("Segoe UI",9),Margin=new Padding(0,4,0,4),Tag="muted"},0,0);language.Controls.Add(ui.Selector(),0,1);header.Controls.Add(language,1,0);
   layout.Controls.Add(header,0,0);layout.Controls.Add(tabs,0,2);layout.Controls.Add(message,0,3);
-  Play();ControlsTab();CrosshairTab();DisplayTab();SubtitlesTab();Manage();Status("Settings are saved on this PC.","설정은 이 PC에 저장됩니다.");
+  Play();ControlsTab();CrosshairTab();DisplayTab();FrameGenerationTab();SubtitlesTab();Manage();Status("Settings are saved on this PC.","설정은 이 PC에 저장됩니다.");
   InitializeUpdates(layout);LauncherTheme.Apply(this);ui.OnChange(()=>tabs.Invalidate());
   HandleCreated+=(s,e)=>LauncherTheme.DarkTitleBar(this);
   Shown+=(s,e)=>UiWindow.Fit(this);ResizeEnd+=(s,e)=>UiWindow.Fit(this);
@@ -138,6 +139,47 @@ partial class Launcher : Form {
   Paragraph(p,"Choose the original position or lower supported dialogue subtitles toward the bottom.\nSaved changes apply automatically while playing.","지원하는 대사 자막을 원래 위치에 두거나 화면 하단으로 내릴 수 있습니다.\n저장하면 게임 중에도 자동으로 적용됩니다.");
   Button(Actions(p),"saveSubtitles","Save subtitle position","자막 위치 저장",()=>{Core.WriteIni(Core.Config(root,"subtitle.ini"),"subtitles",new Dictionary<string,string>{{"position",position.SelectedIndex==1?"bottom":"native"}});Status("Subtitle position saved; changes apply automatically in the game.","자막 위치를 저장했습니다. 게임 중 자동으로 적용됩니다.");});
  }
+ string FgBool(string value){return value=="1"?ui.T("Yes","예"):value=="0"?ui.T("No","아니요"):ui.T("Unknown","미확인");}
+ string FgMode(string value){
+  var names=new Dictionary<string,string[]>{{"off",new[]{"Off","끄기"}},{"auto",new[]{"Auto","자동"}},{"2x",new[]{"2×","2배"}},{"3x",new[]{"3×","3배"}},{"4x",new[]{"4×","4배"}},{"dlaa",new[]{"DLAA","DLAA"}},{"quality",new[]{"Quality","품질"}},{"balanced",new[]{"Balanced","균형"}},{"performance",new[]{"Performance","성능"}},{"ultra_performance",new[]{"Ultra performance","최고 성능"}},{"ultra_quality",new[]{"Ultra quality","최고 품질"}}};
+  string[] name;return names.TryGetValue(value??"unknown",out name)?ui.T(name[0],name[1]):ui.T("Unknown","미확인");
+ }
+ string FrameGenerationEvidence(){
+  try{
+   if(!Core.Running(root))return ui.T("Runtime status appears after starting the game.","게임을 시작하면 실행 상태를 확인할 수 있습니다.");
+   var d=Core.ReadUpscalerStatus(root);if(d.Count==0)return ui.T("Waiting for a current native status sample.","현재 게임의 상태 자료를 기다리고 있습니다.");
+   Func<string,string> get=key=>d.ContainsKey(key)?d[key]:"unknown";
+   string text=ui.T("FG supported in this session: ","현재 실행에서 FG 지원: ")+FgBool(get("fg_supported"))+"\n"+
+    ui.T("FG library mode: ","FG 라이브러리 설정 모드: ")+FgMode(get("fg_mode"))+"\n"+
+    ui.T("DLSS library enable flag: ","DLSS 라이브러리 사용 표시: ")+FgBool(get("dlss_enabled"))+" · "+
+    ui.T("Reported DLSS mode (legacy): ","보고된 DLSS 모드 (참고): ")+FgMode(get("dlss_mode"));
+   if(d.ContainsKey("fg_actual_frames"))text+="\n"+ui.T("Last native presentation: ","마지막 네이티브 화면 제시: ")+d["fg_actual_frames"]+
+    ui.T(" total frames, ","개 프레임, ")+(Int32.Parse(d["fg_actual_frames"])-1)+ui.T(" generated · estimated shown FPS: ","개 생성 · 표시 FPS 추정: ")+d["fg_frame_rate"];
+   else text+="\n"+ui.T("Generated-frame evidence: unknown.","생성 프레임 증거: 미확인.");
+   return text+"\n"+ui.T("Current GPU activity is unverified. The last presentation can remain cached while paused.","현재 GPU 처리 여부는 미확인입니다. 일시 정지 중에는 마지막 화면 제시 자료가 남아 있을 수 있습니다.");
+  }catch{return ui.T("Runtime status is unavailable.","실행 상태를 읽을 수 없습니다.");}
+ }
+ void FrameGenerationTab(){
+  var p=Tab("Frame generation","프레임 생성");
+  Paragraph(p,"Use the game's bundled NVIDIA DLSS Frame Generation. Requires a supported RTX 40/50 series GPU and Windows hardware-accelerated GPU scheduling.\nClose the game before saving; restart it to apply changes.","게임에 포함된 NVIDIA DLSS 프레임 생성을 사용합니다. 지원되는 RTX 40·50 시리즈 GPU와 Windows 하드웨어 가속 GPU 일정 예약이 필요합니다.\n게임을 종료한 뒤 저장하세요. 변경 내용은 게임을 다시 시작하면 적용됩니다.");
+  bool? requested=null;string readError=null;try{requested=Core.FrameGenerationRequested(root);}catch(Exception ex){readError=ex.Message;}
+  var choice=new ComboBox{Name="frameGenerationChoice",DropDownStyle=ComboBoxStyle.DropDownList,Width=280,Margin=new Padding(0,4,0,12)};choice.Items.AddRange(new object[]{"On","Off"});choice.SelectedIndex=requested==true?0:1;Row(p,choice);
+  ui.OnChange(()=>{int selected=choice.SelectedIndex;choice.Items.Clear();choice.Items.AddRange(ui.Language=="ko"?new object[]{"켜기","끄기"}:new object[]{"On","Off"});choice.SelectedIndex=selected;});
+  var configured=Paragraph(p,"","");configured.Name="frameGenerationRequested";
+  ui.Bind(configured,()=>{
+   if(readError!=null)return ui.T("Existing settings need review; no changes have been made.","기존 설정을 확인해야 합니다. 변경된 내용은 없습니다.");
+   bool managed=state.frameGeneration!=null;
+   return managed?ui.T("Saved request: ","저장된 요청: ")+FgMode(state.frameGeneration.enabled?"2x":"off")+(state.suspended?ui.T(" (pack disabled; original settings restored)"," (모드 중지 중 · 원래 설정 복원됨)"):ui.T(" (applies at the next game start)"," (다음 게임 시작 시 적용)")):
+    ui.T("Original settings are in use. ","원래 설정을 사용 중입니다. ")+(requested.HasValue?ui.T("Existing FG request: ","기존 FG 요청: ")+ui.T(requested.Value?"On":"Off",requested.Value?"켜기":"끄기"):ui.T("No FG override was found.","FG 변경 설정이 없습니다."));
+  });
+  var actions=Actions(p);
+  var save=Button(actions,"saveFrameGeneration","Save frame generation","프레임 생성 저장",()=>{Core.SetFrameGeneration(root,choice.SelectedIndex==0);readError=null;state=Core.ReadState(root);Status("Frame generation request saved. Restart the game to apply it.","프레임 생성 요청을 저장했습니다. 게임을 다시 시작하면 적용됩니다.");RefreshMode();});
+  var restore=Button(actions,"restoreFrameGeneration","Restore original setting","원래 설정 복원",()=>{Core.RestoreFrameGeneration(root);readError=null;state=Core.ReadState(root);requested=Core.FrameGenerationRequested(root);choice.SelectedIndex=requested==true?0:1;Status("Original frame generation settings restored. Restart the game to apply them.","원래 프레임 생성 설정을 복원했습니다. 게임을 다시 시작하면 적용됩니다.");RefreshMode();});
+  Action availability=()=>{bool running=Core.Running(root);save.Enabled=!state.suspended&&!running&&readError==null;restore.Enabled=state.frameGeneration!=null&&!running&&readError==null;};ui.OnChange(availability);
+  Paragraph(p,"Saving creates a managed override while preserving your other settings. Engine.ini is protected while the override is in use so the game cannot remove it. Restore returns its original settings and protection.\nDLSS upscaling, anti-aliasing and other graphics choices remain in the game's own menu.","저장하면 다른 설정을 보존하면서 관리되는 변경 값을 적용합니다. 사용 중에는 게임이 Engine.ini를 지우지 않도록 보호합니다. 복원하면 원래 설정과 보호 속성으로 돌아갑니다.\nDLSS 업스케일링·안티앨리어싱과 다른 그래픽 옵션은 게임 안의 설정에서 변경하세요.");
+  var evidence=Paragraph(p,"","");evidence.Name="frameGenerationEvidence";ui.Bind(evidence,()=>FrameGenerationEvidence());
+  fgStatusTimer=new System.Windows.Forms.Timer{Interval=2000};fgStatusTimer.Tick+=(s,e)=>{if(IsDisposed)return;availability();evidence.Text=FrameGenerationEvidence();};fgStatusTimer.Start();
+ }
  void Manage(){
   var p=Tab("Installation","설치");Paragraph(p,"Add, remove or update the three modules with the installer.\nClose the game before changing installed modules.","설치 프로그램에서 각 기능을 추가·제거하거나 업데이트할 수 있습니다.\n설치 구성을 바꾸기 전에 게임을 종료하세요.");
   var compatibility=Paragraph(p,"","");compatibility.Name="campaignLoaderCompatibility";
@@ -149,6 +191,6 @@ partial class Launcher : Form {
   Button(docs,"openLicenses","Licenses & credits","라이선스·제작 정보",()=>Process.Start("explorer.exe",Core.Safe(root,Core.Folder+"/Licenses")));
   Paragraph(p,"Original-file backups are kept outside the game folder.\nThe installer preserves saves and files belonging to other mods.","설치 전 원본 파일은 게임 폴더 밖에 보관됩니다.\n설치 프로그램은 세이브와 다른 모드의 파일을 보존합니다.");
  }
- protected override void Dispose(bool disposing){if(disposing)help.Dispose();base.Dispose(disposing);}
+ protected override void Dispose(bool disposing){if(disposing){if(fgStatusTimer!=null)fgStatusTimer.Dispose();help.Dispose();}base.Dispose(disposing);}
  protected override void WndProc(ref Message m){base.WndProc(ref m);if(m.Msg==0x02E0&&IsHandleCreated&&!IsDisposed)BeginInvoke(new Action(()=>UiWindow.Fit(this)));}
 }

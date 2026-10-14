@@ -27,9 +27,17 @@ $modulePaths = @(
 ) | ForEach-Object { [IO.Path]::GetFullPath($_) }
 # The forwarding DLLs also load Windows' own namesakes. Verify the installed
 # paths rather than counting both system and mod copies as separate modules.
-$modules = @($gameProcess.Modules | Where-Object { [IO.Path]::GetFullPath($_.FileName) -in $modulePaths } | ForEach-Object {
+$moduleDeadline=(Get-Date).AddSeconds(45)
+$modules=@()
+do {
+    $gameProcess.Refresh()
+    if($gameProcess.HasExited){throw 'Game exited before the mod runtime was initialized; startup not verified.'}
+    $modules = @($gameProcess.Modules | Where-Object { $_.FileName -and [IO.Path]::GetFullPath($_.FileName) -in $modulePaths } | ForEach-Object {
     @{name=$_.ModuleName;path=$_.FileName;sha256=(Get-FileHash -LiteralPath $_.FileName -Algorithm SHA256).Hash.ToLowerInvariant()}
-})
+    })
+    if($modules.Count -eq 4){break}
+    Start-Sleep -Milliseconds 500
+} while((Get-Date) -lt $moduleDeadline)
 $windowTitle = $gameProcess.MainWindowTitle
 $closeRequested = $gameProcess.CloseMainWindow()
 $closeDeadline = (Get-Date).AddSeconds(45)
@@ -62,6 +70,7 @@ $report = @{
     native_camera_registered=$mouseText.Contains('native camera post-update registered;')
     native_maneuver_guard_verified=$mouseText.Contains('native maneuver input build guard: verified')
     native_player_maneuver_guard_verified=$mouseText.Contains('native player maneuver build guard: verified')
+    native_landing_guard_verified=$mouseText.Contains('native landing build guard: verified')
     native_raw_provenance_verified=$mouseText.Contains('native raw input provenance hook: verified mapper and synchronous physics order')
     native_psm_admission_provenance_verified=$mouseText.Contains('native PSM admission provenance hook: verified; automatic pursuit excluded from PSM candidate only')
     native_render_viewport_samples=$renderSamples
