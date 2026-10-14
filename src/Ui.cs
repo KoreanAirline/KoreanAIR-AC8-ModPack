@@ -113,6 +113,15 @@ sealed class PrecisionSetting : TableLayoutPanel {
 }
 
 static class UiWindow {
+ public static void SetBrandIcon(Form form) {
+  using(var stream=typeof(UiWindow).Assembly.GetManifestResourceStream("KoreanAIR.LauncherIcon")) {
+   if(stream==null)return;
+   using(var source=new Icon(stream)) {
+    var icon=(Icon)source.Clone();form.Icon=icon;
+    form.Disposed+=(s,e)=>icon.Dispose();
+   }
+  }
+ }
  public static void Fit(Form form) {
   var area=Screen.FromControl(form).WorkingArea;int width=Math.Max(320,area.Width-32),height=Math.Max(320,area.Height-32);
   form.MinimumSize=new Size(Math.Min(form.MinimumSize.Width,width),Math.Min(form.MinimumSize.Height,height));

@@ -21,6 +21,9 @@ assert release['repository'] in (D/'src/UpdateCore.cs').read_text(encoding='utf-
 refs=['System.Windows.Forms.dll','System.Drawing.dll','System.Web.Extensions.dll','System.IO.Compression.dll','System.IO.Compression.FileSystem.dll']
 def compile(name,source,resources=[]):
     args=[str(CSC),'/nologo','/target:winexe','/optimize+','/platform:x64','/out:'+str(BIN/name)]+['/reference:'+r for r in refs]+resources+[str(D/'src/PackCore.cs'),str(D/'src/Ui.cs'),str(D/'src/UpdateCore.cs'),str(D/'src'/source)]
+    icon=D/'assets/launcher.ico'
+    assert icon.is_file(), 'The launcher icon in assets/launcher.ico is required.'
+    args+=['/win32icon:'+str(icon),'/resource:'+str(icon)+',KoreanAIR.LauncherIcon']
     if source=='Launcher.cs':args.extend(str(D/'src'/p) for p in ('Hud.cs','Keys.cs','UpdateUI.cs','MouseInputWorker.cs'))
     subprocess.run(args,check=True)
 
@@ -44,6 +47,7 @@ if options.payload_zip:
     # The release source archive supplies redistributable payloads without game executables.
     with zipfile.ZipFile(options.payload_zip) as z:
         manifest=json.loads(z.read('manifest.json'))
+        assert manifest['brand']==BRAND, 'Use Payload.zip from the matching release.'
         data={f['source']:z.read(f['source']) for f in manifest['files']}
     for f in manifest['files']:
         if hashlib.sha256(data[f['source']]).hexdigest()!=f['hash']:

@@ -1,7 +1,9 @@
 param([ValidateSet('On','Off')][string]$Mode='On',[switch]$SaveRequest)
 $ErrorActionPreference='Stop'
 $root='E:/SteamLibrary/steamapps/common/ACE COMBAT 8'
-$exe=Join-Path $root 'KoreanAIR_AC8_ModPack_1.4.exe'
+$distributionRoot=Split-Path $PSScriptRoot -Parent
+$release=Get-Content -LiteralPath (Join-Path $distributionRoot 'release.json') -Raw | ConvertFrom-Json
+$exe=Join-Path $root ('KoreanAIR_AC8_ModPack_'+$release.version+'.exe')
 $assembly=[Reflection.Assembly]::LoadFrom($exe)
 $core=$assembly.GetType('KoreanAIR.Core',$true)
 if($core.GetMethod('Running').Invoke($null,[object[]]@($root))){throw 'Close the game before this verification.'}

@@ -65,9 +65,9 @@ report={
                      for p in [runtime/'scripts/subtitle.lua',runtime/'lua_subtitle_test.lua']},
     'native_findings':{'position_rate_scope':'Free-position cinematic caption option only; the main caption branch does not call SetPosition.',
                        'lowered_flag_option':option_name,
-                       'radio_box':'Native RadioBox at offset0x340 is a VerticalBox. Only the exact box under RadioPanel containing both exact radio text references is eligible for a compact Canvas slot.'},
+                       'radio_box':'Native RadioBox at offset0x340 contains the speaker, message and arrows. The rendered LiveHUDMessageWidget radio field is at0x4e0; the same-named LiveSubtitleWidget field at0x3c8 is excluded.'},
     'checks':int(matched[1]),'test_log':'runtime/build/lua_subtitle_test.txt',
-    'native_layout_rule':'Exact Main/Local text or compact radio dialogue Canvas slots receive normalized bottom anchors. Four measured corners must prove axis-aligned full viewport vertical extent, allowing a horizontally inset16:9 parent and different UMG DPI local units. Authored horizontal fields are retained. Cached native fields are checked for caption resets; stable anchors require no geometry or setter calls.',
+    'native_layout_rule':'The exact active HUD MessageWidget radio child uses its authored auto-size Canvas slot with normalized bottom anchors and native readback verification; no radio geometry/text searches. Main/Local cinematic text slots retain measured vertical-canvas proof. Horizontal fields and native internal layout are retained. UI ownership follows the controller/root/slot, not camera cuts or aircraft possession.',
     'fallback':'Unknown or authored stacked dialogue remains on the guarded compact-container translation route; title and free-position captions are excluded.',
     'validation_limit':'Pinned executable dispatch and actual shipped Lua fixtures were checked. No game was launched; instantiated cinematic widget slots have not been visually validated.'
 }

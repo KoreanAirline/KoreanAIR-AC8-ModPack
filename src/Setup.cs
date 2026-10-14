@@ -37,6 +37,7 @@ class Setup : Form {
   }catch(Exception e){if(args.Length>0){Console.Error.WriteLine(e.Message);try{File.WriteAllText(Path.Combine(Path.GetTempPath(),"KoreanAIR_AC8_Setup_error.txt"),e.ToString());}catch{}}else MessageBox.Show(new UiLanguage().Error(e),Core.Brand,MessageBoxButtons.OK,MessageBoxIcon.Error);return 1;}
  }
  public Setup(string preferred) {
+  UiWindow.SetBrandIcon(this);
   AutoScaleDimensions=new SizeF(96,96);AutoScaleMode=AutoScaleMode.Dpi;Font=new Font("Segoe UI",10);
   ClientSize=new Size(740,500);MinimumSize=new Size(680,480);MaximizeBox=false;StartPosition=FormStartPosition.CenterScreen;
   Dialog=(text,icon)=>MessageBox.Show(this,text,Core.Brand,MessageBoxButtons.OK,icon);

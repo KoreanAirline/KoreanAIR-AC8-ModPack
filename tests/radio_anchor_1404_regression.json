@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "all_subtitle_checks": 174,
+  "native_radio": {
+    "published_1403_sha256": "e6078d702fd1dd86476ccb437234351a1662a58f1c932bd2f256801c2bd3fcb2",
+    "published_1403_exit": 1,
+    "failure": " native HUD MessageWidget speaker and arrows are positioned",
+    "candidate_exit": 0
+  },
+  "actual_runtime_evidence": {
+    "first_stage": "SubtitleWidget placement lowered body while HUD speaker/arrows stayed top.",
+    "second_stage": "HUD MessageWidget placement lowered speaker/arrows but removing SubtitleWidget placement restored body top.",
+    "final_policy": "Retain BOTH independently owned radio children at bottom.",
+    "complete_visual_confirmed": true,
+    "owner_confirmation": "All functions work; release as2.0 authorized on2026-10-15."
+  },
+  "source_sha256": {
+    "runtime/scripts/subtitle.lua": "698ef5ec26218e78fa1340b5b691cb363faf652484e7450201e528b83784a4b6",
+    "runtime/lua_subtitle_test.lua": "98148b3a1fe92f845d8fd46e7c345399fb9a0a56b62f9872a4e0fe61915199f9"
+  },
+  "validation_limit": "Native field registrations and both-channel regression verified. Owner confirmed final complete placement; all possible campaign scenes were not independently captured."
+}

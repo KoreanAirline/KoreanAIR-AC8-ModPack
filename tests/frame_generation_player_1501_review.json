@@ -1,0 +1,63 @@
+{
+  "scope": "Read-only evidence review; only this local report was written. No game, settings, code or release action.",
+  "reviewed_at_utc": "2026-10-14T15:11:59.5822972Z",
+  "candidate_tested": {
+    "version": "1.4",
+    "build": 2026101404,
+    "owner_confirmed_stable": true,
+    "owner_authorized_public_version": "2.0",
+    "confirmation_source": "Owner confirmation conveyed by parent agent"
+  },
+  "latest_session": {
+    "log": "MouseAim-00058.log",
+    "log_last_write_utc": "2026-10-14T15:08:30.0063216Z",
+    "log_contains_fg_telemetry": false,
+    "status": {
+      "schema": "1",
+      "sample_unix": "1791990512",
+      "dlss_state_source": "native_library_flag",
+      "dlss_mode_source": "deprecated_library",
+      "fg_mode_source": "library_configuration",
+      "dlss_supported": "1",
+      "dlss_enabled": "1",
+      "dlaa_enabled": "0",
+      "dlss_mode": "quality",
+      "dlss_active": "unknown",
+      "dlaa_active": "unknown",
+      "fg_supported": "1",
+      "fg_mode": "2x",
+      "fg_actual_frames": "1",
+      "fg_generated_frames": "0",
+      "fg_frame_rate": "51.928",
+      "fg_last_present_generated": "0",
+      "fg_active": "unknown",
+      "timing_source": "native_last_present"
+    },
+    "actual_fg_during_latest_flight_proven": false,
+    "finding": "FG is supported and configured 2x. Exit cache reports one actual frame and zero generated frames; this does not establish inactivity throughout flight. No current-flight generated-frame capture is available."
+  },
+  "earlier_flight": {
+    "capture": "flight_performance_20261014_185603/status.jsonl",
+    "samples": 295,
+    "fresh_generated_cache_samples": 153,
+    "foreground_unpaused_generated_cache_samples": 140,
+    "fresh_definition": "sample_age_seconds 0 through 10, based on file writer timestamp; native timing itself has no timestamp",
+    "actual_frames_when_generated": 2,
+    "generated_frames_when_generated": 1,
+    "first_positive_sample_unix": 1791971786.1697507,
+    "last_positive_sample_unix": 1791971901.67329,
+    "finding": "Earlier flight native library reported generated presentation frames. This capture predates the final tested 1404 session and cannot prove latest-flight activity."
+  },
+  "prior_fault": {
+    "evidence": "freeze_1404/nvidia_fg_fault.json",
+    "finding": "Previous minidump identifies a null read at 0x20 in NVIDIA DLSS-G worker; initiating cause remains unestablished. Owner subsequently reports stable play."
+  },
+  "fps_claim": "No synthetic FPS, multiplication of base FPS, FPS improvement, or whole-session displayed-FPS claim. 51.928 is only the final native last-presentation cache value.",
+  "evidence_sha256": {
+    "latest_upscaler_status.ini": "f12652ea45433240069e8dae552ce6d8fcc958abb093f6f26458616ec4d12daa",
+    "MouseAim-00058.log": "76ccfd222a6dda7710b91fb3fccbec426ab2ce1db909177f4ee0ff8a7fc1d6b0",
+    "flight_performance_20261014_185603/status.jsonl": "fa98b4ae772d132e19cf15d52fe2efc993836aa059118f568f6d6ef1e8748ec8",
+    "freeze_1404/nvidia_fg_fault.json": "2fab07a36b07f521272b137cfbc4fa1cd9da3891853c63617cadff71f4c87dd8",
+    "runtime/scripts/upscaler_status.lua": "0406b8e030da538962579cab1e0e24afbe77c2bc2af4dc3a5d7371305947a377"
+  }
+}

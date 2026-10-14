@@ -114,7 +114,7 @@ try:
         for axis,bit in enumerate([1,4,2]):
             require(sent[axis]==raw[axis] if keys&bit else True,'held WASD/QE axis retains native value')
         looked,qlook=select(raw,(.3,-.2,.4),(1.,-1.,1.),keys,looking=True)
-        require(looked[:3]==[raw[i] if keys&bit else 0. for i,bit in enumerate([1,4,2])],'Alt zeros only unheld aggregate mouse rotations')
+        require(looked==sent,'Alt keeps identical automatic pursuit on unheld axes, with exact native held-axis values')
         off,_=select(raw,(.3,-.2,.4),(1.,-1.,1.),keys,enabled=False,looking=True)
         require(off==raw,'F8 off retains all native controls even during Alt')
     packet=(ctypes.c_float*6)(.1,.2,.8,1,1,1)
@@ -128,7 +128,7 @@ try:
     retained(True,False,True)
     require(packet[0]==1 and packet[1]==-1,'initial automatic outputs retained for downstream physics')
     retained(True,True,False)
-    require(list(packet)[:3]==[0,0,0],'Alt removes retained automatic writes and base mouse axes without new mapping')
+    require(packet[0]==1 and packet[1]==-1,'Alt cleans retained RAW then reapplies the same last-goal pursuit without fresh mapping')
     retained(False,True,False)
     require(list(packet)[:3]==list((ctypes.c_float*3)(.1,.2,.8)),'F8 restores original native aggregate after consumed Alt filtering')
     retained(True,False,True)

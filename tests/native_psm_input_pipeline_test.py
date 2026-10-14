@@ -40,6 +40,7 @@ while depth:
     depth += (source[end] == "{") - (source[end] == "}")
     end += 1
 selector = source[start:end]
+guidance_gate = next(line.strip() for line in source.splitlines() if "const bool apply_guidance=" in line)
 sync_line = next(line.strip() for line in source.splitlines() if "commit_response_sync(pawn,context,trace);" in line)
 assert "!player_maneuver_control.neutral_edge" in sync_line
 assert "const bool automatic_tracking=apply_guidance&&!native_ownership&&!player_maneuver_control.neutral_edge;" in source
@@ -98,7 +99,9 @@ extern "C" __declspec(dllexport) void rotation_packet(float* axes,const double* 
     const bool keyboard_pitch=(keyboard&1)!=0,keyboard_yaw=(keyboard&4)!=0,keyboard_roll=(keyboard&2)!=0,user_enabled=enabled!=0;
     Trace trace;for(int i=0;i<3;++i)trace.before[i]=before[i];
     /* ACTUAL_PRODUCTION_OWNERSHIP */
-    const bool apply_guidance=user_enabled&&!looking,native_ownership=false,valid=true;
+    const bool override_input=true;
+    /* ACTUAL_PRODUCTION_GUIDANCE_GATE */
+    const bool native_ownership=false,valid=true;
     const bool held_axis[]={held_pitch,held_yaw,held_roll};
     native_input::Params params{dt,modifier,15,8,10,4,6,5};
     /* ACTUAL_PRODUCTION_SELECTOR */
@@ -143,7 +146,7 @@ extern "C" __declspec(dllexport) unsigned recovery_packet(int mode,unsigned flag
     return (native_sample.native_alternate?1u:0u)|(control.active?2u:0u)|(native_ownership?4u:0u)|(sync_commits?8u:0u);
 }
 '''
-fixture = fixture.replace("/* ACTUAL_PRODUCTION_OWNERSHIP */", ownership).replace("/* ACTUAL_PRODUCTION_SELECTOR */", selector).replace("/* ACTUAL_PRODUCTION_SYNC_GATE */", sync_line)
+fixture = fixture.replace("/* ACTUAL_PRODUCTION_OWNERSHIP */", ownership).replace("/* ACTUAL_PRODUCTION_SELECTOR */", selector).replace("/* ACTUAL_PRODUCTION_SYNC_GATE */", sync_line).replace("/* ACTUAL_PRODUCTION_GUIDANCE_GATE */", guidance_gate)
 build = here / "input_zoom_build"
 build.mkdir(exist_ok=True)
 (build / "native_psm_pipeline.cpp").write_text(prefix + sampler + native_sampler + fixture, encoding="utf-8")

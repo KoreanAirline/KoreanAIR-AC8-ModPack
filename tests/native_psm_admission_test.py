@@ -128,9 +128,12 @@ for keys, raw in itertools.product(range(8), [-1, 0, .9152, 1]):
 for automatic, valid, owned, neutral in [(False, True, False, False), (True, False, False, False), (True, True, True, False), (True, True, False, True)]:
     dll.reset();dll.mapped(OWNER);dll.publish(1, 0, automatic, valid, owned, neutral)
     require(not route(), "native/disabled/invalid/accepted maneuver/physical neutral preparation retains untouched admission")
-for gates in [(0,1,0,0,0,0), (1,0,0,0,0,0), (1,1,1,0,0,0), (1,1,0,1,0,0), (1,1,0,0,1,0), (1,1,0,0,0,1)]:
+for gates in [(0,1,0,0,0,0), (1,0,0,0,0,0), (1,1,1,0,0,0), (1,1,0,1,0,0), (1,1,0,0,0,1)]:
     dll.reset();dll.mapped(OWNER);dll.publish(1, 0, True, True, False, False);dll.gates(*gates)
-    require(not route(), "off/inactive/pause/gaze/Alt/lifecycle epoch defaults native without stale automatic authority")
+    require(not route(), "off/inactive/pause/gaze/lifecycle epoch defaults native without stale automatic authority")
+for keys in range(8):
+    dll.reset();dll.mapped(OWNER);dll.publish(1, keys, True, True, False, False);dll.gates(1,1,0,0,1,0)
+    require(route()==(not bool(keys&1)), "ALT last-goal automatic pitch stays protected; physical W/S retains native PSM admission")
 
 EXE = Executable(Path("E:/SteamLibrary/steamapps/common/ACE COMBAT 8/Game/Binaries/Win64/AceCombat8.exe"))
 CLONE = 0x6000000
@@ -198,7 +201,7 @@ try:
     report = {"passed": True, "checks": checks, "native_cases": cases,
         "production_fragments": ["mark_native_mapping", "block_automatic_psm", "actual selected raw origin publication", "Origin", "build_clone"],
         "source_sha256": {"runtime/src/mouse_aim.cpp": hashlib.sha256((RUNTIME / "src/mouse_aim.cpp").read_bytes()).hexdigest(), "runtime/src/native_psm_admission.h": hashlib.sha256((RUNTIME / "src/native_psm_admission.h").read_bytes()).hexdigest()},
-        "finding": "Automatic packets skip only native PSM candidate evaluation, including flag8 forced eligibility, while ordinary raw pursuit, generic highG, native history and accepted native modes retain their own behavior. Physical S/neutral preparation and unknown/native/off/Alt paths retain unchanged admission.",
+        "finding": "Automatic packets, including last-goal pursuit during ALT, skip only native PSM candidate evaluation, including flag8 forced eligibility. Ordinary raw pursuit, generic highG, native history and accepted native modes retain their own behavior. Physical W/S, neutral preparation and unknown/native/off paths retain unchanged admission.",
         "scope": "Complete native instructions and extracted production provenance in synthetic memory; no game process, trajectory or live-flight claim."}
     (HERE / "native_psm_admission_evidence.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     print(f"PASS native PSM admission provenance: {checks} checks; {cases} complete native cases; automatic candidate-only skip, repeated substeps, native/generic/history/physical-S parity.")

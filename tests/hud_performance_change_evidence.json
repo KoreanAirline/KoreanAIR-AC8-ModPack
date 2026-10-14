@@ -1,8 +1,27 @@
 {
   "passed": true,
-  "scope": "Exact preserved guidance/actuator/input/HUD and flight camera/zoom against published1402; display-only class proof, engine camera lens hook and subtitle layout reviewed separately. Actual recompiled ownership/optics/landing/PSM fixtures; no new live performance claim.",
-  "immutable_baseline_tag": "v1.4-b2026101402",
-  "immutable_baseline_archive_sha256": "0fd34c312a0027b684c7bc4ffde7b4cc49d383b2c4ed758a0ea7a96fc7d9d828",
+  "scope": "Exact native source reconstruction from published1403 with only three ALT ownership gate removals and comments; main-script release branding updated2.0; camera/display/zoom/HUD, actuator and guidance math unchanged. Subtitle geometry-free placement validated separately. Actual recompiled ownership/optics/landing/PSM fixtures; no new live-flight or FPS claim.",
+  "immutable_baseline_tag": "v1.4-b2026101403",
+  "immutable_baseline_archive_sha256": "088d86110db7b3c1b8886ac8052f7c08e7f179868ffad9ac569d3c0525c69c00",
+  "exact_native_gate_substitution_count": 3,
+  "reviewed_function_delta_sha256": {
+    "free_look_suspends_guidance": {
+      "before": "7ea2db09cf4f59ead4a3a1044f900657fee06b53f6335bf03ff9ca6b39ab54cb",
+      "after": "bebe3485e0351ff24f999e6caf4e1fd919a9dec67580c12a8a7813879659c112"
+    },
+    "commit_response_sync": {
+      "before": "7e518a687c82401a9cd9920a6928304b37f649189200bf14d2bcd67cc5da14a3",
+      "after": "5b63dd201c329ca6786894e7ff5ef9991b7465e21009f8adc6ea7eca8c57e6b9"
+    },
+    "block_automatic_psm": {
+      "before": "d19548e069aab5e9a2c809fd3b37a10d7af6027f9eb02999288a67a846c688a2",
+      "after": "e33f7346b3a442e61ed1a7b626d378695de3ab87172237150603f18565bd5198"
+    },
+    "process_input": {
+      "before": "73f72700576bca1e629c73510daccbc56d42cc0042be3e24df5a59e7c30c04d4",
+      "after": "f9731c8c1b6b4c2a6dcdd3115d214703b2593662ff3ff13878790fa8366f3a43"
+    }
+  },
   "prior_hud_function_sha256": {
     "draw_overlay": "ec8c022ce4917ac11b973c297534d15007e1892badc68800b745be35fad09140",
     "overlay_loop": "6d17d2ba32d7fde07fda6005c8f9bb1adf50a6bbdcd5ba9929baca2e335f03f7",
@@ -10,7 +29,8 @@
     "mouse_loop": "5c4c8a1a09be7f38225dc2c21db4e597cc6b3f450097ffff13f30ff504a9d59c",
     "advance_pointer": "d402e8417e730ae8bf44a80c90979fa47845bfb8e9d448dcf5762feb363dacac",
     "ac8_mouseaim_targetscore": "7efdc0128e468df48aa72c35050bc01c0414a7517bc0448d35eebd898c17267f",
-    "update_commands": "d91ab7d9784243aaa6435868e4b75796335abc30dd9169bc9e3708bcd9ad7791"
+    "update_commands": "d91ab7d9784243aaa6435868e4b75796335abc30dd9169bc9e3708bcd9ad7791",
+    "ac8_mouseaim_displaycamera": "2509c7fc3cb3c89df54a9a6e642508ec809d6251b18a3ff625b03fa7933bca8a"
   },
   "preserved_camera_function_sha256": {
     "restore_native_zoom": "5c95113dedf8a5271149ab5332a103e63dbb00ce7e405f8f26ec9e564d61c976",
@@ -22,7 +42,8 @@
     "apply_native_camera": "7c94943dcadf4c27db0bb15fb029e6199887b0d8e0d5b5f66dc2c691444c2bfb",
     "read_post_camera_hud": "90c352d91da7952775999065e94c9ef138926d6cce9801d9220465faf06eb79c",
     "apply_native_zoom": "6c6847f18179774d09c04eb13a75128958ba3f1be391690661c39c7241e6dafa",
-    "update_native_camera": "2eab8338f80a227bf17c260bee338afd12e59af9651056b68ad91966513be229"
+    "update_native_camera": "2eab8338f80a227bf17c260bee338afd12e59af9651056b68ad91966513be229",
+    "update_native_engine_camera": "3632b67f33ab362f503272e889bb9a3355d07bd398a1308114b69c3bc18c9b7c"
   },
   "preserved_runtime_file_sha256": {
     "runtime/src/absolute_hook.h": "92c8b9331e722cedc7a390c7df51ee36a64d5c5aa98c85f18d72b2968336307d",
@@ -34,6 +55,8 @@
     "runtime/src/camera_projection.h": "d1a57a3617d6ac821a031b932ba8fe0494d6e47efc738018bf2c48e1fe255c33",
     "runtime/src/coupled_pursuit.h": "bfa24a257791410f76ba724dafb33904b994177287c3c3ab920f3d36040f657f",
     "runtime/src/display_engine.h": "e05161f30cbaff24db1860ab99f50e4c3cac891c209f0cd86ad4d2086a79380e",
+    "runtime/src/display_math.h": "e8b18db8279c03791525170bda372d307bd87acd52021eb4edee8daf3d576d6a",
+    "runtime/src/display_runtime.h": "0ecda32f068e36f882b47c731d876216d87245b9d8a761491548958127898916",
     "runtime/src/display_window.h": "c8d6364ca77f5ae3e30b8ff7086c41cc30f7a66bb347f9072dab49e2bfece92a",
     "runtime/src/flight_math.h": "9890537601f4e8e4fbc9e5e0a8a6d5a026db01df07583e36990b6a3e3e8bb416",
     "runtime/src/free_look.h": "73a15beb6c7ae9aa3ea218d72245a13e2a81d7781aefc89d23394e4cfc65c702",
@@ -48,6 +71,7 @@
     "runtime/src/mouse_counter_state.h": "84b116a9ade26bd8e87e4615e1ab10f1d9bfa393ae70faae0ffdadeb4069ae85",
     "runtime/src/native_actuator.h": "82e545bb4125e1fc8bb81ee8f9df84f25c07023258ce8904c60e0c272ebcd106",
     "runtime/src/native_attenuation.h": "54040f4d3196c31e824254eaba5c9d0847975341cc7a641a6b2e20646402651a",
+    "runtime/src/native_camera.h": "263f23b562f39967427c00310d842d74734e368eb8390f201548ad52e35859df",
     "runtime/src/native_extra_rotation.h": "e2a83d9cd7a8de4c3a4e9d43d1776cf481f6c82778c7424d9ee1dfe5f7de50ab",
     "runtime/src/native_headlook.h": "545367c680f37fd151521cae24ff10684865ea356ed1f74e5eb74a91e2e0b749",
     "runtime/src/native_landing_guard.h": "7cd56e939ccaa6224597b813bfda73d30ef111d78e86983cf20bf02908daffd8",
@@ -83,30 +107,36 @@
     "runtime/src/vendor/minhook/src/trampoline.h": "53ed9934492320617a27bfd952ffe7f5b7a4a1d09963d4512447082fe7b727b4",
     "runtime/src/yaw_signature.h": "cc161c27d35b7f5d34a0183e5de33cc8fcc3e0557067aa6bd5f9885b91d26180",
     "runtime/scripts/camera.lua": "6712a2e93ed3301bf815cdfcc526b9570b75bbc3ee133e6fe3e2d3f24fb18387",
+    "runtime/scripts/display.lua": "caffb50bad1d1a018146f05019e58ff88f6d24dd8f503cb21d44deee40d2e28b",
     "runtime/scripts/frame_profile.lua": "233698aaf6d31663d051e9a1a8684429afea33441691677ee924e741570b2ec8",
     "runtime/scripts/gaze.lua": "82089f851484f103ff906f397a0ac9c7d3fa1552c455bf3ec35215d7bff3e927",
     "runtime/scripts/gaze_probe.lua": "675b9614ae1046da950671b485035db296c2d0b55ce56749b7fc0b3c22d36d73",
     "runtime/scripts/headlook.lua": "63cdc6fa2bc58d1948ffb9731b73450ebf08422a6501528e2450d193dc1589ce",
     "runtime/scripts/ini.lua": "fa62d1fe86b657ce2d8b47415f85ec8200547b70ceebca3a1c7b004f5fa44303",
-    "runtime/scripts/main.lua": "f2fb05020b83dc2fe5abbe4a0b26d3945862105137d2539e65f3450379d1a902",
+    "runtime/scripts/main.lua": "341b34a38ca8023415d809959228d2d5c1acfc4a0a40ce1c2d0556d56980e204",
     "runtime/scripts/pack.lua": "426a8d414ed5c695499edd133b868d6222f9d218b0aeb861f006e3aeeb3b1bd0",
     "runtime/scripts/reticle_target.lua": "339175d13e3368a6abadbdde8260d78964da68a5abc0bca37ae0d52715b9b66a",
     "runtime/scripts/rig_math.lua": "f66c013f281e83bf32844076a79fd4540d9906b5e874f34b795d3f49d0387ce5",
+    "runtime/scripts/scene.lua": "0f4e3bb365e3cc725200f411e4f7be3b1f0604f73bee8b54942bcdac1390bb04",
     "runtime/scripts/target_probe.lua": "029665f69cdaeaa439609503ca9146c3029860328176d1a7038dc2ac1b551396",
     "runtime/scripts/upscaler_status.lua": "0406b8e030da538962579cab1e0e24afbe77c2bc2af4dc3a5d7371305947a377",
     "src/MouseInputWorker.cs": "5bd7ae25f4c0170f1dc434025a4371168ab4eb1cb63a2ca23388bd98ae1b103c"
   },
   "recompiled_fixture_results": {
-    "native_rotation_input_pipeline_test.py": "PASS native PSM input pipeline: 170 checks; actual ownership boundary/sampler/Control/raw selector/sync gate and unmodified native admission; aggregate mouse cannot fake native press; new S -> neutral once -> held mode2; keyboard/mouse mode2 elevator; generic-highG race prevented; auxiliary inputs retained. Synthetic memory only, no live-flight claim.\n{\"passed\":true,\"checks\":995,\"keys0_baseline_cases\":144,\"native_input_runs\":364,\"max_raw_to_q_error\":2.682209010451686e-08,\"source_sha256\":\"3b28f84f7c883f22f2a3e84c77c5d46204d05fcfb7a7e7d25a79d0b258501235\",\"ownership_sha256\":\"ac233c959cb56f995d37642f377214326cde9bf09c30a51e5d8553d516685b24\",\"native_code_sha256\":\"ee8fc903e34ec106d3c0fa918db75e7c8766c157b422038b4e54d9e523be9e4d\",\"scope\":\"Actual production ownership/selector and pinned native input instructions in synthetic memory. Throttle auxiliary helper and finite import stubbed; no dynamics or live-flight claim.\"}",
+    "alt_last_goal_follow_test.py": "PASS free-look input gate: 447 checks; actual production mouse/camera ownership, RAW-pursuit and response-commit gates; physical ALT-before-Lua; 400 held camera movements preserve last world goal; manual nose handoff; rebind/refocus blocked hold; disabled/inactive/pause/gaze/foreign input safeguards. No live flight claim.\nPASS published 1403 negative control: retained-goal pursuit stops at physical ALT hold; current build continues it.",
+    "native_rotation_input_pipeline_test.py": "PASS native PSM input pipeline: 170 checks; actual ownership boundary/sampler/Control/raw selector/sync gate and unmodified native admission; aggregate mouse cannot fake native press; new S -> neutral once -> held mode2; keyboard/mouse mode2 elevator; generic-highG race prevented; auxiliary inputs retained. Synthetic memory only, no live-flight claim.\n{\"passed\":true,\"checks\":995,\"keys0_baseline_cases\":144,\"native_input_runs\":364,\"max_raw_to_q_error\":2.682209010451686e-08,\"source_sha256\":\"8f982d759b3af669bb2972c5ebdc2a4dff1b1524474b96978c0364e928b31d59\",\"ownership_sha256\":\"ac233c959cb56f995d37642f377214326cde9bf09c30a51e5d8553d516685b24\",\"native_code_sha256\":\"ee8fc903e34ec106d3c0fa918db75e7c8766c157b422038b4e54d9e523be9e4d\",\"scope\":\"Actual production ownership/selector and pinned native input instructions in synthetic memory. Throttle auxiliary helper and finite import stubbed; no dynamics or live-flight claim.\"}",
     "native_landing_integration_test.py": "PASS: extracted production helper/pose/camera/processor gates; ordinary gear-down approach, native RAW cleanup/fresh mapping, PSM provenance, late camera release, same-frame camera post-update landing acquisition, transient unavailable ownership, worker freeze, single resumed seed, epoch and release.",
     "native_landing_guard_test.py": "PASS: native landing ownership with native controller prerequisites, bit9-only ordinary approach/PSM recovery, component/controller class identity, unreadable transition, recorded alternating-heading lifecycle.\nPASS: 12 independent pinned fingerprints, phase enum/vtable/switch derivation, 12 native gate branches, 8 actual entry/controller getter cases; log shows 258 opposite-heading transitions.",
-    "native_psm_admission_test.py": "PASS native PSM admission provenance: 4016 checks; 540 complete native cases; automatic candidate-only skip, repeated substeps, native/generic/history/physical-S parity.",
+    "native_psm_admission_test.py": "PASS native PSM admission provenance: 4023 checks; 540 complete native cases; automatic candidate-only skip, repeated substeps, native/generic/history/physical-S parity.",
     "native_psm_abi_unwind_test.py": "Windows instruction boundary counts: 17 90 4 17 76 4 62; helper unwinds 8\nPASS actual MinHook install, three native-layout unwind fragments, chosen clone ABI/side effects and Windows helper/selector unwind.\nPASS actual absolute fallback install, three native-layout unwind fragments, chosen clone ABI/side effects and Windows helper/selector unwind.\nPASS native PSM ABI/unwind: 3295 checks; helper calls=34 live helper unwinds=10; instruction boundaries=17/90/4/17/76/4/62. Exact native fixture code, synthetic memory only; no live flight claim.",
     "display_engine_lifecycle_test.py": "PASS: 216 actual engine poll/ack/ResizeFrame/reshape lifecycle checks for 5760x1080, 7680x1440 and 11520x2160; mocked platform boundaries, no game hardware claim.",
     "landing_v10_comparison_test.py": "PASS: original1.0 and b1302 ownership-classification bytes match; normalized sampler bytes match;10 native snapshot cases match, including no maneuver ownership for landing00040200."
   },
+  "post_change_live_alt_verified": false,
+  "post_change_live_subtitle_position_verified": false,
+  "new_fps_measurement": false,
   "source_sha256": {
-    "runtime/src/mouse_aim.cpp": "3b28f84f7c883f22f2a3e84c77c5d46204d05fcfb7a7e7d25a79d0b258501235",
+    "runtime/src/mouse_aim.cpp": "8f982d759b3af669bb2972c5ebdc2a4dff1b1524474b96978c0364e928b31d59",
     "runtime/src/native_camera.h": "263f23b562f39967427c00310d842d74734e368eb8390f201548ad52e35859df",
     "runtime/src/display_math.h": "e8b18db8279c03791525170bda372d307bd87acd52021eb4edee8daf3d576d6a",
     "runtime/src/display_runtime.h": "0ecda32f068e36f882b47c731d876216d87245b9d8a761491548958127898916",
@@ -116,10 +146,15 @@
     "runtime/src/raw_mouse_worker.h": "dd5a7212fd55c7e8ff62d1a244ebcb75db296f69bf8190dea273fe673858b214",
     "runtime/src/async_diagnostics.h": "0262e9a2ba70af4dbf995b5af574fd341d90522f55953115d8c3ee36521ee475",
     "runtime/scripts/headlook.lua": "63cdc6fa2bc58d1948ffb9731b73450ebf08422a6501528e2450d193dc1589ce",
-    "runtime/scripts/main.lua": "f2fb05020b83dc2fe5abbe4a0b26d3945862105137d2539e65f3450379d1a902",
+    "runtime/scripts/main.lua": "341b34a38ca8023415d809959228d2d5c1acfc4a0a40ce1c2d0556d56980e204",
     "runtime/scripts/display.lua": "caffb50bad1d1a018146f05019e58ff88f6d24dd8f503cb21d44deee40d2e28b",
     "runtime/scripts/scene.lua": "0f4e3bb365e3cc725200f411e4f7be3b1f0604f73bee8b54942bcdac1390bb04",
-    "runtime/scripts/subtitle.lua": "e6078d702fd1dd86476ccb437234351a1662a58f1c932bd2f256801c2bd3fcb2",
-    "tests/refresh_1403_evidence.py": "566aebe4a106c50ef5415936a0d185e75880a65b79f22a98583a33e1069aa3f9"
+    "runtime/scripts/subtitle.lua": "698ef5ec26218e78fa1340b5b691cb363faf652484e7450201e528b83784a4b6",
+    "tests/input_free_look_gate_test.py": "7240cbd4b8bcf3d972b18049defc0698e26e46b1ef9df5530931517911986335",
+    "tests/alt_last_goal_follow_test.py": "3b5985b06a6bef6809cd829ab7391f47614c17367f5cdeac271c439ecf883f62",
+    "tests/native_rotation_input_pipeline_test.py": "5015e95577bffec36e2dcf1cf66ac39405353bf3c9cd435f85c9ecd3347f78e8",
+    "tests/native_psm_input_pipeline_test.py": "8c5357ffcfc75ab11e97b16e9ce34c16a3a2e0d761bbc1c732518f75276d8096",
+    "tests/native_psm_admission_test.py": "7b6cac59bbd7486170792693b4c0ea70ed0f54f250de01602dca62961a4c14a0",
+    "tests/refresh_1501_evidence.py": "bb7834c712eecb41be32b51763df6e44e4903e7177db50252a44e1d98abca6a8"
   }
 }

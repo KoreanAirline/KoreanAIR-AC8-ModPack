@@ -12,17 +12,17 @@
     "0xba26052:0x18": "ef8710ec28a52572175b77f2513c751df88d5d6fb8f79b5e7ab644dc6be9dbb8"
   },
   "source_sha256": {
-    "runtime/scripts/subtitle.lua": "e6078d702fd1dd86476ccb437234351a1662a58f1c932bd2f256801c2bd3fcb2",
-    "runtime/lua_subtitle_test.lua": "dbaac86f5dd4b0775218450198bed15fd74cfb441090520d249ba905c7bf7900"
+    "runtime/scripts/subtitle.lua": "698ef5ec26218e78fa1340b5b691cb363faf652484e7450201e528b83784a4b6",
+    "runtime/lua_subtitle_test.lua": "98148b3a1fe92f845d8fd46e7c345399fb9a0a56b62f9872a4e0fe61915199f9"
   },
   "native_findings": {
     "position_rate_scope": "Free-position cinematic caption option only; the main caption branch does not call SetPosition.",
     "lowered_flag_option": "Display_SpeakerNameSubtitlesOn",
-    "radio_box": "Native RadioBox at offset0x340 is a VerticalBox. Only the exact box under RadioPanel containing both exact radio text references is eligible for a compact Canvas slot."
+    "radio_box": "Native RadioBox at offset0x340 contains the speaker, message and arrows. The rendered LiveHUDMessageWidget radio field is at0x4e0; the same-named LiveSubtitleWidget field at0x3c8 is excluded."
   },
-  "checks": 132,
+  "checks": 174,
   "test_log": "runtime/build/lua_subtitle_test.txt",
-  "native_layout_rule": "Exact Main/Local text or compact radio dialogue Canvas slots receive normalized bottom anchors. Four measured corners must prove axis-aligned full viewport vertical extent, allowing a horizontally inset16:9 parent and different UMG DPI local units. Authored horizontal fields are retained. Cached native fields are checked for caption resets; stable anchors require no geometry or setter calls.",
+  "native_layout_rule": "The exact active HUD MessageWidget radio child uses its authored auto-size Canvas slot with normalized bottom anchors and native readback verification; no radio geometry/text searches. Main/Local cinematic text slots retain measured vertical-canvas proof. Horizontal fields and native internal layout are retained. UI ownership follows the controller/root/slot, not camera cuts or aircraft possession.",
   "fallback": "Unknown or authored stacked dialogue remains on the guarded compact-container translation route; title and free-position captions are excluded.",
   "validation_limit": "Pinned executable dispatch and actual shipped Lua fixtures were checked. No game was launched; instantiated cinematic widget slots have not been visually validated."
 }

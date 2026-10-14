@@ -1,5 +1,5 @@
 {
-  "scope": "mouse-only separate process; unchanged native guidance",
+  "scope": "Mouse-only separate process and current protocol recompiled/executed; collector unchanged from published1403. Native guidance math unchanged; reviewed ALT ownership gates validated separately.",
   "checks": 3011,
   "cumulative_source_checks": 1121,
   "standalone_hidden_collector": {
@@ -7,7 +7,7 @@
     "ready": true,
     "raw_registration_preserved": true,
     "inactive_mouse_packets": 0,
-    "startup_ms": 31
+    "startup_ms": 63
   },
   "rejected_wrong_game": {
     "validated_game_fixture": false,
@@ -44,5 +44,12 @@
       "sha256": "6ff38ea77dc3bf018db3c7eccb0f987c31ef1eab684491138492eb601aa3d3dd"
     }
   ],
-  "source": "https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-registerrawinputdevices"
+  "source": "https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-registerrawinputdevices",
+  "current_revalidation": {
+    "release_build": "2026101404",
+    "protocol_checks": 3011,
+    "standalone_collector_and_wrong_path_cases_executed": true,
+    "physical_mouse_sampling_performed": false,
+    "live_game_cadence_verified": false
+  }
 }

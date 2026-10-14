@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "checks": 447,
+  "scope": "Extracted production ownership/pursuit/response gates plus actual FreeLook, controlled physical keys. No actual game flight, target convergence or handling-quality claim.",
+  "source_sha256": {
+    "runtime/src/mouse_aim.cpp": "8f982d759b3af669bb2972c5ebdc2a4dff1b1524474b96978c0364e928b31d59",
+    "runtime/src/free_look.h": "73a15beb6c7ae9aa3ea218d72245a13e2a81d7781aefc89d23394e4cfc65c702",
+    "runtime/src/manual_rotation_input.h": "ac233c959cb56f995d37642f377214326cde9bf09c30a51e5d8553d516685b24",
+    "tests/input_free_look_gate_test.py": "7240cbd4b8bcf3d972b18049defc0698e26e46b1ef9df5530931517911986335",
+    "tests/native_psm_input_pipeline_test.py": "8c5357ffcfc75ab11e97b16e9ce34c16a3a2e0d761bbc1c732518f75276d8096",
+    "tests/native_rotation_input_pipeline_test.py": "5015e95577bffec36e2dcf1cf66ac39405353bf3c9cd435f85c9ecd3347f78e8",
+    "tests/native_psm_admission_test.py": "7b6cac59bbd7486170792693b4c0ea70ed0f54f250de01602dca62961a4c14a0",
+    "tests/alt_last_goal_follow_test.py": "3b5985b06a6bef6809cd829ab7391f47614c17367f5cdeac271c439ecf883f62"
+  },
+  "negative_control": {
+    "tag": "v1.4-b2026101403",
+    "source_sha256": "3b28f84f7c883f22f2a3e84c77c5d46204d05fcfb7a7e7d25a79d0b258501235",
+    "expected_failure": "FAIL: physical ALT before Lua poll keeps last-goal RAW pursuit and coherent response commit",
+    "returncode": 1
+  },
+  "result": "PASS free-look input gate: 447 checks; actual production mouse/camera ownership, RAW-pursuit and response-commit gates; physical ALT-before-Lua; 400 held camera movements preserve last world goal; manual nose handoff; rebind/refocus blocked hold; disabled/inactive/pause/gaze/foreign input safeguards. No live flight claim.",
+  "policy": "ALT holds the existing world-space aim goal. Automatic pursuit and response commit continue on unheld flight axes; explicit WASD/QE axes retain native input. ALT mouse movement controls only camera. Manual keyboard flight during ALT recenters the goal at the actual nose when ALT is released. Existing pause/gaze/landing/lifecycle/disabled/matched-native-input gates remain.",
+  "automatic_psm": "The unchanged provenance guard now also protects automatic elevator commands while ALT is held; native held W/S preparation and accepted native maneuvers keep their existing ownership."
+}

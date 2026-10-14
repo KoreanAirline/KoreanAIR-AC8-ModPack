@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "game_sha256": "51510e2a520565dbe81fb0d569e95cd4393077acaaa859371489b80b8128829f",
+  "finding": "Two live display channels share the same named radio child: HUD MessageWidget speaker/arrows at0x4e0 and SubtitleWidget separate caption at0x3c8. Both must remain below.",
+  "class_factory_rva": "0x6e6b270",
+  "hud_property_descriptor_rva": "0xc74f3a0",
+  "caption_property_descriptor_rva": "0xca74330",
+  "native_slice_sha256": {
+    "0xc750ff0": "842a6d48515f0c8211c1d199bff7ac11c2089035a6b7e21bb3750f023e165183",
+    "0xc750cd0": "412850b6969b1030c45c533068522395a32667f95902e2eaea337c93ad98b9b3",
+    "0xc750e40": "9c71bc70541317d0937daef8e9389b76aa9e9ca167f546bdf313b55cd8a82c7e",
+    "0xc74f3a0": "4a6ea84b693db8166594dd79d5fb68cf5c04089a7fc6ce373c69e146410c2937",
+    "0xca74330": "3362457bc07d8b443a2e77075f9a0f69b2f9e54727ca1c4a47ec7f177f4c6da6"
+  },
+  "source_sha256": {
+    "runtime/scripts/subtitle.lua": "698ef5ec26218e78fa1340b5b691cb363faf652484e7450201e528b83784a4b6",
+    "runtime/lua_subtitle_test.lua": "98148b3a1fe92f845d8fd46e7c345399fb9a0a56b62f9872a4e0fe61915199f9"
+  },
+  "validation_limit": "Native property registrations verified; actual HUD placement requires player confirmation."
+}

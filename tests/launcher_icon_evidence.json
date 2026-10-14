@@ -1,0 +1,21 @@
+{
+    "artwork_sha256":  "ae715d67c91329bef119118bed3583a2a1d1a64033c1587bed4b09ba19076410",
+    "files":  [
+                  {
+                      "resource_matches":  true,
+                      "form_icon":  true,
+                      "sha256":  "acd05685e072a69b41deec765f1f5920c3d5738a0ff9e313a17b179385eec4e3",
+                      "file":  "KoreanAIR_AC8_ModPack_2.0.exe",
+                      "native_icon_size":  32
+                  },
+                  {
+                      "resource_matches":  true,
+                      "form_icon":  true,
+                      "sha256":  "b61b0a20cc2e4ed0c04703924d1c9ccc0c3c9fdf199cd65939607a3aa4780d60",
+                      "file":  "KoreanAIR_AC8_ModPack_2.0_Setup.exe",
+                      "native_icon_size":  32
+                  }
+              ],
+    "icon_sha256":  "02180a217beca828527eece5aea1b4aa785b538e27f8403d421f4b4c81348e8f",
+    "passed":  true
+}

@@ -24,7 +24,9 @@ public static class LiveFrameGenerationAudit {
   string engine=Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"BANDAI NAMCO Entertainment/ACE COMBAT 8/Saved/Config/Windows/Engine.ini");
   string gus=Path.Combine(Path.GetDirectoryName(engine),"GameUserSettings.ini");
   byte[] gusBefore=Bytes(gus);bool success=false;string error=null;bool? oldManaged=null;byte[] engineBefore=null;FileAttributes attrs=FileAttributes.Normal;
-  string exe=Path.Combine(root,"KoreanAIR_AC8_ModPack_1.4.exe");
+  string distributionRoot=Directory.GetParent(Path.GetDirectoryName(typeof(LiveFrameGenerationAudit).Assembly.Location)).FullName;
+  var release=new JavaScriptSerializer().Deserialize<Dictionary<string,object>>(File.ReadAllText(Path.Combine(distributionRoot,"release.json")));
+  string exe=Path.Combine(root,"KoreanAIR_AC8_ModPack_"+release["version"].ToString()+".exe");
   try{
    assembly=Assembly.LoadFrom(exe);core=assembly.GetType("KoreanAIR.Core",true);Check(!(bool)Call("Running",root),"game closed before settings writes");
    var oldLease=Lease(State());if(oldLease!=null){oldManaged=(bool)oldLease.GetType().GetField("enabled").GetValue(oldLease);Call("RestoreFrameGeneration",root);}

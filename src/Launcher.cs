@@ -43,6 +43,7 @@ partial class Launcher : Form {
   }
  }
  public Launcher(string r) {
+  UiWindow.SetBrandIcon(this);
   root=r;state=Core.ReadState(root);if(state==null)throw new Exception("Run the installer before opening this launcher.");
   Text=Core.Brand;AutoScaleDimensions=new SizeF(96,96);AutoScaleMode=AutoScaleMode.Dpi;
   Font=new Font("Segoe UI",10);ClientSize=new Size(920,760);MinimumSize=new Size(800,610);StartPosition=FormStartPosition.CenterScreen;

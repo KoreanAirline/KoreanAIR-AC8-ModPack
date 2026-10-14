@@ -7,6 +7,7 @@ if (Get-Process -Name AceCombat8 -ErrorAction SilentlyContinue) { throw 'Game mu
 $campaignPath = Join-Path $nativeRoot 'KoreanAIR_AC8_Campaign.log'
 $campaignBefore = if (Test-Path -LiteralPath $campaignPath) { (Get-Item -LiteralPath $campaignPath).Length } else { 0 }
 $launchedAt = Get-Date
+$crashRoot=Join-Path $env:LOCALAPPDATA 'BANDAI NAMCO Entertainment/ACE COMBAT 8/Saved/Crashes'
 & (Join-Path $PSScriptRoot 'LiveLaunch.exe') $gameRoot
 if ($LASTEXITCODE -ne 0) { throw 'Installed launcher did not start the game.' }
 $gameProcess = $null
@@ -19,6 +20,7 @@ do {
 if (-not $gameProcess) { throw 'No game process after launch.' }
 Start-Sleep -Seconds 10
 $gameProcess.Refresh()
+$gameProcess.EnableRaisingEvents=$true
 $modulePaths = @(
     (Join-Path $nativeRoot 'dinput8.dll'),
     (Join-Path $nativeRoot 'dwmapi.dll'),
@@ -39,12 +41,31 @@ do {
     Start-Sleep -Milliseconds 500
 } while((Get-Date) -lt $moduleDeadline)
 $windowTitle = $gameProcess.MainWindowTitle
+# Do not close the game immediately after shader/startup construction: the
+# current native async asset callbacks may still be settling. This delay is
+# diagnostic only and does not alter game or mod shutdown behavior.
+Start-Sleep -Seconds 20
 $closeRequested = $gameProcess.CloseMainWindow()
 $closeDeadline = (Get-Date).AddSeconds(45)
 do {
     Start-Sleep -Milliseconds 500
     $stillRunning = Get-Process -Id $gameProcess.Id -ErrorAction SilentlyContinue
 } while ($stillRunning -and (Get-Date) -lt $closeDeadline)
+$exitCode=$null
+if(-not $stillRunning){try{$gameProcess.WaitForExit();$exitCode=$gameProcess.ExitCode}catch{}}
+$newCrashes=@()
+if(Test-Path -LiteralPath $crashRoot){
+ foreach($folder in Get-ChildItem -LiteralPath $crashRoot -Directory | Where-Object {$_.LastWriteTime -ge $launchedAt}){
+  $context=Join-Path $folder.FullName 'CrashContext.runtime-xml'
+  if(Test-Path -LiteralPath $context){
+   try{
+    [xml]$document=Get-Content -LiteralPath $context -Raw
+    $properties=$document.FGenericCrashContext.RuntimeProperties
+    if([int]$properties.ProcessId -eq $gameProcess.Id){$newCrashes+=@{folder=$folder.Name;error=[string]$properties.ErrorMessage;requesting_exit=[string]$properties.IsRequestingExit}}
+   }catch{throw 'The current game crash context could not be verified.'}
+  }
+ }
+}
 $campaignLog = Get-Item -LiteralPath $campaignPath
 $campaignBytes = [IO.File]::ReadAllBytes($campaignPath)
 $campaignOffset = if ($campaignBytes.Length -ge $campaignBefore) { [int]$campaignBefore } else { 0 }
@@ -78,7 +99,8 @@ $report = @{
     native_wide_render_viewport_observed=($wideRenderSamples.Count -gt 0)
     graphics_override_log_present=$ueText.Contains('[AC8Performance]')
     close_request_accepted=$closeRequested
-    mission_piloted=$false;game_closed_normally=($closeRequested -and -not $stillRunning)
+    process_exit_code=$exitCode;new_game_crashes=$newCrashes
+    mission_piloted=$false;game_closed_normally=($closeRequested -and -not $stillRunning -and $exitCode -eq 0 -and $newCrashes.Count -eq 0)
 }
 $report | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $reportFolder 'live_game_launch.json') -Encoding utf8
 if (-not $report.running -or -not $report.campaign_log_fresh -or -not $report.campaign_pak_mounted -or -not $report.lua_modules_loaded -or $report.new_runtime_errors -or -not $report.native_dll_matches -or -not $report.native_log_fresh -or -not $report.native_camera_registered -or -not $report.native_maneuver_guard_verified -or -not $report.native_player_maneuver_guard_verified -or -not $report.native_raw_provenance_verified -or -not $report.native_psm_admission_provenance_verified -or -not $report.game_closed_normally) {

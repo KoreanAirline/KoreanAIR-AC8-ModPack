@@ -1,13 +1,13 @@
-KoreanAIR_AC8_ModPack_1.4
+KoreanAIR_AC8_ModPack_2.0
 English user guide
 
 INSTALL AND PLAY
 
 1. Start ACE COMBAT 8 normally through Steam at least once, then close the game.
 2. Extract the complete ZIP, keeping Payload.zip beside the installer, then run
-   KoreanAIR_AC8_ModPack_1.4_Setup.exe. Select the game folder containing
+   KoreanAIR_AC8_ModPack_2.0_Setup.exe. Select the game folder containing
    start_protected_game.exe, then choose the modules and click Install / Update.
-3. Open KoreanAIR_AC8_ModPack_1.4.exe in the game folder. Keep Steam open and
+3. Open KoreanAIR_AC8_ModPack_2.0.exe in the game folder. Keep Steam open and
    choose Play with selected mods.
 
 The standalone installer downloads the matching verified mod files when needed.
@@ -65,8 +65,9 @@ Use the tab's Save button to store your changes.
 MOUSE FLIGHT (Controls)
 
 Adjust Mouse steering sensitivity and Free look sensitivity separately.
-Hold the free-look key during flight to look around. WASD remains available for
-direct control. Save changes, then focus the game; sensitivity, aim zoom and mod
+Hold the free-look key during flight to look around. The aircraft keeps following
+your last mouse steering target; free-look mouse movement does not change it.
+WASD remains available for direct control. Save changes, then focus the game; sensitivity, aim zoom and mod
 shortcut settings reload automatically in about 0.5 seconds. F10 is an optional manual
 reload shortcut; it is not required to apply saved changes.
 

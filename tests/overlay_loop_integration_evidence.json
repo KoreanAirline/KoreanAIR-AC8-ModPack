@@ -2,6 +2,6 @@
   "passed": true,
   "scope": "Production extracted overlay loop with counted native boundaries; no game FPS claim.",
   "production_loop_sha256": "6d17d2ba32d7fde07fda6005c8f9bb1adf50a6bbdcd5ba9929baca2e335f03f7",
-  "runtime_source_sha256": "3b28f84f7c883f22f2a3e84c77c5d46204d05fcfb7a7e7d25a79d0b258501235",
+  "runtime_source_sha256": "8f982d759b3af669bb2972c5ebdc2a4dff1b1524474b96978c0364e928b31d59",
   "negative_control": "Removing inactive-schedule timer guard fails unavailable-QPC regression."
 }
