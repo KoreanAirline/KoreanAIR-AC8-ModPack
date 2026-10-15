@@ -1,13 +1,13 @@
-KoreanAIR_AC8_ModPack_2.0
+KoreanAIR_AC8_ModPack_2.1
 English user guide
 
 INSTALL AND PLAY
 
 1. Start ACE COMBAT 8 normally through Steam at least once, then close the game.
 2. Extract the complete ZIP, keeping Payload.zip beside the installer, then run
-   KoreanAIR_AC8_ModPack_2.0_Setup.exe. Select the game folder containing
+   KoreanAIR_AC8_ModPack_2.1_Setup.exe. Select the game folder containing
    start_protected_game.exe, then choose the modules and click Install / Update.
-3. Open KoreanAIR_AC8_ModPack_2.0.exe in the game folder. Keep Steam open and
+3. Open KoreanAIR_AC8_ModPack_2.1.exe in the game folder. Keep Steam open and
    choose Play with selected mods.
 
 The standalone installer downloads the matching verified mod files when needed.
@@ -48,7 +48,7 @@ MODULES
   Online dialogue remains unchanged.
 - Mouse flight controls: mouse steering, Alt free look, toggle zoom toward mouse
   aim and the flight helper HUD.
-- Triple monitor span and FOV: single-display flight FOV or a window spanning
+- Screen & camera: flight FOV, automatic ultrawide correction or a window spanning
   three displays, plus chase camera distance/height when Mouse flight is installed.
 
 ADJUSTING VALUES
@@ -159,24 +159,31 @@ in about 0.5 seconds without restarting. The HUD shortcut hides/shows both marke
 
 SCREEN AND CAMERA (Screen & camera)
 
-Enable camera settings to apply this tab's camera options. FOV uses a 16:9 reference
-and affects flight only. Prerecorded videos retain their original view.
+Enable screen & camera settings to apply this tab's camera options and automatic
+aspect correction in supported rendered scenes. FOV uses a 16:9 reference and
+affects flight only. Prerecorded videos retain their original view.
 Chase camera distance and height require the Mouse flight module and affect
 third-person view only.
+
+For a single 21:9 or 32:9 ultrawide display, enable screen & camera settings and
+leave Span across three monitors unchecked. Select the display's native resolution
+in the game's borderless or fullscreen mode. Three monitors are not required;
+correction follows the actual game render viewport.
 
 Triple span requires three displays with equal pixel resolutions, arranged directly
 left/main/right in Windows display settings. The middle display must be the main
 display, and all three must align along the top with no gaps. NVIDIA Surround is
-not required. If the layout is unsuitable, triple span is unavailable but
-single-display FOV remains available. Save changes, then focus the game to see them.
+not required. If the layout is unsuitable, only triple span is unavailable;
+single-display FOV and ultrawide correction remain available.
+Save changes, then focus the game to see them.
 
-When triple span is enabled, supported rendered hangar aircraft/weapon selection,
-sortie and departure scenes, real-time cinematics, T target-view and interactive
-head-look scenes also use the full span. The mod extends
+Supported rendered hangar aircraft/weapon selection, sortie and departure scenes,
+real-time cinematics, T target-view and interactive head-look scenes adapt to the
+actual game render viewport on an ultrawide display or triple span. The mod extends
 the horizontal view while preserving native camera motion and animated zoom; the
 flight FOV slider does not replace the cinematic lens. This requires a positively
-identified active camera and a matching wide render viewport. Unrecognized
-cameras, prerecorded videos and separately drawn black-bar overlays are unchanged.
+identified active camera and a confirmed render viewport. Unrecognized cameras,
+prerecorded videos and separately drawn black-bar overlays are unchanged.
 
 FRAME GENERATION (Frame generation)
 

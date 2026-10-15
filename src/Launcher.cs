@@ -116,19 +116,19 @@ partial class Launcher : Form {
    var left=ss.FirstOrDefault(x=>x.Bounds.Right==c.Bounds.Left&&x.Bounds.Y==c.Bounds.Y&&x.Bounds.Size==c.Bounds.Size);
    var right=ss.FirstOrDefault(x=>x.Bounds.Left==c.Bounds.Right&&x.Bounds.Y==c.Bounds.Y&&x.Bounds.Size==c.Bounds.Size);
    if(left!=null&&right!=null&&c.Bounds.Width*3<=16384&&c.Bounds.Height<=16384&&ss.Count(x=>x.Bounds.Right==c.Bounds.Left&&x.Bounds.Y==c.Bounds.Y&&x.Bounds.Size==c.Bounds.Size)==1&&ss.Count(x=>x.Bounds.Left==c.Bounds.Right&&x.Bounds.Y==c.Bounds.Y&&x.Bounds.Size==c.Bounds.Size)==1){ok=true;return ui.T("Three aligned displays: ","정렬된 모니터 3대: ")+(c.Bounds.Width*3)+" × "+c.Bounds.Height;}
-   return ui.T("Triple span needs equal-size, aligned displays on both sides of the main display.\nSingle-display FOV is available with your current layout.","트리플 화면은 주 모니터 양옆에 해상도가 같은 모니터를 나란히 배치해야 합니다.\n현재 배치에서도 단일 모니터 FOV는 조절할 수 있습니다.");
+   return ui.T("Main display: ","주 모니터: ")+c.Bounds.Width+" × "+c.Bounds.Height+" ("+((double)c.Bounds.Width/c.Bounds.Height).ToString("0.00",CultureInfo.InvariantCulture)+":1)\n"+ui.T("Single-display FOV and ultrawide correction are available.\nTriple span needs equal-size, aligned displays on both sides of the main display.","단일 모니터 FOV와 울트라와이드 화면 보정을 사용할 수 있습니다.\n트리플 화면은 주 모니터 양옆에 해상도가 같은 모니터를 나란히 배치해야 합니다.");
   }finally{SetThreadDpiAwarenessContext(old);}}catch{return ui.T("Monitor layout could not be read. Check Windows display settings.","모니터 배치를 읽지 못했습니다. Windows 디스플레이 설정을 확인하세요.");}
  }
  void DisplayTab(){
   var p=Tab("Screen & camera","화면·카메라");if(!state.display){Paragraph(p,"Screen & camera is not installed. Add it in Installation.","화면·카메라 기능이 설치되지 않았습니다. 설치 탭에서 추가하세요.");return;}
   var d=Core.ReadIni(Core.Config(root,"display.ini"),"display");bool ok;Geometry(out ok);var geometry=Paragraph(p,"","");ui.Bind(geometry,()=>{bool detected;return Geometry(out detected);});
-  var enable=Check(p,"cameraEnabled","Enable camera settings","카메라 설정 사용",Value(d,"enabled",1)!=0);
+  var enable=Check(p,"cameraEnabled","Enable screen & camera settings","화면·카메라 설정 사용",Value(d,"enabled",1)!=0);
   var span=Check(p,"spanEnabled","Span across three monitors (no NVIDIA Surround)","모니터 3대에 화면 확장 (NVIDIA Surround 불필요)",ok&&Value(d,"span",0)!=0);span.Enabled=ok;
   var fov=Number(p,"fov","FOV (16:9 reference)","시야각 FOV (16:9 기준)",Value(d,"fov",100),60,120,1,0.1M);
   var distance=Number(p,"cameraDistance","Chase camera distance","추적 카메라 거리",Value(d,"distance",3000),1500,6000,0,1);
   var height=Number(p,"cameraHeight","Chase camera height","추적 카메라 높이",Value(d,"height",600),0,1500,0,1);
   if(!state.mouse){distance.Enabled=height.Enabled=false;Paragraph(p,"Camera distance and height require Mouse flight.","카메라 거리·높이를 조절하려면 마우스 조종도 설치해야 합니다.");}
-  Paragraph(p,"FOV affects flight. Menus and cinematics keep their original camera.\nScreen changes can be saved while playing; focus the game to see the result.","FOV는 비행 중 적용됩니다. 메뉴·영상 장면의 카메라는 원본을 사용합니다.\n게임 중에도 저장할 수 있습니다. 게임으로 돌아가면 화면 설정이 반영됩니다.");
+  Paragraph(p,"Enable screen & camera for automatic aspect correction in supported rendered scenes,\nusing the actual game viewport. FOV affects flight; prerecorded videos stay unchanged.\nFor a single 21:9 / 32:9 display, leave triple span unchecked and select its native resolution\nin the game using borderless/fullscreen mode. Save changes, then focus the game.","화면·카메라 설정을 켜면 지원하는 실시간 렌더링 장면을 실제 게임 화면 비율에 맞춰\n자동 보정합니다. FOV는 비행 중 적용되며 미리 제작된 동영상은 변경하지 않습니다.\n21:9 / 32:9 단일 모니터는 모니터 3대 확장을 끄고 게임의 테두리 없는 창 / 전체 화면에서\n기본 해상도를 선택하세요. 게임 중에도 저장한 뒤 게임으로 돌아가면 적용됩니다.");
   Button(Actions(p),"saveDisplay","Save screen & camera","화면·카메라 설정 저장",()=>{Core.WriteIni(Core.Config(root,"display.ini"),"display",new Dictionary<string,string>{{"enabled",enable.Checked?"1":"0"},{"span",span.Checked&&ok?"1":"0"},{"fov",V(fov.Number)},{"distance",V(distance.Number)},{"height",V(height.Number)}});Status("Screen & camera settings saved.","화면·카메라 설정을 저장했습니다.");});
  }
  void SubtitlesTab(){
