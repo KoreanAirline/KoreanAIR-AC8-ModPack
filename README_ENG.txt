@@ -64,10 +64,19 @@ Use the tab's Save button to store your changes.
 
 MOUSE FLIGHT (Controls)
 
+The mouse steering circle updates independently of game frames, using the current
+refresh rate of the displays covered by the game window. Unchanged glyph images
+are reused. Aircraft direction follows the game's actual state updates. Camera
+compensation is blended between updates without delaying mouse input or the
+aircraft's steering target.
+
 Adjust Mouse steering sensitivity and Free look sensitivity separately.
 Hold the free-look key during flight to look around. The aircraft keeps following
 your last mouse steering target; free-look mouse movement does not change it.
-WASD remains available for direct control. Save changes, then focus the game; sensitivity, aim zoom and mod
+Pitch, roll or yaw input during free look cancels pursuit for the rest of that
+hold. The steering circle follows the aircraft nose until you release the
+free-look key; mouse steering then resumes from that direction.
+Save changes, then focus the game; sensitivity, aim zoom and mod
 shortcut settings reload automatically in about 0.5 seconds. F10 is an optional manual
 reload shortcut; it is not required to apply saved changes.
 
@@ -112,7 +121,8 @@ INTERACTIVE SCENE MOUSE LOOK
 In supported interactive cinematic scenes that allow head/camera movement, move
 the mouse to look around instead of using the original 7/8/9/0 controls. No ALT
 press is needed. This uses Free look sensitivity from Controls, just like ALT
-look during flight. Original keyboard look remains available and the game's
+look during flight. Stopping the mouse retains the selected look direction.
+Original keyboard look remains available and the game's
 scene-specific angle limits remain in effect. Mouse movement in these scenes
 does not change the flight steering target.
 

@@ -1,14 +1,58 @@
-KoreanAIR AC8 Mod Pack 2.0 — build 2026101501
+# War Thunder-Style Mouse Controls, Triple-Monitor Support, and More!
 
-- Keep campaign-radio speaker, arrows and caption body together at the bottom through both active native radio layouts.
-- Keep following the last mouse-aim direction while ALT controls free look. Held WASD/QE inputs retain their own axes.
-- Include the owner's supplied launcher and installer icon.
-- Preserve guidance calculations, rendered widescreen cameras, zoom, mouse input, crosshair rendering, graphics quality and saved settings.
+**⚠️ Important Note:** This mod reads game data to perform calculations, so it only works in single-player mode.
 
-The owner tested the final b2026101404 candidate, confirmed it works without problems, and authorized this 2.0 release. Its native runtime and final combined radio layout are unchanged. Source, installer, settings-preservation and startup validation are included separately. This confirmation does not claim independent coverage of every scene, measured generated-frame output or a new FPS gain.
+## Features
 
-Extract the complete distribution ZIP and keep Payload.zip beside Setup.exe. Existing users, including version 1.0 users, can update without uninstalling.
+Here's what this mod offers:
 
-한국어: 캠페인 무전의 화자·표시 기호·대사를 두 개의 실제 자막 경로에서 함께 하단에 표시합니다. ALT로 둘러보는 동안 마지막 마우스 조준 방향을 계속 따라가며, WASD/QE로 직접 조종하는 축은 유지합니다. 사용자가 제공한 실행기·설치 프로그램 아이콘을 포함했습니다. 기존 조종 계산·와이드 화면·확대·입력·조준점 표시·그래픽 품질과 사용자 설정은 유지합니다.
+1. **War Thunder-style keyboard and mouse controls** (Check out the YouTube demo video to see how it works!)
+2. **Triple-monitor support** (See screenshots)
+3. **Improved Japanese-to-Korean subtitles** (For Korean players, fixing awkward or unnatural translations)
+4. **Frame Generation support** (This was previously possible by manually editing the game's .ini files, but now you can enable it directly through the mod launcher.)
+5. **Adjustable subtitle position** (Personally, I find subtitles at the top of the screen a bit hard to read, so I've added an option to move them to the bottom.)
 
-사용자가 최종 b2026101404 후보를 직접 테스트하고 문제가 없음을 확인한 뒤 2.0 배포를 승인했습니다. 테스트한 네이티브 런타임과 최종 무전 배치는 그대로 유지됩니다. 소스와 설치·설정 유지·실행 검증 자료를 별도로 제공합니다. 모든 장면의 독립 검증, 실제 생성 프레임 측정 또는 새로운 FPS 향상을 주장하지 않습니다. 1.0 사용자를 포함한 기존 사용자는 제거하지 않고 업데이트할 수 있습니다.
+## War Thunder-Style Mouse Controls
+
+I made this mod mainly for players who prefer using a keyboard and mouse.
+
+I took inspiration from War Thunder, which is well known for its mouse-friendly flight controls, and tried to bring a similar control scheme to this game.
+
+**You no longer have to manually manage pitch, yaw, and roll with your mouse just to get your aircraft to follow the circle on the screen.**
+
+Instead, your aircraft will automatically follow your mouse aim, just like in War Thunder.
+
+Of course, you can still manually control your roll using **A and D**, which allows you to pull off more advanced maneuvers.
+
+You can also **right-click to zoom in**, just like in War Thunder.
+
+## Triple-Monitor Support
+
+For those of you running a triple-monitor setup (three 16:9 monitors), I've added support for using all three screens **without needing NVIDIA Surround**.
+
+You can simply enable and configure it through the mod launcher.
+
+This works not only during campaign gameplay but also in **real-time rendered cutscenes**.
+
+As a result, you can actually see parts of the game world that would normally be outside the visible area on a standard 16:9 display.
+
+## Bug Reports & Feedback
+
+Unfortunately, I've been pretty busy lately, so I haven't had enough time to thoroughly test everything.
+
+There might still be some bugs, so if you run into any issues, **please let me know in the comments!**
+
+Thanks for checking out my mod, and I hope you enjoy it!
+
+---
+
+## Bug fixes — 2.0 (build 2026101506)
+
+- Corrected target selection to prioritize enemies nearest the visible mouse-aim circle.
+- Corrected Alt free-look and manual-control handoff: Alt alone retains the existing flight goal; WASD/QE input while holding Alt switches the aim circle to the aircraft heading until Alt is released.
+- Reduced aim-circle jitter while keeping mouse flight-goal input immediate.
+- Extended widescreen handling to the active replay/debrief cameras.
+- Fixed automatic recentering when using mouse head look in interactive scenes.
+- Corrected independent mouse-input worker startup and removed redundant object searches, camera checks and status-text allocations.
+
+Intermittent stalls around landing/takeoff were still observed during testing. Their cause remains unconfirmed; this update does not claim to fix them.

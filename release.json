@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "build": 2026101501,
+  "build": 2026101506,
   "repository": "KoreanAirline/KoreanAIR-AC8-ModPack",
-  "change_type": "owner_version_release"
+  "change_type": "bugfix_local_candidate"
 }

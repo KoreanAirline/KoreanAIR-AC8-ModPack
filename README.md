@@ -19,6 +19,6 @@ The modules are intended for offline play. Use the launcher's **Disable pack for
 
 This repository contains the launcher, installer and shared updater source, release metadata, synthetic tests and legal notices. See [BUILDING.md](BUILDING.md) for build instructions.
 
-The matching release's `KoreanAIR_AC8_ModPack_1.4_Sources.zip` includes the native runtime source, campaign loader source, translation source and redistributable `Payload.zip` needed for a full installer rebuild. Game executables are not included.
+The matching release's `KoreanAIR_AC8_ModPack_2.0_Sources.zip` includes the native runtime source, campaign loader source, translation source and redistributable `Payload.zip` needed for a full installer rebuild. Game executables are not included.
 
 Independently written KoreanAIR code uses the [MIT license](LICENSE). Third-party components retain their notices in [licenses](licenses).
