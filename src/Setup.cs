@@ -9,6 +9,7 @@ using System.Threading;
 using KoreanAIR;
 class Setup : Form {
  bool busy;
+ string moduleSelectionPath;
  readonly UiLanguage ui=new UiLanguage();
  readonly TextBox path=new TextBox{Name="gamePath",Dock=DockStyle.Fill};
  readonly CheckBox campaign=new CheckBox{Name="campaign",AutoSize=true},mouse=new CheckBox{Name="mouse",AutoSize=true},display=new CheckBox{Name="display",AutoSize=true};
@@ -33,10 +34,15 @@ class Setup : Form {
     else if(args[0]=="--uninstall"&&args.Length==2)Core.Uninstall(args[1]);else throw new Exception("Invalid command line.");return 0;
    }
    try{SetThreadDpiAwarenessContext(new IntPtr(-4));}catch{}
-   Application.EnableVisualStyles();Application.Run(new Setup(args.Length==2&&args[0]=="--ui-root"?args[1]:null));return 0;
+   bool uiRoot=args.Length>=2&&args[0]=="--ui-root";
+   bool? translation=null;
+   if(uiRoot&&args.Length==3){if(args[2]!="0"&&args[2]!="1")throw new Exception("Invalid translation selection.");translation=args[2]=="1";}
+   if(uiRoot&&args.Length>3)throw new Exception("Invalid command line.");
+   Application.EnableVisualStyles();Application.Run(new Setup(uiRoot?args[1]:null,translation));return 0;
   }catch(Exception e){if(args.Length>0){Console.Error.WriteLine(e.Message);try{File.WriteAllText(Path.Combine(Path.GetTempPath(),"KoreanAIR_AC8_Setup_error.txt"),e.ToString());}catch{}}else MessageBox.Show(new UiLanguage().Error(e),Core.Brand,MessageBoxButtons.OK,MessageBoxIcon.Error);return 1;}
  }
- public Setup(string preferred) {
+ public Setup(string preferred):this(preferred,null){}
+ public Setup(string preferred,bool? translation) {
   UiWindow.SetBrandIcon(this);
   AutoScaleDimensions=new SizeF(96,96);AutoScaleMode=AutoScaleMode.Dpi;Font=new Font("Segoe UI",10);
   ClientSize=new Size(740,500);MinimumSize=new Size(680,480);MaximizeBox=false;StartPosition=FormStartPosition.CenterScreen;
@@ -65,13 +71,13 @@ class Setup : Form {
   ui.Bind(install,"Install / Update","설치·업데이트");ui.Bind(remove,"Uninstall","모드 제거");
   foreach(var b in new[]{install,remove}){b.AutoSize=true;b.AutoSizeMode=AutoSizeMode.GrowAndShrink;b.MinimumSize=new Size(165,40);b.Padding=new Padding(10,4,10,4);b.Margin=new Padding(0,0,12,5);buttons.Controls.Add(b);}Row(main,buttons);
   Row(main,status);Status("Ready","준비됨");
-  install.Click+=(s,e)=>{PendingWork=Work(false);};remove.Click+=(s,e)=>{PendingWork=Work(true);};path.Leave+=(s,e)=>LoadState(true);LoadState(true);
+  install.Click+=(s,e)=>{PendingWork=Work(false);};remove.Click+=(s,e)=>{PendingWork=Work(true);};path.Leave+=(s,e)=>{if(!String.Equals(moduleSelectionPath,path.Text,StringComparison.OrdinalIgnoreCase))LoadState(true);};LoadState(true);if(translation.HasValue)campaign.Checked=translation.Value;
   FormClosing+=(s,e)=>{if(busy)e.Cancel=true;};
   Shown+=(s,e)=>UiWindow.Fit(this);ResizeEnd+=(s,e)=>UiWindow.Fit(this);
  }
  void Row(TableLayoutPanel parent,Control control){control.Dock=DockStyle.Top;int row=parent.RowCount++;parent.RowStyles.Add(new RowStyle(SizeType.AutoSize));parent.Controls.Add(control,0,row);}
  void Status(string en,string ko){ui.Bind(status,en,ko);}
- void LoadState(bool updateStatus){try{var s=Core.ReadState(path.Text);if(s!=null){campaign.Checked=s.campaign;mouse.Checked=s.mouse;display.Checked=s.display;if(updateStatus)Status("Existing installation detected","기존 설치를 확인했습니다.");}using(var p=ReleasePayload.OpenManifest(Assembly.GetExecutingAssembly())){loaderStatus.Visible=Core.InspectCampaignLoader(path.Text,p).ForeignLoader;}ui.Bind(loaderStatus,"Another mod uses Game/Binaries/Win64/dinput8.dll. Keep Korean campaign subtitles OFF to preserve it while installing Mouse/Screen. In-game coexistence is unverified.","다른 모드가 Game/Binaries/Win64/dinput8.dll을 사용합니다. 해당 파일을 보존하려면 캠페인 한국어 자막을 끄고 마우스·화면 기능을 설치하세요. 실제 게임에서의 동시 사용은 검증되지 않았습니다.");}catch{loaderStatus.Visible=false;}}
+ void LoadState(bool updateStatus){moduleSelectionPath=path.Text;try{var s=Core.ReadState(path.Text);if(s!=null){campaign.Checked=s.campaign;mouse.Checked=s.mouse;display.Checked=s.display;if(updateStatus)Status("Existing installation detected","기존 설치를 확인했습니다.");}using(var p=ReleasePayload.OpenManifest(Assembly.GetExecutingAssembly())){loaderStatus.Visible=Core.InspectCampaignLoader(path.Text,p).ForeignLoader;}ui.Bind(loaderStatus,"Another mod uses Game/Binaries/Win64/dinput8.dll. Keep Korean campaign subtitles OFF to preserve it while installing Mouse/Screen. In-game coexistence is unverified.","다른 모드가 Game/Binaries/Win64/dinput8.dll을 사용합니다. 해당 파일을 보존하려면 캠페인 한국어 자막을 끄고 마우스·화면 기능을 설치하세요. 실제 게임에서의 동시 사용은 검증되지 않았습니다.");}catch{loaderStatus.Visible=false;}}
  void PayloadProgress(int percent){if(IsDisposed||!IsHandleCreated)return;BeginInvoke(new Action(()=>{if(!IsDisposed)Status("Downloading installation files… "+percent+"%","설치 파일 다운로드 중… "+percent+"%");}));}
  async Task Work(bool uninstall){
   if(busy)return;

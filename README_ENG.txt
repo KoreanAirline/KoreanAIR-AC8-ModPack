@@ -45,7 +45,9 @@ to play with your installed mods.
 MODULES
 
 - Korean campaign subtitles: improves campaign subtitles using the English source.
-  Online dialogue remains unchanged.
+  Online dialogue remains unchanged. In Subtitles, select Korean campaign
+  translation and Apply translation selection to add/remove it through Setup.
+  Mouse flight and screen features also work without Korean translation.
 - Mouse flight controls: mouse steering, Alt free look, toggle zoom toward mouse
   aim and the flight helper HUD.
 - Screen & camera: flight FOV, automatic ultrawide correction or a window spanning

@@ -132,7 +132,11 @@ partial class Launcher : Form {
   Button(Actions(p),"saveDisplay","Save screen & camera","화면·카메라 설정 저장",()=>{Core.WriteIni(Core.Config(root,"display.ini"),"display",new Dictionary<string,string>{{"enabled",enable.Checked?"1":"0"},{"span",span.Checked&&ok?"1":"0"},{"fov",V(fov.Number)},{"distance",V(distance.Number)},{"height",V(height.Number)}});Status("Screen & camera settings saved.","화면·카메라 설정을 저장했습니다.");});
  }
  void SubtitlesTab(){
-  var p=Tab("Subtitles","자막");if(!state.mouse&&!state.display&&!state.campaign){Paragraph(p,"Subtitle positioning requires an installed module. Add one in Installation.","자막 위치를 조절하려면 모듈이 필요합니다. 설치 탭에서 추가하세요.");return;}
+  var p=Tab("Subtitles","자막");
+  var translation=new CheckBox{Name="koreanTranslation",Checked=state.campaign,AutoSize=true};ui.Bind(translation,"Korean campaign translation","캠페인 한국어 번역");Row(p,translation);
+  Paragraph(p,"Optional Korean translation. Mouse flight and screen features work independently, including with English subtitles.\nApplying this selection opens the installer with your other modules retained. Close the game first.","한국어 번역은 선택 사항입니다. 영어 자막을 사용해도 마우스 조종·화면 기능은 독립적으로 작동합니다.\n적용을 누르면 다른 기능 선택을 유지한 설치 창이 열립니다. 먼저 게임을 종료하세요.");
+  Button(Actions(p),"applyKoreanTranslation","Apply translation selection…","번역 선택 적용…",()=>OpenModuleSetup(translation.Checked));
+  if(!state.mouse&&!state.display&&!state.campaign){Paragraph(p,"Subtitle positioning requires an installed module. Add one in Installation.","자막 위치를 조절하려면 모듈이 필요합니다. 설치 탭에서 추가하세요.");return;}
   var d=Core.ReadIni(Core.Config(root,"subtitle.ini"),"subtitles");string saved;int selected=d.TryGetValue("position",out saved)&&String.Equals(saved,"bottom",StringComparison.OrdinalIgnoreCase)?1:0;
   var row=new TableLayoutPanel{AutoSize=true,AutoSizeMode=AutoSizeMode.GrowAndShrink,ColumnCount=2,RowCount=1,Margin=new Padding(0,3,0,8)};row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,50));row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,50));row.RowStyles.Add(new RowStyle(SizeType.AutoSize));
   var label=new Label{Name="subtitlePositionLabel",AutoSize=true,Dock=DockStyle.Top,Margin=new Padding(0,6,10,0)};ui.Bind(label,"Dialogue subtitle position","대사 자막 위치");row.Controls.Add(label,0,0);
@@ -187,11 +191,18 @@ partial class Launcher : Form {
   var compatibility=Paragraph(p,"","");compatibility.Name="campaignLoaderCompatibility";
   ui.Bind(compatibility,()=>{bool foreign=Core.InspectCampaignLoader(root).ForeignLoader;compatibility.Visible=foreign;return foreign?ui.T("Another mod uses Game/Binaries/Win64/dinput8.dll.\nTo keep it, install Mouse flight or Screen & camera with Korean campaign subtitles off.\nAfter removing the other loader, add Korean campaign subtitles in Installation.\nUsing these mods together in game has not been verified.","다른 모드가 Game/Binaries/Win64/dinput8.dll을 사용하고 있습니다.\n이 파일을 보존하려면 한국어 캠페인 자막을 끄고 마우스 조종·화면 기능을 설치하세요.\n기존 로더를 제거한 뒤 설치 탭에서 한국어 캠페인 자막을 추가할 수 있습니다.\n실제 게임에서 모드를 함께 사용하는 동작은 아직 검증되지 않았습니다."):"";});
   var actions=Actions(p);
-  Button(actions,"changeModules","Change installed modules","설치된 기능 변경",()=>{if(Core.Running(root))throw new Exception("Close ACE COMBAT 8 first.");string temp=Path.Combine(Path.GetTempPath(),Core.Brand+"_Setup_"+Guid.NewGuid().ToString("N")+".exe");File.Copy(Core.Safe(root,Core.Folder+"/Setup.exe"),temp);Process.Start(new ProcessStartInfo(temp,"--ui-root \""+root+"\""){WorkingDirectory=root,UseShellExecute=true});Close();});
+  Button(actions,"changeModules","Change installed modules","설치된 기능 변경",()=>OpenModuleSetup(null));
   Button(actions,"openFolder","Open game folder","게임 폴더 열기",()=>Process.Start("explorer.exe",root));
   var docs=Actions(p);Button(docs,"openReadme","Open README","사용 안내 열기",()=>Process.Start(new ProcessStartInfo(Core.Safe(root,Core.Folder+"/README_"+(ui.Language=="ko"?"KOR":"ENG")+".txt")){UseShellExecute=true}));
   Button(docs,"openLicenses","Licenses & credits","라이선스·제작 정보",()=>Process.Start("explorer.exe",Core.Safe(root,Core.Folder+"/Licenses")));
   Paragraph(p,"Original-file backups are kept outside the game folder.\nThe installer preserves saves and files belonging to other mods.","설치 전 원본 파일은 게임 폴더 밖에 보관됩니다.\n설치 프로그램은 세이브와 다른 모드의 파일을 보존합니다.");
+ }
+ void OpenModuleSetup(bool? campaign){
+  if(Core.Running(root))throw new Exception("Close ACE COMBAT 8 first.");
+  string temp=Path.Combine(Path.GetTempPath(),Core.Brand+"_Setup_"+Guid.NewGuid().ToString("N")+".exe");
+  File.Copy(Core.Safe(root,Core.Folder+"/Setup.exe"),temp);
+  string args="--ui-root \""+root+"\""+(campaign.HasValue?" "+(campaign.Value?"1":"0"):"");
+  Process.Start(new ProcessStartInfo(temp,args){WorkingDirectory=root,UseShellExecute=true});Close();
  }
  protected override void Dispose(bool disposing){if(disposing){if(fgStatusTimer!=null)fgStatusTimer.Dispose();help.Dispose();}base.Dispose(disposing);}
  protected override void WndProc(ref Message m){base.WndProc(ref m);if(m.Msg==0x02E0&&IsHandleCreated&&!IsDisposed)BeginInvoke(new Action(()=>UiWindow.Fit(this)));}

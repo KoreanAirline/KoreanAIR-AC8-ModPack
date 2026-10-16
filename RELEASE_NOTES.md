@@ -102,24 +102,24 @@ Thanks for checking out my mod, and I hope you enjoy it!
 
 ---
 
-## Bug fixes — 2.2 (build 2026101605)
+## Bug fixes — 2.2 (build 2026101608)
 
-- Corrected widescreen output for supported real-time cinematics, briefing maps, replay and debrief views while retaining the native 3D proportions.
-- Fixed horizontal stretching of death/retry menus, radio speaker names and `<< >>` frames on wide displays. Dialogue text and subtitle positioning are retained.
-- Fixed mouse-aim marker visibility and camera/input handoff in supported campaign camera transitions, including focus/kill scenes.
-- Improved aim-circle motion at different display refresh rates. Added mouse side-button bindings.
-- Alt free look continues toward the existing aim point; manual flight input during Alt switches to manual control and resumes mouse aiming from the current nose direction on release.
-- Added a bounded retry for a transient startup thread change that could prevent the mod, including screen expansion, from starting.
+- Reduced repeated controller validation and unnecessary native head-look release calls during flight and cinematic transitions. Current ownership is still checked every frame.
+- Fixed a valid native input mode that could leave mouse-flight camera and aim-marker initialization incomplete.
+- Kept mouse guidance during interactive campaign focus shots, while respecting native input locks and the game's animated close-up/slow-motion lens.
+- Added Korean translation selection to the Subtitles tab. English subtitles, mouse flight and screen options remain independent; other selected modules are retained.
 
-**Updating:** Close the game and run `KoreanAIR_AC8_ModPack_2.2_Setup.exe` over the existing installation, or use the launcher's update notice. Saved settings and selected modules are preserved; uninstalling first is unnecessary. The standalone installer downloads its matching payload from GitHub. For offline installation, extract the main ZIP and keep `Payload.zip` beside Setup.
+**Updating:** Close the game and run `KoreanAIR_AC8_ModPack_2.2_Setup.exe` over the existing installation, or use the launcher's update notice. Saved settings and selected modules are preserved. Uninstalling first is unnecessary. Setup downloads its matching verified files when needed; for offline installation, keep `Payload.zip` beside Setup.
 
-### 한국어 버그 수정 — 2.2 (빌드 2026101605)
+Multi-second transition stalls remain under investigation. This build reduces verified redundant mod work; it does not claim to eliminate all game/driver stalls or increase measured FPS. Graphics quality, DLSS and frame-generation settings are preserved.
 
-- 지원되는 실시간 시네마틱·브리핑 지도·리플레이·디브리프 화면의 와이드 출력을 수정했습니다. 3D 장면의 원래 비율은 유지합니다.
-- 와이드 화면에서 사망·재시도 메뉴, 무전 화자 이름과 `<< >>` 칸이 가로로 늘어지는 문제를 수정했습니다. 대사 본문과 자막 위치 설정은 유지합니다.
-- 집중·킬 장면을 포함한 지원되는 캠페인 카메라 전환에서 조준원 표시와 카메라·입력 연결을 수정했습니다.
-- 모니터 주사율이 달라도 조준원이 부드럽게 움직이도록 개선하고, 마우스 사이드 버튼 바인딩을 추가했습니다.
-- Alt 자유 시점에서는 기존 조준점을 계속 따라갑니다. Alt를 누른 채 수동 조종하면 수동 입력을 따르고, Alt를 놓으면 현재 기수 방향부터 마우스 조종을 재개합니다.
-- 시작 시 일시적인 스레드 변경으로 모드와 화면 확장이 시작되지 않던 경우를 제한적으로 재시도하도록 보완했습니다.
+### 한국어 버그 수정 — 2.2 (빌드 2026101608)
 
-**기존 사용자 설치:** 게임을 종료하고 `KoreanAIR_AC8_ModPack_2.2_Setup.exe`를 기존 게임 폴더에 설치하거나, 런처의 업데이트 알림을 이용하세요. 기존 설정과 선택한 기능은 유지되므로 먼저 삭제할 필요가 없습니다. Setup만 실행하면 해당 버전의 파일을 GitHub에서 받습니다. 인터넷 없이 설치하려면 배포 ZIP 전체를 풀고 `Payload.zip`을 Setup 옆에 두세요.
+- 비행·시네마틱 전환에서 컨트롤러 중복 검사와 불필요한 자유 시점 해제 호출을 줄였습니다. 현재 카메라·입력 소유권은 매 프레임 확인합니다.
+- 유효한 일부 게임 입력 모드에서 마우스 조종 카메라와 조준원 초기화가 끝나지 않을 수 있는 문제를 수정했습니다.
+- 조종 가능한 캠페인 집중 장면에서 마우스 조종을 유지하고, 게임의 입력 잠금과 클로즈업·슬로모션 확대를 존중하도록 보완했습니다.
+- 자막 탭에 한국어 번역 선택을 추가했습니다. 영어 자막 사용 여부와 마우스 조종·화면 기능은 독립적이며 다른 기능 선택은 유지합니다.
+
+**기존 사용자 설치:** 게임을 종료하고 Setup을 기존 게임 폴더에 설치하거나 런처의 업데이트 알림을 이용하세요. 먼저 삭제할 필요 없이 기존 설정과 선택한 기능을 유지합니다. Setup만 실행해도 필요한 파일을 검증하여 내려받습니다. 오프라인 설치는 ZIP 전체를 풀고 `Payload.zip`을 Setup 옆에 두세요.
+
+전환 때 수 초간 끊기는 현상의 원인은 계속 조사 중입니다. 이번 빌드는 확인된 모드 중복 작업을 줄였으며, 모든 게임·드라이버 정지 해소나 실측 FPS 향상을 보장하지 않습니다. 그래픽 품질·DLSS·프레임 생성 설정은 유지합니다.

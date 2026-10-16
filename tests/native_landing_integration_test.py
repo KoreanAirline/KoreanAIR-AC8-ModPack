@@ -112,6 +112,9 @@ void original_camera_update(void*,float){
 bool update_native_display(void*){return true;}
 void reset_native_zoom_state(void*,bool=true){++zoom_resets;}
 uintptr_t native_display_view_target(void*){return aircraft.load();}
+// This fixture exercises landing ownership. Campaign foreign-camera focus
+// admission is independently tested in focus_1607.
+bool interactive_focus_view(void*,const CameraCommand&){return false;}
 bool foreground_is_game(){return true;}
 CameraViewMode read_native_camera_mode(uintptr_t,bool=false){return CameraViewMode::ThirdPerson;}
 int read_native_display_scene_state(uintptr_t){return 0;}

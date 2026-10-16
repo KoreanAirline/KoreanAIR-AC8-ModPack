@@ -13,7 +13,7 @@ source = (runtime / "src/mouse_aim.cpp").read_text(encoding="utf-8")
 main = (runtime / "scripts/main.lua").read_text(encoding="utf-8")
 headlook = (runtime / "scripts/headlook.lua").read_text(encoding="utf-8")
 assert main.index("local headlooking=headlook.update(cached_controller)") < main.index("frame_native(address,")
-assert "function M.release() native(0,0) end" in headlook
+assert "function M.release()" in headlook and "native(0,0)" in headlook
 assert "if count~=1 then controller=nil end" in headlook
 assert "if not valid(controller) then M.release();return false end" in headlook
 assert "local selected=controller:GetViewTarget()" in headlook
