@@ -1,13 +1,13 @@
-KoreanAIR_AC8_ModPack_2.1
+KoreanAIR_AC8_ModPack_2.2
 English user guide
 
 INSTALL AND PLAY
 
 1. Start ACE COMBAT 8 normally through Steam at least once, then close the game.
 2. Extract the complete ZIP, keeping Payload.zip beside the installer, then run
-   KoreanAIR_AC8_ModPack_2.1_Setup.exe. Select the game folder containing
+   KoreanAIR_AC8_ModPack_2.2_Setup.exe. Select the game folder containing
    start_protected_game.exe, then choose the modules and click Install / Update.
-3. Open KoreanAIR_AC8_ModPack_2.1.exe in the game folder. Keep Steam open and
+3. Open KoreanAIR_AC8_ModPack_2.2.exe in the game folder. Keep Steam open and
    choose Play with selected mods.
 
 The standalone installer downloads the matching verified mod files when needed.
@@ -107,6 +107,9 @@ A target does not have to be inside the circle. Offscreen/behind-camera targets
 are excluded; the game's own candidate list still determines eligible targets.
 Holding the button for 0.35 seconds or longer retains the game's target-view
 behavior.
+When the player aircraft uses a target-focus or impact camera, the game retains
+its camera while mouse steering continues. Scripted camera actors and interactive
+head-look scenes retain their own input.
 
 Cobra, Kulbit and other native special maneuvers retain the game's aircraft and
 activation requirements. During the game's special-maneuver rotation, ordinary
@@ -134,8 +137,9 @@ Default mod shortcuts (change them on Controls):
 - Alt (hold): free look.
 - Right mouse button (click): toggle aim zoom, 2× by default; click again to return.
 
-Choose keys from the list or use Press key to capture one. Aim zoom also accepts
-the right, middle and side mouse buttons. Each of the six mod actions needs
+Choose keys from the list or use Press key to capture one. All six mod actions
+accept Mouse 4 / Mouse 5 (side buttons); aim zoom also accepts right and middle
+mouse buttons. Each of the six mod actions needs
 a different key. WASD/QE, Escape, Enter, Tab and Windows keys are reserved.
 Avoid conflicts with the game's other bindings.
 Set the game's own flight and target-selection keys in its controls menu.

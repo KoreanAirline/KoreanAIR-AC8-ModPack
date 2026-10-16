@@ -88,6 +88,9 @@ $report = @{
     new_runtime_errors=($ueText -match $errors -or $mouseText -match $errors)
     modules=$modules;native_dll_matches=(@($modules | Where-Object { $_.name -eq 'ac8_mouse_aim_010.dll' -and $_.sha256 -eq $expectedNativeHash }).Count -eq 1)
     native_log_fresh=$freshNative
+    independent_mouse_ready=$mouseText.Contains('independent mouse input ready: existing launcher worker; no game RAW registration changes')
+    independent_mouse_fallback=$mouseText.Contains('independent mouse input unavailable')
+    overlay_refresh_detected=($mouseText -match 'overlay display refresh=([0-9]+)Hz')
     native_camera_registered=$mouseText.Contains('native camera post-update registered: live and engine managers;')
     native_maneuver_guard_verified=$mouseText.Contains('native maneuver input build guard: verified')
     native_player_maneuver_guard_verified=$mouseText.Contains('native player maneuver build guard: verified')
@@ -103,7 +106,7 @@ $report = @{
     mission_piloted=$false;game_closed_normally=($closeRequested -and -not $stillRunning -and $exitCode -eq 0 -and $newCrashes.Count -eq 0)
 }
 $report | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $reportFolder 'live_game_launch.json') -Encoding utf8
-if (-not $report.running -or -not $report.campaign_log_fresh -or -not $report.campaign_pak_mounted -or -not $report.lua_modules_loaded -or $report.new_runtime_errors -or -not $report.native_dll_matches -or -not $report.native_log_fresh -or -not $report.native_camera_registered -or -not $report.native_maneuver_guard_verified -or -not $report.native_player_maneuver_guard_verified -or -not $report.native_raw_provenance_verified -or -not $report.native_psm_admission_provenance_verified -or -not $report.game_closed_normally) {
+if (-not $report.running -or -not $report.campaign_log_fresh -or -not $report.campaign_pak_mounted -or -not $report.lua_modules_loaded -or $report.new_runtime_errors -or -not $report.native_dll_matches -or -not $report.native_log_fresh -or -not $report.independent_mouse_ready -or $report.independent_mouse_fallback -or -not $report.native_camera_registered -or -not $report.native_maneuver_guard_verified -or -not $report.native_player_maneuver_guard_verified -or -not $report.native_raw_provenance_verified -or -not $report.native_psm_admission_provenance_verified -or -not $report.game_closed_normally) {
     throw 'Startup verification failed; see live_game_launch.json.'
 }
-Write-Output 'PASS: installed launcher startup, current native camera/maneuver guards, revised campaign PAK mount and normal exit. No mission piloting.'
+Write-Output 'PASS: installed launcher and independent mouse worker startup, current native camera/maneuver guards, revised campaign PAK mount and normal exit. No mission piloting.'

@@ -56,6 +56,8 @@ std::atomic<uintptr_t> aircraft{0x2000000-0x2268};
 std::atomic<uint64_t> input_generation{1};
 bool looking=false;
 bool free_look_suspends_guidance(){return looking;}
+bool manual_takeover=false;
+bool free_look_manual_control(){return manual_takeover;}
 struct Control{bool neutral_edge=false;}player_maneuver_control;
 '''
 FIXTURE = r'''
@@ -65,8 +67,9 @@ extern "C" __declspec(dllexport) void build(const unsigned char* code,const unsi
 }
 extern "C" __declspec(dllexport) void reset(){
     native_raw.reset();player_admission_origin.clear();enabled=true;active=true;game_paused=false;gaze_active=false;
-    looking=false;input_generation=1;aircraft=0x2000000-0x2268;
+    looking=false;manual_takeover=false;input_generation=1;aircraft=0x2000000-0x2268;
 }
+extern "C" __declspec(dllexport) void manual(int claimed){manual_takeover=claimed!=0;}
 extern "C" __declspec(dllexport) void mapped(uintptr_t owner){mark_native_mapping(reinterpret_cast<unsigned char*>(owner));}
 extern "C" __declspec(dllexport) void publish(float pitch,int keys,int automatic,int valid_input,int owned,int neutral){
     const uintptr_t pawn=aircraft.load();const bool apply_guidance=automatic!=0,valid=valid_input!=0,held_pitch=(keys&1)!=0,native_ownership=owned!=0;
@@ -134,6 +137,8 @@ for gates in [(0,1,0,0,0,0), (1,0,0,0,0,0), (1,1,1,0,0,0), (1,1,0,1,0,0), (1,1,0
 for keys in range(8):
     dll.reset();dll.mapped(OWNER);dll.publish(1, keys, True, True, False, False);dll.gates(1,1,0,0,1,0)
     require(route()==(not bool(keys&1)), "ALT last-goal automatic pitch stays protected; physical W/S retains native PSM admission")
+    dll.manual(1);require(not route(), "latched Alt manual ownership rejects stale automatic provenance on every axis")
+    dll.manual(0);require(route()==(not bool(keys&1)), "Alt-only/resumed automatic provenance remains protected after manual gate clears")
 
 EXE = Executable(Path("E:/SteamLibrary/steamapps/common/ACE COMBAT 8/Game/Binaries/Win64/AceCombat8.exe"))
 CLONE = 0x6000000

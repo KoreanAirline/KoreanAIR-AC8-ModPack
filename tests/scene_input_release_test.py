@@ -59,6 +59,12 @@ std::atomic<float> command_pitch{0},command_roll{0},command_yaw{0},pose_pitch{0}
 std::atomic<uint64_t> maneuver_pitch_motion{0};std::atomic<unsigned> keyboard_mask{0};
 flight::FreeLook free_look;flight::GeometricGuidance guidance;
 bool free_look_key_pressed=false;
+flight::FreeLookManualControl free_look_manual;
+long look_mouse_dx=0,look_mouse_dy=0;
+bool mouse_capture_look=false,mouse_flight_after_look=false;
+void reset_look_mouse_input();void observe_mouse_mode(bool looking);
+bool free_look_binding_down(){return free_look_key_pressed;}
+bool free_look_manual_control(){observe_mouse_mode(free_look_key_pressed);free_look_manual.observe(free_look_key_pressed,false);return free_look_manual.follows_nose();}
 float previous_pitch=0,previous_yaw=0,previous_roll=0,filtered_pitch_rate=0,filtered_yaw_rate=0,filtered_roll_rate=0;
 unsigned long long previous_pose_tick=0,telemetry_tick=0;double previous_pose_seconds=0;
 std::mutex target_vector_mutex;flight::V live_target{1,0,0};uint64_t live_target_revision=1;
@@ -81,6 +87,7 @@ bool read_numbers(LuaView& lua,double(&out)[2]) {memcpy(out,lua.state->args,size
 namespace ac8headlook {
 bool native_headlook_active(uintptr_t){return head_eligible;}
 bool apply_native_headlook(uintptr_t,float,float){return true;}
+void release_native_headlook(){}
 }
 UINT WINAPI raw_original(HRAWINPUT input,UINT command,LPVOID data,PUINT,UINT){if(command!=RID_INPUT)return UINT(-1);memcpy(data,input,sizeof(RAWINPUT));return sizeof(RAWINPUT);}
 using GetRawInputDataFn=UINT(WINAPI*)(HRAWINPUT,UINT,LPVOID,PUINT,UINT);
@@ -88,6 +95,8 @@ GetRawInputDataFn original_get_raw_input_data=raw_original;
 unsigned checks=0;
 void require(bool ok,const char* message){++checks;if(!ok){std::fprintf(stderr,"FAIL: %s\n",message);std::exit(1);}}
 '''
+prefix += function('reset_look_mouse_input') + function('observe_mouse_mode') + function('queue_mouse_input')
+
 fixture = r'''
 lua_State scene(uintptr_t owner=0,bool paused=false){lua_State state;state.args[0]=double(owner);state.args[1]=paused?1:0;require(ac8_mouseaim_scenelook(&state)==3,"actual scene numeric bridge accepted");return state;}
 void capture(long x,long y){RAWINPUT packet{},out{};packet.header.dwType=RIM_TYPEMOUSE;packet.data.mouse.lLastX=x;packet.data.mouse.lLastY=y;UINT bytes=sizeof(out);require(capture_get_raw_input_data(reinterpret_cast<HRAWINPUT>(&packet),RID_INPUT,&out,&bytes,sizeof(RAWINPUTHEADER))==sizeof(out),"actual raw capture preserves native packet result");}
@@ -114,7 +123,7 @@ int main(){
     scene(0x10000,true);require(mouse_dx.load()==0&&mouse_dy.load()==0,"scene pause transition discards once");
     mouse_dx.store(8);scene(0x10000,true);require(mouse_dx.load()==8,"repeated paused scene binding does not discard again");
     scene(0x10000,false);require(mouse_dx.load()==0,"scene unpause boundary discards once");
-    clock_tick+=251;capture(8,-5);require(mouse_dx.load()==8,"expired scene routes fresh delta back to flight");
+    clock_tick+=251;capture(8,-5);require(look_mouse_dx==8&&mouse_dx.load()==0,"expired scene routes fresh delta back to current Alt look queue");
     scene(0x10000);require(mouse_dx.load()==0&&mouse_dy.load()==0,"stale scene reactivation discards boundary once");
     mouse_dx.store(9);scene();require(mouse_dx.load()==0,"actual scene exit discards boundary once");
     free_look.reset();free_look_key_pressed=false;target_pitch.store(0);target_yaw.store(0);
@@ -145,9 +154,10 @@ int main(){
         require(std::abs(ordinary_pixels-zoom_pixels)<.001f,"actual ALT uses configured look sensitivity with matching current-lens pixel response");
         require(dot(goal(),held_goal)>.999999f&&zoom_requested.load(),"zoomed ALT movement leaves clicked zoom and flight goal intact");
         free_look_key_pressed=false;clock_tick+=16;capture(100,-100);update_commands();
-        require(dot(goal(),held_goal)>.999999f&&zoom_requested.load()&&!manual_free_look.load(),"ALT release discards boundary packet and retains zoom/flight goal");
-        clock_tick+=16;capture(10,0);update_commands();
-        require(dot(goal(),held_goal)<.999999f&&zoom_requested.load(),"ordinary aim movement resumes after ALT while zoom remains requested");
+        const auto release_goal=ac8pointing::move(held_goal,view,100,-100,config.sensitivity,zoom_magnification.load());
+        require(dot(goal(),release_goal)>.999999f&&zoom_requested.load()&&!manual_free_look.load(),"known flight packet captured after physical Alt release applies once and retains zoom");
+        const auto release_before=goal();clock_tick+=16;capture(10,0);update_commands();
+        require(dot(goal(),release_before)<.999999f&&zoom_requested.load(),"ordinary aim movement continues after ALT while zoom remains requested");
     }
     const auto prior_goal=goal();native_landing_owned.store(true);zoom_requested.store(true);zoom_magnification.store(8);
     command_pitch.store(1);command_yaw.store(1);command_roll.store(1);capture(11,-5);update_commands();

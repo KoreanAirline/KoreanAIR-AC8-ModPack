@@ -2,7 +2,9 @@ from pathlib import Path
 import hashlib,json,subprocess,struct,time,zipfile
 D=Path(__file__).resolve().parents[1]
 BASE=D/'tests'/('fixtures_'+time.strftime('%H%M%S'));BASE.mkdir()
-SETUP=D/'build/KoreanAIR_AC8_ModPack_1.3_Setup.exe'
+release=json.loads((D/'release.json').read_text(encoding='utf-8-sig'))
+BRAND='KoreanAIR_AC8_ModPack_'+release['version']
+SETUP=D/'build'/(BRAND+'_Setup.exe')
 results=[]
 def check(name,condition):
     results.append(dict(name=name,passed=bool(condition)))
@@ -15,7 +17,7 @@ def fake(name,bad=False):
     (root/'unrelated.txt').write_text('keep me');return root
 def run(*args,ok=True):
     result=subprocess.run([str(SETUP),*map(str,args)],creationflags=subprocess.CREATE_NO_WINDOW)
-    if (result.returncode==0)!=ok:raise AssertionError(f'Unexpected exit {result.returncode} {args}: '+(Path.home()/'AppData/Local/Temp/KoreanAIR_AC8_Setup_error.txt').read_text())
+    if (result.returncode==0)!=ok:raise AssertionError(f'Unexpected exit {result.returncode} {args}: '+(Path.home()/'AppData/Local/Temp/KoreanAIR_AC8_Setup_error.txt').read_text(encoding='utf-8-sig',errors='replace'))
 def state(root):return json.loads((root/'KoreanAIR_AC8_ModPack/installed.json').read_text())
 for cp in range(2):
  for m in range(2):
@@ -52,7 +54,7 @@ check('foreign_campaign_preflight_no_mutations',before=={str(p.relative_to(root)
 for m,d in [(1,0),(0,1),(1,1)]:
  run('--install',root,0,m,d)
  check(f'foreign_runtime_install_{m}{d}',all((root/p).read_bytes()==content for p,content in external.items()) and not state(root)['campaign'])
- launcher=root/'KoreanAIR_AC8_ModPack_1.3.exe'
+ launcher=root/(BRAND+'.exe')
  for action in ['--suspend','--verify','--resume','--verify']:
   p=subprocess.run([str(launcher),action],creationflags=subprocess.CREATE_NO_WINDOW);check(f'foreign_{m}{d}_{action}',p.returncode==0 and all((root/name).read_bytes()==content for name,content in external.items()))
  run('--uninstall',root)
@@ -60,7 +62,7 @@ for m,d in [(1,0),(0,1),(1,1)]:
 check('foreign_originals_fully_restored',before=={str(p.relative_to(root)):p.read_bytes() for p in root.rglob('*') if p.is_file()})
 root=fake('unsupported',bad=True);run('--install',root,1,1,1,ok=False);check('unsupported_no_changes',not(root/'KoreanAIR_AC8_ModPack').exists())
 root=fake('changed_owned');run('--install',root,1,0,0);dll=root/'Game/Binaries/Win64/dinput8.dll';dll.write_bytes(b'changed');run('--uninstall',root,ok=False);check('changed_preserved',dll.read_bytes()==b'changed' and (root/'KoreanAIR_AC8_ModPack/installed.json').exists())
-root=fake('suspend');run('--install',root,1,1,1);launcher=root/'KoreanAIR_AC8_ModPack_1.3.exe'
+root=fake('suspend');run('--install',root,1,1,1);launcher=root/(BRAND+'.exe')
 for action in ['--verify','--suspend','--verify','--resume','--verify']:
  p=subprocess.run([str(launcher),action],creationflags=subprocess.CREATE_NO_WINDOW);check('launcher'+action,p.returncode==0)
 run('--uninstall',root)

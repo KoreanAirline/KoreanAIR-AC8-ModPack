@@ -24,6 +24,8 @@ for native,fake in [('ac8display::PhysicalPixelScope physical_pixels;','FakePhys
 prelude=r'''
 #include "overlay_refresh.h"
 #include "overlay_update_policy.h"
+#include "display_camera.h"
+#include "target_score.h"
 #include <atomic>
 #include <mutex>
 #include <cstring>
@@ -36,25 +38,24 @@ uint64_t qpc=0,revision=1,frame_index=0;
 unsigned iterations=0,limit=500,rate=180,draws=0,hides=0,arms=0,cancels=0,display_invalidations=0;
 unsigned period_poll=0,failed_waits=0,positive_waits=0;
 bool input=true,present_ok=true,placement_ok=true,timer_ok=true,clock_ok=true,
-     visible=true,showing=false,armed=false,hide_midway=false,message_pending=false,wait_ok=true;
+     visible=true,showing=false,armed=false,hide_midway=false,message_pending=false,wait_ok=true,camera_burst=false;
 uint64_t timer_deadline=0;
 std::vector<uint64_t> draw_times;
 std::vector<uint32_t> backing;
 std::atomic<bool> running{true},hud_enabled{true},game_paused{false},gaze_active{false},
     active{true},enabled{true},perf_enabled{false};
 std::atomic<uintptr_t> aircraft{2};
+std::atomic<uint64_t> input_generation{1};std::atomic<bool> manual_free_look{false};
 std::atomic<float> target_pitch{},target_yaw{},camera_pitch{},camera_yaw{};
 HWND game_window=reinterpret_cast<HWND>(2),overlay_window=nullptr;
 HINSTANCE self_module=reinterpret_cast<HINSTANCE>(3);
 std::mutex hud_frame_mutex,hud_settings_mutex;
 HANDLE hud_overlay_wake=nullptr;
 ac8hud::Settings hud_settings;
-namespace flight {
-struct V{float x=1,y=0,z=0;};struct Basis{V f;};struct Point{int x=300,y=300;bool visible=true;};
-Point project_marker(V,Basis,V,float,int,int){return {};}
-}
-struct HudFrame {uintptr_t pawn=2;int width=5760,height=1080;uint64_t tick=1000,publication=1;flight::V aim,offset;flight::Basis pose,view;float fov=90;};
+struct HudFrame {uintptr_t pawn=2;int width=5760,height=1080;uint64_t tick=1000,publication=1;flight::V aim{1,0,0},offset;flight::Basis pose=flight::basis(0,0,0),view=flight::basis(0,0,0);float fov=90;uint64_t generation=1;unsigned camera_mode=1;uint64_t publication_qpc=0;};
 HudFrame hud_frame;
+std::mutex presented_marker_mutex;ac8target::PresentedMarker presented_marker;
+flight::ScreenPoint last_aim{};std::vector<flight::ScreenPoint> aim_points;
 namespace ac8pack {const char* version="fixture";}
 namespace ac8profile {std::atomic<bool> enabled{false};}
 std::atomic<uint64_t> overlay_uploads{0};
@@ -79,8 +80,9 @@ public:
  HWND handle()const{return reinterpret_cast<HWND>(uintptr_t(100+id));}
  bool needs_restore()const{return false;}
  size_t backing_bytes()const{return 5000;}
- GlyphResult present(HWND,const RECT&,GlyphPoint,const ac8hud::Glyph&,HWND=HWND_TOPMOST,bool=true){
+ GlyphResult present(HWND,const RECT&,GlyphPoint point,const ac8hud::Glyph&,HWND=HWND_TOPMOST,bool=true){
   if(id%2==0){++draws;draw_times.push_back(qpc);}own_shown=present_ok&&placement_ok;showing=own_shown;
+  if(id%2==1&&own_shown){last_aim={point.x,point.y,point.visible};aim_points.push_back(last_aim);}
   return {present_ok&&placement_ok,true,true};
  }
  bool hide(){if(own_shown){++hides;own_shown=false;showing=false;return true;}return false;}
@@ -123,11 +125,15 @@ BOOL peek(MSG* message,HWND,UINT,UINT,UINT){
 DWORD fake_error(){return 5;}
 void advance(uint64_t delta){
     require(delta>0,"native wait makes positive temporal progress");++positive_waits;qpc+=delta;
-    const auto current=qpc/285714;
-    if(current!=frame_index){frame_index=current;hud_frame.publication=current+1;hud_frame.tick=tick();}
+    const auto current=camera_burst?std::min<uint64_t>(2,qpc/285714):qpc/285714;
+    if(current!=frame_index){frame_index=current;hud_frame.publication=current+1;hud_frame.tick=tick();hud_frame.publication_qpc=current*285714;
+        if(camera_burst)hud_frame.view=flight::basis(0,float(current)*2,0);}
 }
 DWORD wait(DWORD count,const HANDLE* handles,DWORD timeout,DWORD,DWORD){
     ++iterations;
+    if(presented_marker.tick&&presented_marker.center.visible&&showing)
+        require(presented_marker.center.x==last_aim.x&&presented_marker.center.y==last_aim.y,
+            "selection cache records the exact aim center actually submitted by production overlay");
     if(iterations==100){message_pending=true;}
     if(hide_midway&&iterations==250){game_paused=true;}
     if(iterations>=limit)running=false;
@@ -145,9 +151,9 @@ DWORD wait(DWORD count,const HANDLE* handles,DWORD timeout,DWORD,DWORD){
 void sleep(DWORD ms){require(ms>=1,"failed wait has bounded positive fallback");advance(uint64_t(ms)*10000);}
 void reset(){
     qpc=0;revision=1;frame_index=0;iterations=draws=hides=arms=cancels=display_invalidations=period_poll=failed_waits=positive_waits=0;
-    input=present_ok=placement_ok=timer_ok=clock_ok=visible=wait_ok=true;showing=armed=hide_midway=message_pending=false;
+    input=present_ok=placement_ok=timer_ok=clock_ok=visible=wait_ok=true;showing=armed=hide_midway=message_pending=camera_burst=false;
     running=true;hud_enabled=active=enabled=true;game_paused=gaze_active=perf_enabled=false;
-    hud_frame={};draw_times.clear();rate=180;limit=500;
+    hud_frame={};presented_marker={};last_aim={};aim_points.clear();draw_times.clear();rate=180;limit=500;
 }
 '''
 aliases=dict(RegisterClassW='register_class',CreateWindowExW='create_window',LoadCursorW='cursor',CreateEventW='create_event',
@@ -190,6 +196,11 @@ int main(){
     require(draws==0&&arms==0,"unfocused overlay neither draws nor schedules high-rate timer");
     reset();wait_ok=false;limit=10;overlay_loop();
     require(failed_waits==limit&&positive_waits==limit,"failed native wait uses sleep fallback");
+    reset();input=false;camera_burst=true;limit=35;overlay_loop();
+    const auto final=flight::project_marker(hud_frame.aim,hud_frame.view,hud_frame.offset,hud_frame.fov,hud_frame.width,hud_frame.height);
+    require(!aim_points.empty()&&aim_points.back().x==final.x&&aim_points.back().y==final.y,
+        "production camera-only blend submits its exact final center after camera publications stop");
+    require(arms>0&&arms<25&&cancels>0,"finite camera burst schedules its blend then returns to idle without a continuing timer tail");
     std::printf("PASS: %u production overlay-loop lifecycle/cadence checks; no native window or game launched.\n",checks);
 }
 '''
@@ -211,6 +222,8 @@ bad=run(prelude+negative+tests,'overlay_loop_integration_negative')
 assert bad.returncode!=0 and 'unavailable QPC' in bad.stderr,bad.stdout+bad.stderr
 cpp.write_text(prelude+loop+tests)
 evidence=dict(passed=True,scope='Production extracted overlay loop with counted native boundaries; no game FPS claim.',
+              source_sha256={p.relative_to(T.parent).as_posix():hashlib.sha256(p.read_bytes()).hexdigest()
+                for p in (R/'src/mouse_aim.cpp',R/'src/display_camera.h',R/'src/overlay_update_policy.h',Path(__file__))},
               production_loop_sha256=hashlib.sha256(production_loop.encode()).hexdigest(),
               runtime_source_sha256=hashlib.sha256((R/'src/mouse_aim.cpp').read_bytes()).hexdigest(),
               negative_control='Removing inactive-schedule timer guard fails unavailable-QPC regression.')

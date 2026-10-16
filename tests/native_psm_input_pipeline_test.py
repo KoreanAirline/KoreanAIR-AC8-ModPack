@@ -56,6 +56,7 @@ prefix = r'''
 #include "native_maneuver_guard.h"
 #include "manual_rotation_input.h"
 native_input::RawOwnership native_raw;
+bool free_look_manual_control(){return false;}
 bool player_maneuver_code_verified=true;
 bool maneuver_code_verified=true;
 player_maneuver::Control control;

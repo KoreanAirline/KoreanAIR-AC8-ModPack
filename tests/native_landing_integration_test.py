@@ -26,7 +26,7 @@ def function(text, signature):
 
 helper = function(source, 'bool observe_native_landing(uintptr_t pawn) {')
 pose = function(source, 'void receive_pose(const double (&v)[13]) {')
-camera_receiver = function(camera, 'bool receive_camera(uintptr_t manager,uintptr_t pawn,double p,double y,double r) {')
+camera_receiver = function(camera, 'bool receive_camera(uintptr_t manager,uintptr_t pawn,double p,double y,double r,')
 camera_update = function(camera, 'void __fastcall update_native_camera(void* manager,float dt) {')
 camera_update_gate = camera_update[:camera_update.index('    HudFrame frame;')]
 processor = function(source, 'uintptr_t __fastcall process_input(unsigned char* state, unsigned char* context) {')
@@ -61,7 +61,9 @@ prelude = r'''
 #include "aim_input_state.h"
 ac8pointing::Snapshot pointing_snapshot;
 struct Resettable {unsigned resets=0;void reset(){++resets;}};
-Resettable native_rudder,live_guidance,maneuver_guard,player_maneuver_control,free_look,guidance;
+Resettable native_rudder,live_guidance,maneuver_guard,player_maneuver_control,free_look,guidance,free_look_manual;
+void reset_look_mouse_input(){}
+long look_mouse_dx=0,look_mouse_dy=0;
 struct Origin {bool automatic=false;unsigned clears=0;void clear(){automatic=false;++clears;}};
 Origin player_admission_origin;
 native_input::RawOwnership native_raw;
@@ -81,15 +83,16 @@ bool landing_code_verified=true;
 std::mutex camera_command_mutex,target_vector_mutex;
 std::recursive_mutex pointing_mutex;
 flight::V live_target{1,0,0};
-struct CameraCommand {uintptr_t manager=0,pawn=0;double p=0,y=0,r=0;flight::V aim{1,0,0};ULONGLONG tick=0;};
+struct CameraCommand {uintptr_t manager=0,pawn=0;double p=0,y=0,r=0;flight::V aim{1,0,0};ULONGLONG tick=0;bool observe_only=false;};
 CameraCommand camera_command;
 unsigned hud_invalidations=0,normal_updates=0,normal_inputs=0,native_inputs=0,seed_count=0;
 unsigned native_camera_calls=0,camera_applies=0,zoom_resets=0;
 bool native_camera_starts_landing=false,native_camera_fault=false;
+bool final_projection_installed=false;
 struct Features {bool mouse_flight=true;} pack_features;
 int perf_camera=0;
 struct PerfSpan {explicit PerfSpan(int){}};
-enum class CameraViewMode {Unavailable,FirstPerson,Cockpit,ThirdPerson};
+enum class CameraViewMode {Unavailable,FirstPerson,Cockpit,ThirdPerson,NativeScene};
 float received_raw[3]{};
 double fixture_time=0;
 flight::Basis fixture_basis=flight::basis(-2.907f,-35.666f,0);
@@ -101,6 +104,7 @@ HMODULE fixture_module(const wchar_t*){return reinterpret_cast<HMODULE>(0x140000
 #define GetTickCount64 fixture_tick
 void restore_native_zoom(void*){}
 void restore_native_display(void*){}
+namespace ac8headlook {void maintain_native_headlook(uintptr_t){}}
 void original_camera_update(void*,float){
     ++native_camera_calls;
     if(native_camera_starts_landing)*reinterpret_cast<std::uint32_t*>(aircraft.load()+0x2B18)=0x40200;
@@ -109,7 +113,8 @@ bool update_native_display(void*){return true;}
 void reset_native_zoom_state(void*,bool=true){++zoom_resets;}
 uintptr_t native_display_view_target(void*){return aircraft.load();}
 bool foreground_is_game(){return true;}
-CameraViewMode read_native_camera_mode(uintptr_t){return CameraViewMode::ThirdPerson;}
+CameraViewMode read_native_camera_mode(uintptr_t,bool=false){return CameraViewMode::ThirdPerson;}
+int read_native_display_scene_state(uintptr_t){return 0;}
 bool apply_native_camera(void*,const CameraCommand&,CameraViewMode){++camera_applies;return true;}
 void require(bool value,const char* label){if(!value){std::fprintf(stderr,"FAIL: %s\n",label);std::exit(1);}}
 uintptr_t original(unsigned char*,unsigned char*) {
@@ -124,7 +129,7 @@ uintptr_t normal_entry() {
     applied_tick.store(fixture_tick());
     return 0xBEEF;
 }
-bool receive_camera(uintptr_t,uintptr_t,double,double,double);
+bool receive_camera(uintptr_t,uintptr_t,double,double,double,bool);
 bool observe_native_landing(uintptr_t);
 void update_commands();
 template<class T,std::size_t N>void put(std::array<unsigned char,N>& memory,unsigned offset,T value){std::memcpy(memory.data()+offset,&value,sizeof(value));}

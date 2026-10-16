@@ -61,7 +61,7 @@ class ZoomUiAudit {
    number.Text="2.37";Commit(number);number.UpButton();Check("numeric_fine_step",number.Value==2.38M);slider.Value++;Check("slider_fine_step_and_sync",number.Value==2.39M&&slider.Value==139);
    number.Text="0.5";Commit(number);Check("zoom_lower_limit",number.Value==1);number.Text="99";Commit(number);Check("zoom_upper_limit",number.Value==8);
    foreach(int code in new[]{2,4,5,6})Check("zoom_mouse_option_"+code,box.Items.Cast<object>().Any(x=>Code(x)==code));
-   foreach(string action in new[]{"free_look","hud_toggle","steering_toggle","recenter","reload"})Check("existing_action_keyboard_only_"+action,!((ComboBox)Find(f,"key_"+action)).Items.Cast<object>().Any(x=>new[]{1,2,4,5,6}.Contains(Code(x))));
+   foreach(string action in new[]{"free_look","hud_toggle","steering_toggle","recenter","reload"}){var codes=((ComboBox)Find(f,"key_"+action)).Items.Cast<object>().Select(Code).ToArray();Check("existing_action_side_buttons_"+action,codes.Contains(5)&&codes.Contains(6)&&!codes.Any(x=>new[]{1,2,4}.Contains(x)));}
    foreach(int code in new[]{1,65,68,69,81,83,87,27,13,9,91,92})Check("zoom_reserved_excluded_"+code,!box.Items.Cast<object>().Any(x=>Code(x)==code));
    Language(f,"en");var help=(ToolTip)f.GetType().GetField("help",instance).GetValue(f);Check("english_zoom_defaults_tooltip",help.GetToolTip(number).Contains("2×")&&help.GetToolTip(enabled).Contains("Click Right mouse button")&&help.GetToolTip(enabled).Contains("click again")&&help.GetToolTip(enabled).Contains("140 ms"));
    enabled.Checked=false;Choose(f,"zoom",71);number.Text="2.87";Language(f,"ko");Language(f,"en");Language(f,"ko");

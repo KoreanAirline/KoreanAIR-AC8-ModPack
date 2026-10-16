@@ -27,6 +27,9 @@ prefix = r'''
 #include "mod_keys.h"
 #include "hud_render.h"
 #include "aim_zoom.h"
+#include "free_look.h"
+flight::FreeLook free_look;flight::FreeLookManualControl free_look_manual;
+void reset_look_mouse_input(){}
 struct Features {bool mouse_flight=true;} pack_features;
 std::atomic<bool> zoom_enabled{true},zoom_requested{false},zoom_binding_blocked{false},free_look_binding_blocked{false},manual_free_look{false};
 std::atomic<int> free_look_binding{18},zoom_binding{2};

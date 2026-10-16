@@ -12,17 +12,17 @@ From this repository's root:
 python build_pack.py --launcher-only
 ```
 
-The output is `build/KoreanAIR_AC8_ModPack_2.1.exe`. The compiler is resolved from the Windows directory. If necessary, pass `--csc <compiler-path>` or set the `CSC` environment variable.
+The output is `build/KoreanAIR_AC8_ModPack_2.2.exe`. The compiler is resolved from the Windows directory. If necessary, pass `--csc <compiler-path>` or set the `CSC` environment variable.
 
 ## Installer with the release payload
 
-Download `KoreanAIR_AC8_ModPack_2.1_Sources.zip` from the [matching release](https://github.com/KoreanAirline/KoreanAIR-AC8-ModPack/releases). Extract its `Payload.zip` into this repository's root, then run:
+Download `KoreanAIR_AC8_ModPack_2.2_Sources.zip` from the [matching release](https://github.com/KoreanAirline/KoreanAIR-AC8-ModPack/releases). Extract its `Payload.zip` into this repository's root, then run:
 
 ```powershell
 python build_pack.py --payload-zip Payload.zip
 ```
 
-This verifies the input payload file hashes, replaces the launcher and English/Korean manuals with the current build, updates their manifest hashes, and compiles `build/KoreanAIR_AC8_ModPack_2.1_Setup.exe`. Use the source archive belonging to the same public version and internal build recorded in `release.json`.
+This verifies the input payload file hashes, replaces the launcher and English/Korean manuals with the current build, updates their manifest hashes, and compiles `build/KoreanAIR_AC8_ModPack_2.2_Setup.exe`. Use the source archive belonging to the same public version and internal build recorded in `release.json`.
 
 Keep the generated `Payload.zip` beside the installer. Setup embeds only its small manifest and payload descriptor; it verifies the separate ZIP before installing. Official standalone update installers can obtain their exact SHA-pinned payload from the matching GitHub release. Locally rebuilt packages should distribute both files together.
 

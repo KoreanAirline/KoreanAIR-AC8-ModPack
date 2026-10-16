@@ -46,14 +46,15 @@ int main(){
  }
  const auto previous=goal();free_look_key_pressed=true;
  require(!advance_pointer(100,-100)&&dot(goal()-previous,goal()-previous)==0,"ALT key pauses flight goal before next engine frame");
- mouse_dx.store(100);mouse_dy.store(-100);update_commands();
+ queue_mouse_input(100,-100);update_commands();
  require(free_look.held&&!pointing_snapshot.ready&&dot(goal()-previous,goal()-previous)<2e-12f,"ALT enter discards boundary packet");
- mouse_dx.store(20);mouse_dy.store(-20);++clock_tick;update_commands();
+ queue_mouse_input(20,-20);++clock_tick;update_commands();
  require(std::abs(look_yaw.load()-.6f)<.001f&&dot(goal()-previous,goal()-previous)<2e-12f,"ALT keeps its existing sensitivity and separate flight aim");
  free_look_key_pressed=false;manual_free_look.store(false);
  require(!advance_pointer(10,-10),"ALT release waits for serialized native boundary, never applies old look movement as flight input");
- mouse_dx.store(100);mouse_dy.store(-100);++clock_tick;update_commands();
- require(!free_look.held&&pointing_snapshot.ready&&dot(goal()-previous,goal()-previous)<2e-12f,"ALT release discards boundary packet and restores real pointing");
+ queue_mouse_input(100,-100);++clock_tick;update_commands();
+ const auto release_expected=ac8pointing::move(previous,view,100,-100,config.sensitivity,zoom_magnification.load());
+ require(!free_look.held&&pointing_snapshot.ready&&dot(goal()-release_expected,goal()-release_expected)<2e-12f,"ALT release preserves known fresh flight packet and restores real pointing");
  command_pitch.store(.75f);command_roll.store(-.4f);command_yaw.store(.2f);native_maneuver_active.store(true);
  require(advance_pointer(3,-3)&&command_pitch.load()==.75f&&command_roll.load()==-.4f&&command_yaw.load()==.2f,"native maneuver mouse intent accepted without writing any aircraft command or pose");
  native_maneuver_active.store(false);
