@@ -15,6 +15,7 @@ class Setup : Form {
  readonly CheckBox campaign=new CheckBox{Name="campaign",AutoSize=true},mouse=new CheckBox{Name="mouse",AutoSize=true},display=new CheckBox{Name="display",AutoSize=true};
  readonly Label status=new Label{Name="installStatus",AutoSize=true,Dock=DockStyle.Fill};
  readonly Label loaderStatus=new Label{Name="campaignLoaderCompatibility",AutoSize=true,Dock=DockStyle.Fill,ForeColor=Color.DarkOrange,Visible=false};
+ readonly Label hotasStatus=new Label{Name="hotasCompatibility",AutoSize=true,Dock=DockStyle.Fill,ForeColor=Color.DarkOrange,Visible=false};
  readonly Button install=new Button{Name="installPack"},remove=new Button{Name="uninstallPack"};
  readonly Button browse=new Button{Name="browseGame"};
  internal Action<string,MessageBoxIcon> Dialog;
@@ -66,6 +67,7 @@ class Setup : Form {
   ui.Bind(campaign,"Korean campaign subtitles","캠페인 한국어 자막");ui.Bind(mouse,"Mouse flight controls","마우스 비행 조종");ui.Bind(display,"Triple monitor span and FOV","트리플 모니터·FOV");mouse.Checked=true;
   foreach(var c in new[]{campaign,mouse,display}){c.Margin=new Padding(0,5,0,15);Row(main,c);}
   loaderStatus.Margin=new Padding(0,0,0,12);Row(main,loaderStatus);
+  hotasStatus.Margin=new Padding(0,0,0,12);Row(main,hotasStatus);
   var note=new Label{AutoSize=true,Margin=new Padding(0,8,0,18)};ui.Bind(note,"Modules run in offline play. Select none to remove the pack.\nYour game, saves and unrelated mods are preserved.","모드는 오프라인 플레이에서 사용합니다. 모든 기능을 해제하면 모드를 제거합니다.\n게임 원본, 세이브, 다른 모드의 파일은 보존합니다.");Row(main,note);
   var buttons=new FlowLayoutPanel{AutoSize=true,AutoSizeMode=AutoSizeMode.GrowAndShrink,WrapContents=true,Margin=new Padding(0,0,0,12)};
   ui.Bind(install,"Install / Update","설치·업데이트");ui.Bind(remove,"Uninstall","모드 제거");
@@ -77,12 +79,19 @@ class Setup : Form {
  }
  void Row(TableLayoutPanel parent,Control control){control.Dock=DockStyle.Top;int row=parent.RowCount++;parent.RowStyles.Add(new RowStyle(SizeType.AutoSize));parent.Controls.Add(control,0,row);}
  void Status(string en,string ko){ui.Bind(status,en,ko);}
- void LoadState(bool updateStatus){moduleSelectionPath=path.Text;try{var s=Core.ReadState(path.Text);if(s!=null){campaign.Checked=s.campaign;mouse.Checked=s.mouse;display.Checked=s.display;if(updateStatus)Status("Existing installation detected","기존 설치를 확인했습니다.");}using(var p=ReleasePayload.OpenManifest(Assembly.GetExecutingAssembly())){loaderStatus.Visible=Core.InspectCampaignLoader(path.Text,p).ForeignLoader;}ui.Bind(loaderStatus,"Another mod uses Game/Binaries/Win64/dinput8.dll. Keep Korean campaign subtitles OFF to preserve it while installing Mouse/Screen. In-game coexistence is unverified.","다른 모드가 Game/Binaries/Win64/dinput8.dll을 사용합니다. 해당 파일을 보존하려면 캠페인 한국어 자막을 끄고 마우스·화면 기능을 설치하세요. 실제 게임에서의 동시 사용은 검증되지 않았습니다.");}catch{loaderStatus.Visible=false;}}
+ void LoadState(bool updateStatus){RefreshHotasStatus();moduleSelectionPath=path.Text;try{var s=Core.ReadState(path.Text);if(s!=null){campaign.Checked=s.campaign;mouse.Checked=s.mouse;display.Checked=s.display;if(updateStatus)Status("Existing installation detected","기존 설치를 확인했습니다.");}using(var p=ReleasePayload.OpenManifest(Assembly.GetExecutingAssembly())){loaderStatus.Visible=Core.InspectCampaignLoader(path.Text,p).ForeignLoader;}ui.Bind(loaderStatus,"Another mod uses Game/Binaries/Win64/dinput8.dll. Keep Korean campaign subtitles OFF to preserve it while installing Mouse/Screen. In-game coexistence is unverified.","다른 모드가 Game/Binaries/Win64/dinput8.dll을 사용합니다. 해당 파일을 보존하려면 캠페인 한국어 자막을 끄고 마우스·화면 기능을 설치하세요. 실제 게임에서의 동시 사용은 검증되지 않았습니다.");}catch{loaderStatus.Visible=false;}}
+ void RefreshHotasStatus(){
+  try{
+   var compatibility=Core.InspectHotas(path.Text);hotasStatus.Visible=compatibility.Present;
+   ui.Bind(hotasStatus,"AC8HOTAS / AnalogueYaw detected. To use flight-stick controls, leave Mouse flight OFF. Screen, FOV and subtitles can stay enabled. Setup can merge the recognized 0.2.0 bundle into this pack's tested UE4SS while preserving HOTAS folders and bindings. Unknown replacement files are preserved. In-game combined operation has not been verified.","AC8HOTAS / AnalogueYaw를 확인했습니다. 스틱 조종을 사용하려면 마우스 비행 조종을 끄세요. 화면·FOV·자막은 사용할 수 있습니다. 확인된 0.2.0 묶음은 HOTAS 폴더와 바인딩을 보존하고 이 모드의 검증된 UE4SS로 통합합니다. 알 수 없는 교체 파일은 보존합니다. 실제 게임에서의 병용은 아직 검증하지 못했습니다.");
+  }catch{hotasStatus.Visible=false;}
+ }
  void PayloadProgress(int percent){if(IsDisposed||!IsHandleCreated)return;BeginInvoke(new Action(()=>{if(!IsDisposed)Status("Downloading installation files… "+percent+"%","설치 파일 다운로드 중… "+percent+"%");}));}
  async Task Work(bool uninstall){
   if(busy)return;
   string root=path.Text;bool cp=campaign.Checked,m=mouse.Checked,d=display.Checked;
   uninstall=uninstall||!(cp||m||d);
+  try{if(!uninstall&&m&&Core.InspectHotas(root).InputEnabled){Dialog(ui.Error(new Exception(Core.HotasInputConflictMessage)),MessageBoxIcon.Warning);return;}}catch(Exception ex){Dialog(ui.Error(ex),MessageBoxIcon.Error);return;}
   if(!uninstall&&cp) {
    try { using(var p=ReleasePayload.OpenManifest(Assembly.GetExecutingAssembly())) {
     if(Core.InspectCampaignLoader(root,p).ForeignLoader) {

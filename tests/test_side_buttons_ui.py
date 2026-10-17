@@ -12,7 +12,7 @@ library = out / "SideButtonUiAudit.dll"
 refs = ["System.Windows.Forms.dll", "System.Drawing.dll", "System.Web.Extensions.dll",
         "System.IO.Compression.dll", "System.IO.Compression.FileSystem.dll", "System.Net.Http.dll"]
 sources = ["PackCore.cs", "Ui.cs", "UpdateCore.cs", "Launcher.cs", "Hud.cs", "Keys.cs",
-           "UpdateUI.cs", "MouseInputWorker.cs"]
+           "UpdateUI.cs", "MouseInputWorker.cs", "SupportReport.cs"]
 subprocess.run(["C:/Windows/Microsoft.NET/Framework64/v4.0.30319/csc.exe", "/nologo",
                 "/target:library", "/platform:x64", "/out:" + str(library),
                 *["/reference:" + ref for ref in refs],

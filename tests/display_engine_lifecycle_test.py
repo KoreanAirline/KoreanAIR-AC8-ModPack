@@ -40,6 +40,7 @@ prefix = r'''
 #include <windows.h>
 #include <array>
 #include <vector>
+#include <string>
 #include <atomic>
 #include <mutex>
 #include <cstdio>
@@ -66,7 +67,7 @@ boundaries = r'''
 ClientMetrics fixture_client;
 SpanGeometry fixture_geometry;
 ClientMetrics physical_client_metrics(HWND window){return window==game_window?fixture_client:ClientMetrics{};}
-SpanGeometry physical_span_geometry(){return fixture_geometry;}
+SpanGeometry physical_span_geometry(const SpanSelection& selection={}){return fixture_geometry;}
 }
 std::array<std::array<unsigned char,0x300>,3> fixture_viewports{};
 std::array<std::array<unsigned char,0x40>,3> fixture_natives{};

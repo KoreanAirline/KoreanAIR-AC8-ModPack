@@ -1,0 +1,33 @@
+using System;using System.IO;using System.Linq;using System.Drawing;using System.Reflection;using System.Collections.Generic;using System.Runtime.InteropServices;using System.Windows.Forms;using KoreanAIR;
+class MonitorUiAudit{
+ internal static DisplayTopology.Monitor[] Monitors;
+ static List<string> checks=new List<string>();static string destination,fixture;
+ [DllImport("user32.dll")]static extern IntPtr SetThreadDpiAwarenessContext(IntPtr context);
+ static void Check(bool ok,string name){if(!ok)throw new Exception(name);checks.Add(name);}
+ static Control Find(Control c,string name){if(c.Name==name)return c;foreach(Control child in c.Controls){var found=Find(child,name);if(found!=null)return found;}return null;}
+ static void Layout(Form f){for(int i=0;i<3;i++){f.PerformLayout();Application.DoEvents();}}
+ static string Device(ComboBox box){return (string)box.SelectedItem.GetType().GetProperty("Device").GetValue(box.SelectedItem,null);}
+ static void Choose(ComboBox box,string device){for(int i=0;i<box.Items.Count;++i)if((string)box.Items[i].GetType().GetProperty("Device").GetValue(box.Items[i],null)==device){box.SelectedIndex=i;return;}throw new Exception("Missing choice "+device);}
+ static void Language(Form f,string language){var ui=(UiLanguage)typeof(Launcher).GetField("ui",BindingFlags.NonPublic|BindingFlags.Instance).GetValue(f);ui.Change(language,false);Layout(f);}
+ static void Screenshot(Form f,string name){Layout(f);using(var bitmap=new Bitmap(f.Width,f.Height)){f.DrawToBitmap(bitmap,new Rectangle(Point.Empty,bitmap.Size));bitmap.Save(Path.Combine(destination,name+".png"));}}
+ [STAThread]static int Main(string[] args){
+  destination=Path.GetFullPath(args[0]);fixture=Path.Combine(destination,"fixture");Directory.CreateDirectory(fixture);SetThreadDpiAwarenessContext(new IntPtr(-4));Application.EnableVisualStyles();
+  Monitors=new[]{new DisplayTopology.Monitor(new Rectangle(0,-900,1600,900),true,"A"),new DisplayTopology.Monitor(new Rectangle(-1920,0,1920,1080),false,"L"),new DisplayTopology.Monitor(new Rectangle(0,0,1920,1080),false,"C"),new DisplayTopology.Monitor(new Rectangle(1920,0,1920,1080),false,"R"),new DisplayTopology.Monitor(new Rectangle(0,1080,1280,720),false,"B")};
+  Directory.CreateDirectory(Path.GetDirectoryName(Core.Config(fixture,"display.ini")));Core.Text(Core.Safe(fixture,Core.Folder+"/installed.json"),Core.Json.Serialize(new State{root=fixture,mouse=true,display=true,build=Core.ReleaseBuild}));
+  string config=Core.Config(fixture,"display.ini");Core.Text(config,"; retain this comment\r\n[display]\r\nenabled=1\r\nspan=1\r\nleft_monitor=L\r\ncenter_monitor=C\r\nright_monitor=R\r\nfov=101.7\r\nextra=keep\r\n");
+  try{using(var f=new Launcher(fixture)){
+   f.CheckUpdatesOnOpen=false;f.Dialog=(text,icon)=>{throw new Exception(text);};f.ShowInTaskbar=false;f.StartPosition=FormStartPosition.Manual;f.Location=new Point(-32000,-32000);f.AutoScaleMode=AutoScaleMode.None;f.ClientSize=new Size(920,760);f.Show();
+   var tabs=(TabControl)Find(f,"settingsTabs");tabs.SelectedTab=tabs.TabPages.Cast<TabPage>().Single(x=>x.Name=="Screen & camera");Layout(f);
+   var manual=(CheckBox)Find(f,"manualMonitorSelection");var span=(CheckBox)Find(f,"spanEnabled");var left=(ComboBox)Find(f,"left_monitor");var center=(ComboBox)Find(f,"center_monitor");var right=(ComboBox)Find(f,"right_monitor");var diagram=(MonitorLayoutDiagram)Find(f,"monitorLayoutDiagram");var page=tabs.SelectedTab;
+   Check(manual.Checked&&span.Enabled&&span.Checked,"selected physical triple works with Windows primary outside");Check(Device(left)=="L"&&Device(center)=="C"&&Device(right)=="R","saved manual roles loaded exactly");Check(diagram.Monitors.Length==5&&diagram.Selection.SequenceEqual(new[]{"L","C","R"}),"diagram includes five screens and all selected roles");
+   foreach(string language in new[]{"en","ko"}){Language(f,language);page.AutoScrollPosition=Point.Empty;Layout(f);Check(Device(left)=="L"&&Device(center)=="C"&&Device(right)=="R",language+" preserves unsaved selected IDs");Check(diagram.Width>600&&diagram.Height>=170,language+" diagram usable bounds");Screenshot(f,"monitor_launcher_"+language);using(var bitmap=new Bitmap(diagram.Width,diagram.Height)){diagram.DrawToBitmap(bitmap,diagram.ClientRectangle);bitmap.Save(Path.Combine(destination,"monitor_diagram_"+language+".png"));}foreach(var box in new[]{left,center,right}){page.ScrollControlIntoView(box);Layout(f);var bounds=box.RectangleToScreen(box.ClientRectangle);var view=page.RectangleToScreen(page.ClientRectangle);Check(bounds.Width>300&&bounds.Left>=view.Left&&bounds.Right<=view.Right+1&&bounds.Top>=view.Top&&bounds.Bottom<=view.Bottom+1,language+" role selector readable and reachable "+box.Name);}}
+   string before=File.ReadAllText(config);Choose(right,"C");Check(!span.Enabled,"duplicate device rejected immediately");((Button)Find(f,"saveDisplay")).PerformClick();Check(File.ReadAllText(config)==before,"invalid manual roles do not overwrite working configuration");Choose(right,"R");Check(span.Enabled,"valid role correction enables span");
+   Choose(left,"R");Choose(right,"L");Check(!span.Enabled,"reversed physical order rejected");Choose(left,"L");Choose(right,"R");
+   ((Button)Find(f,"saveDisplay")).PerformClick();var saved=Core.ReadIni(config,"display");Check(saved["left_monitor"]=="L"&&saved["center_monitor"]=="C"&&saved["right_monitor"]=="R"&&saved["span"]=="1","valid roles saved");Check(saved["extra"]=="keep"&&saved["fov"]=="101.7"&&File.ReadAllText(config).Contains("; retain this comment"),"unrelated display settings retained");
+   Monitors=Monitors.Where(m=>m.Device!="R").ToArray();((Button)Find(f,"refreshDisplayDetection")).PerformClick();Check(!span.Enabled&&Device(right)=="R","disconnected selected monitor remains selected but cannot enable span");Language(f,"en");Check(Device(right)=="R","language refresh preserves disconnected selection");
+   manual.Checked=false;Check(!left.Enabled&&!center.Enabled&&!right.Enabled,"auto mode disables manual selectors");
+  }
+  File.WriteAllText(Path.Combine(destination,"monitor_ui_regression.json"),Core.Json.Serialize(new{passed=true,checks=checks.Count,results=checks,scope="Production WinForms UI against synthetic monitor enumeration and a settings-only fixture. No real monitor arrangement or game files changed."}));Console.WriteLine("PASS monitor UI: "+checks.Count+" checks; English/Korean 920x760 screenshots and five-screen diagram.");return 0;
+  }catch(Exception e){File.WriteAllText(Path.Combine(destination,"monitor_ui_regression.json"),Core.Json.Serialize(new{passed=false,checks=checks.Count,error=e.ToString(),results=checks}));Console.WriteLine(e);return 1;}
+ }
+}

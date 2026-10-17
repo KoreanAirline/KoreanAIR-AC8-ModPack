@@ -9,25 +9,26 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web.Script.Serialization;
 
-[assembly:System.Reflection.AssemblyVersion("2.2.0.0")]
-[assembly:System.Reflection.AssemblyFileVersion("2.2.0.0")]
-[assembly:System.Reflection.AssemblyInformationalVersion("2.2+b2026101608")]
+[assembly:System.Reflection.AssemblyVersion("2.3.0.0")]
+[assembly:System.Reflection.AssemblyFileVersion("2.3.0.0")]
+[assembly:System.Reflection.AssemblyInformationalVersion("2.3+b2026101701")]
 [assembly:System.Reflection.AssemblyProduct("KoreanAIR AC8 Mod Pack")]
 
 namespace KoreanAIR {
 public sealed class Item { public string path; public string source; public string hash; public string group; public bool mutable; }
 public sealed class FileState { public string path; public string hash; public string original; public bool mutable; }
 public sealed class FrameGenerationLease { public bool enabled,live,originalExists,originalReadOnly; public string encoding,newline,prefix,previousSection; }
-public sealed class State { public string version="2.2"; public long build; public string root; public bool campaign; public bool mouse; public bool display; public bool suspended; public string backup; public string campaignLoaderHash; public string legacyCampaignLoaderHash; public FrameGenerationLease frameGeneration; public List<FileState> files=new List<FileState>(); }
+public sealed class State { public string version="2.3"; public long build; public string root; public bool campaign; public bool mouse; public bool display; public bool suspended; public string backup; public string campaignLoaderHash; public string legacyCampaignLoaderHash; public FrameGenerationLease frameGeneration; public List<FileState> files=new List<FileState>(); }
 public sealed class Manifest { public List<Item> files; public Dictionary<string,string> legacy; }
 public sealed class LoaderCompatibility { public bool ForeignLoader; public string Path; public string Hash; public string Kind; }
+public sealed class HotasCompatibility { public bool Present,InputEnabled,KnownSharedRuntime,HotasEnabled,AnalogYawEnabled; }
 public sealed class PackWriteException : IOException {
  public readonly string Target,Stage;
  public PackWriteException(string target,string stage,Exception cause):base("Unable to write installed file: "+target+"\n"+cause.Message,cause){Target=target;Stage=stage;}
 }
 public static class Core {
- public const string Brand="KoreanAIR_AC8_ModPack_2.2";
- public const long ReleaseBuild=2026101608;
+ public const string Brand="KoreanAIR_AC8_ModPack_2.3";
+ public const long ReleaseBuild=2026101701;
  public const string Folder="KoreanAIR_AC8_ModPack";
  public const string Mod="Game/Binaries/Win64/UE4SS/Mods/AC8MouseAim/";
  public const string CampaignLoader="Game/Binaries/Win64/dinput8.dll";
@@ -104,6 +105,52 @@ public static class Core {
  }
  public static LoaderCompatibility InspectCampaignLoader(string root) { var state=ReadState(root);return InspectCampaignLoader(root,state,state==null?null:state.campaignLoaderHash,state==null?null:state.legacyCampaignLoaderHash); }
  public static LoaderCompatibility InspectCampaignLoader(string root,Stream payload) { using(var zip=new ZipArchive(payload,ZipArchiveMode.Read,true)){var manifest=ReadManifest(zip);return InspectCampaignLoader(root,ReadState(root),CampaignHash(manifest),LegacyCampaignHash(manifest));} }
+ // Only this owner-supplied full HOTAS package is eligible for a shared-runtime
+ // migration. Its native Lua API is not adopted: Setup installs our tested pair.
+ static readonly Dictionary<string,string> HotasRuntimeHashes=new Dictionary<string,string>(StringComparer.OrdinalIgnoreCase){
+  {"Game/Binaries/Win64/dwmapi.dll","c5d2ab9f9b89bd94460b0a283eefb113085105014011cac961f36787376db744"},
+  {"Game/Binaries/Win64/UE4SS/UE4SS.dll","3fc1cd877007499e8c4f2152e12f76098aba8e267b7ee65846edc17cf7a0d1a4"}};
+ static readonly Dictionary<string,string> PackRuntimeHashes=new Dictionary<string,string>(StringComparer.OrdinalIgnoreCase){
+  {"Game/Binaries/Win64/dwmapi.dll","cf440b9eb8643bb7c434acfda696aee57fd981d185dca5e57fb8dbb18f8fc1cd"},
+  {"Game/Binaries/Win64/UE4SS/UE4SS.dll","680a026890abb4d0df2211251f8defc1681a584275f1521dcc0fe30af480006f"}};
+ static bool ExternalModEnabled(string root,string name) {
+  const string prefix="Game/Binaries/Win64/UE4SS/Mods/";bool enabled=File.Exists(Safe(root,prefix+name+"/enabled.txt"));
+  string txt=Safe(root,prefix+"mods.txt");
+  if(File.Exists(txt)){
+   if(new FileInfo(txt).Length>262144)throw new Exception("The UE4SS mod list is too large. Existing files have been preserved.");
+   foreach(string line in File.ReadAllLines(txt)){
+    var match=System.Text.RegularExpressions.Regex.Match(line,@"^\s*"+System.Text.RegularExpressions.Regex.Escape(name)+@"\s*:\s*([01])\s*(?:[;#].*)?$",System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+    if(match.Success)enabled=enabled||match.Groups[1].Value=="1";
+    else if(System.Text.RegularExpressions.Regex.IsMatch(line,@"^\s*"+System.Text.RegularExpressions.Regex.Escape(name)+@"\s*:",System.Text.RegularExpressions.RegexOptions.IgnoreCase))throw new Exception("The UE4SS mod list cannot be read safely. Existing files have been preserved.");
+   }
+  }
+  string json=Safe(root,prefix+"mods.json");
+  if(File.Exists(json)){
+   if(new FileInfo(json).Length>262144)throw new Exception("The UE4SS mod list is too large. Existing files have been preserved.");
+   // The two UE4SS lists may both be used by an existing installation. A true
+   // entry in either is conservatively active; both must be off to certify off.
+   try{var rows=Json.Deserialize<List<Dictionary<string,object>>>(File.ReadAllText(json));if(rows==null)throw new Exception();
+    foreach(var row in rows){object mod,on;if(row==null)throw new Exception();if(row.TryGetValue("mod_name",out mod)&&String.Equals(Convert.ToString(mod),name,StringComparison.OrdinalIgnoreCase)){if(!row.TryGetValue("mod_enabled",out on)||!(on is bool))throw new Exception();enabled=enabled||(bool)on;}}
+   }catch{throw new Exception("The UE4SS mod list cannot be read safely. Existing files have been preserved.");}
+  }
+  return enabled;
+ }
+ public static HotasCompatibility InspectHotas(string root) {
+  const string prefix="Game/Binaries/Win64/UE4SS/Mods/";
+  bool hotas=File.Exists(Safe(root,prefix+"AC8HOTAS/Scripts/main.lua"));
+  bool yaw=File.Exists(Safe(root,prefix+"AC8AnalogYaw/Scripts/main.lua"));
+  var result=new HotasCompatibility{Present=hotas||yaw};if(!result.Present)return result;
+  result.HotasEnabled=hotas&&ExternalModEnabled(root,"AC8HOTAS");result.AnalogYawEnabled=yaw&&ExternalModEnabled(root,"AC8AnalogYaw");
+  result.InputEnabled=result.HotasEnabled||result.AnalogYawEnabled;
+  bool known=(hotas&&File.Exists(Safe(root,prefix+"AC8HOTAS/bindings.lua"))&&File.Exists(Safe(root,prefix+"AC8HOTAS/Scripts/ac8_hotas_devices_001.dll")))||(yaw&&File.Exists(Safe(root,prefix+"AC8AnalogYaw/Scripts/ac8_analog_yaw_013.dll"))),foreign=false;
+  foreach(var pair in HotasRuntimeHashes){string p=Safe(root,pair.Key);if(!File.Exists(p))continue;string hash=HashFile(p);if(hash==pair.Value)foreign=true;else if(hash!=PackRuntimeHashes[pair.Key])known=false;}
+  result.KnownSharedRuntime=known&&foreign;return result;
+ }
+ static bool HotasReplacement(HotasCompatibility hotas,bool mouse,string path,string hash) { string expected;return !mouse&&hotas.KnownSharedRuntime&&HotasRuntimeHashes.TryGetValue(path,out expected)&&hash==expected; }
+ public const string HotasMouseConflict="AC8HOTAS or AC8AnalogYaw is enabled. Keep Mouse flight OFF to use its flight-stick controls. Screen, subtitle layout and Korean translation can stay enabled. Existing HOTAS bindings and mod files have been preserved.";
+ public const string HotasRuntimeRepair="Shared UE4SS files were supplied by AC8HOTAS. Close the game and rerun Setup with Mouse flight OFF. Setup keeps HOTAS bindings and mod files and installs the pack's tested shared runtime.";
+ public const string HotasInputConflictMessage=HotasMouseConflict;
+ public const string HotasRuntimeRepairMessage=HotasRuntimeRepair;
  static string Offline(string root) { var o=Json.Deserialize<Dictionary<string,object>>(File.ReadAllText(Safe(root,"EasyAntiCheat/Settings.json"))); if(!o.ContainsKey("executable")||!String.Equals(Convert.ToString(o["executable"]),"Game/Binaries/Win64/AceCombat8.exe",StringComparison.OrdinalIgnoreCase)) throw new Exception("Unexpected game launch configuration."); o["allow_null_client"]="true"; return Json.Serialize(o); }
  static void Locked(string root,Action action) { using(var gate=new System.Threading.Mutex(false,"Local\\KoreanAIR_AC8_"+Hash(Encoding.UTF8.GetBytes(Path.GetFullPath(root).TrimEnd(Path.DirectorySeparatorChar).ToLowerInvariant())).Substring(0,16))) { bool held=false;try{try{held=gate.WaitOne(0);}catch(System.Threading.AbandonedMutexException){held=true;}if(!held)throw new Exception("Another pack operation is already running for this game folder.");action();}finally{if(held)gate.ReleaseMutex();} } }
  public static void Install(string root,bool cp,bool mouse,bool display,Stream payload,string installer) { Locked(root,()=>FgLocked(()=>InstallCore(root,cp,mouse,display,payload,installer))); }
@@ -121,6 +168,7 @@ public static class Core {
  static void InstallCore(string root,bool cp,bool mouse,bool display,Stream payload,string installer) {
   root=Path.GetFullPath(root).TrimEnd(Path.DirectorySeparatorChar); VerifyGame(root); if(Running(root)) throw new Exception("Close ACE COMBAT 8 before changing installed modules."); if(!cp&&!mouse&&!display) { Uninstall(root); return; }
   State old=ReadState(root); if(old!=null&&old.suspended) throw new Exception("Resume the installed modules before updating them.");
+  var hotas=InspectHotas(root);if(mouse&&hotas.InputEnabled)throw new Exception(HotasMouseConflict);
   string backup=old==null?Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),Folder,"Backups",Hash(Encoding.UTF8.GetBytes(root.ToLowerInvariant())).Substring(0,16),DateTime.UtcNow.ToString("yyyyMMdd_HHmmss_fff")):old.backup;
   ValidateFrameGeneration(root,old);
   var next=new State{build=ReleaseBuild,root=root,campaign=cp,mouse=mouse,display=display,backup=backup,frameGeneration=old==null?null:old.frameGeneration};
@@ -144,11 +192,13 @@ public static class Core {
   var oldFiles=(old==null?new List<FileState>():old.files).ToDictionary(x=>x.path,StringComparer.OrdinalIgnoreCase);
   // A replacement supplied by another mod is no longer ours to remove or restore.
   if(!cp&&loader.ForeignLoader)oldFiles.Remove(CampaignLoader);
+  var hotasReplacements=new HashSet<string>(StringComparer.OrdinalIgnoreCase);
   foreach(var p in wanted.Keys.ToArray()) {
    string target=Safe(root,p); FileState before; oldFiles.TryGetValue(p,out before);
    if(mutable.Contains(p)&&File.Exists(target)&&p!=Mod+"pack.ini"&&p!="Game/Binaries/Win64/UE4SS/Mods/mods.txt") wanted[p]=File.ReadAllBytes(target);
-   if(File.Exists(target)&&before==null) { string hash=HashFile(target); string known; bool legacy=manifest.legacy.TryGetValue(p,out known)&&known==hash; bool same=hash==Hash(wanted[p]); bool config=mutable.Contains(p)&&p.StartsWith(Mod,StringComparison.OrdinalIgnoreCase); bool list=p=="Game/Binaries/Win64/UE4SS/Mods/mods.txt"; if(!legacy&&!same&&!config&&!list) throw new Exception("Another file already occupies this module path. It has been preserved: "+p); }
-   if(before!=null&&File.Exists(target)&&!before.mutable&&p!=Mod+"pack.ini"&&HashFile(target)!=before.hash&&!(String.Equals(p,CampaignLoader,StringComparison.OrdinalIgnoreCase)&&!loader.ForeignLoader)) throw new Exception("An installed file was changed outside this installer. It has been preserved: "+p);
+   if(File.Exists(target)&&HotasReplacement(hotas,mouse,p,HashFile(target)))hotasReplacements.Add(p);
+   if(File.Exists(target)&&before==null) { string hash=HashFile(target); string known; bool legacy=manifest.legacy.TryGetValue(p,out known)&&known==hash; bool same=hash==Hash(wanted[p]); bool config=mutable.Contains(p)&&p.StartsWith(Mod,StringComparison.OrdinalIgnoreCase); bool list=p=="Game/Binaries/Win64/UE4SS/Mods/mods.txt"; if(!legacy&&!same&&!config&&!list&&!hotasReplacements.Contains(p)) throw new Exception("Another file already occupies this module path. It has been preserved: "+p); }
+   if(before!=null&&File.Exists(target)&&!before.mutable&&p!=Mod+"pack.ini"&&HashFile(target)!=before.hash&&!(String.Equals(p,CampaignLoader,StringComparison.OrdinalIgnoreCase)&&!loader.ForeignLoader)&&!hotasReplacements.Contains(p)) throw new Exception("An installed file was changed outside this installer. It has been preserved: "+p);
   }
   foreach(var f in oldFiles.Values) if(!wanted.ContainsKey(f.path)&&File.Exists(Safe(root,f.path))&&!f.mutable&&HashFile(Safe(root,f.path))!=f.hash) throw new Exception("An installed file was changed and cannot be removed: "+f.path);
   var journal=new Dictionary<string,byte[]>(StringComparer.OrdinalIgnoreCase); Action<string> capture=p=> { if(!journal.ContainsKey(p)) { string t=Safe(root,p); journal[p]=File.Exists(t)?File.ReadAllBytes(t):null; } };
@@ -156,6 +206,9 @@ public static class Core {
    foreach(var f in oldFiles.Values) if(!wanted.ContainsKey(f.path)) { capture(f.path); Restore(root,old,f); }
    foreach(var pair in wanted) {
     string p=pair.Key,t=Safe(root,p); capture(p); FileState before; oldFiles.TryGetValue(p,out before); string original=before==null?null:before.original;
+    // An externally supplied pinned HOTAS replacement became the user's new
+    // original after our previous install. Preserve that exact file on removal.
+    if(before!=null&&hotasReplacements.Contains(p)&&HashFile(t)!=before.hash){original="original/hotas/"+Guid.NewGuid().ToString("N")+".bin";Atomic(Safe(backup,original),File.ReadAllBytes(t));}
     if(before==null&&File.Exists(t)) { string known; bool legacy=manifest.legacy.TryGetValue(p,out known)&&known==HashFile(t); if(!legacy) { original="original/"+p; Atomic(Safe(backup,original),File.ReadAllBytes(t)); } else Atomic(Safe(backup,"legacy/"+p),File.ReadAllBytes(t)); }
     if(!File.Exists(t)||HashFile(t)!=Hash(pair.Value)) Atomic(t,pair.Value);
     next.files.Add(new FileState{path=p,hash=Hash(pair.Value),original=original,mutable=mutable.Contains(p)});
@@ -342,6 +395,13 @@ public static class Core {
  public static void WriteIni(string path,string section,Dictionary<string,string> values) { var lines=File.Exists(path)?File.ReadAllLines(path).ToList():new List<string>(); string active=""; bool found=false; var keys=new HashSet<string>(values.Keys,StringComparer.OrdinalIgnoreCase); for(int i=0;i<lines.Count;i++) { string l=lines[i].Trim(); if(l.StartsWith("[")&&l.EndsWith("]")) { if(active.Equals(section,StringComparison.OrdinalIgnoreCase)) { foreach(var k in keys) lines.Insert(i++,k+"="+values[k]); keys.Clear(); } active=l.Substring(1,l.Length-2); if(active.Equals(section,StringComparison.OrdinalIgnoreCase)) found=true; } else if(active.Equals(section,StringComparison.OrdinalIgnoreCase)&&l.Contains("=")&&!l.StartsWith(";")&&!l.StartsWith("#")) { string k=l.Substring(0,l.IndexOf('=')).Trim(); if(values.ContainsKey(k)) { lines[i]=k+"="+values[k]; keys.Remove(k); } } } if(!found) lines.Add("["+section+"]"); foreach(var k in keys) lines.Add(k+"="+values[k]); Atomic(path,Encoding.Unicode.GetBytes(String.Join("\r\n",lines)+"\r\n").PrependBom()); }
  static byte[] PrependBom(this byte[] bytes) { return Encoding.Unicode.GetPreamble().Concat(bytes).ToArray(); }
  public static string Config(string root,string file) { return Safe(root,Mod+file); }
- public static void Launch(string root) { Locked(root,()=>LaunchCore(root)); } static void LaunchCore(string root) { VerifyGame(root); var s=ReadState(root); if(s==null) throw new Exception("Run the installer first."); if(Running(root)) throw new Exception("ACE COMBAT 8 is already running."); if(s.suspended) Suspend(root,false); s=ReadState(root); ValidateFrameGeneration(root,s); if(s.frameGeneration!=null)FgLocked(()=>FgSave(root,s.frameGeneration.enabled)); s=ReadState(root); foreach(var f in s.files.Where(x=>!x.mutable)) if(!File.Exists(Safe(root,f.path))||HashFile(Safe(root,f.path))!=f.hash) throw new Exception("Installation verification failed: "+f.path); var p=new ProcessStartInfo(Safe(root,"start_protected_game.exe"),"-SaveToUserDir -anticheat_settings=KoreanAIR_AC8_Offline.json"); p.WorkingDirectory=root;p.UseShellExecute=false; p.EnvironmentVariables["EOS_USE_ANTICHEATCLIENTNULL"]="1";p.EnvironmentVariables["SteamAppId"]="2288340";p.EnvironmentVariables["KOREANAIR_AC8_MODPACK"]="1";p.EnvironmentVariables["KOREANAIR_AC8_CAMPAIGN"]=s.campaign?"1":"0";Process.Start(p); }
+ static void ValidateLaunchFiles(string root,State s) {
+  var hotas=InspectHotas(root);if(s.mouse&&hotas.InputEnabled)throw new Exception(HotasMouseConflict);
+  foreach(var f in s.files.Where(x=>!x.mutable))if(!File.Exists(Safe(root,f.path))||HashFile(Safe(root,f.path))!=f.hash){
+   if(hotas.KnownSharedRuntime&&HotasRuntimeHashes.ContainsKey(f.path))throw new Exception(HotasRuntimeRepair);
+   throw new Exception("Installation verification failed: "+f.path);
+  }
+ }
+ public static void Launch(string root) { Locked(root,()=>LaunchCore(root)); } static void LaunchCore(string root) { VerifyGame(root); var s=ReadState(root); if(s==null) throw new Exception("Run the installer first."); if(Running(root)) throw new Exception("ACE COMBAT 8 is already running."); if(s.mouse&&InspectHotas(root).InputEnabled)throw new Exception(HotasMouseConflict); if(s.suspended) Suspend(root,false); s=ReadState(root); ValidateFrameGeneration(root,s); if(s.frameGeneration!=null)FgLocked(()=>FgSave(root,s.frameGeneration.enabled)); s=ReadState(root);ValidateLaunchFiles(root,s); var p=new ProcessStartInfo(Safe(root,"start_protected_game.exe"),"-SaveToUserDir -anticheat_settings=KoreanAIR_AC8_Offline.json"); p.WorkingDirectory=root;p.UseShellExecute=false; p.EnvironmentVariables["EOS_USE_ANTICHEATCLIENTNULL"]="1";p.EnvironmentVariables["SteamAppId"]="2288340";p.EnvironmentVariables["KOREANAIR_AC8_MODPACK"]="1";p.EnvironmentVariables["KOREANAIR_AC8_CAMPAIGN"]=s.campaign?"1":"0";Process.Start(p); }
 }
 }

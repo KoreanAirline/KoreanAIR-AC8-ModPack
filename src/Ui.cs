@@ -43,6 +43,8 @@ sealed class UiLanguage {
   // Preserve filenames and unexpected diagnostics; translate the operation's known error.
   string en=ex.Message;
   var known=new Dictionary<string,string> {
+   {Core.HotasInputConflictMessage,"AC8HOTAS 또는 AC8AnalogYaw가 켜져 있습니다. 스틱 조종을 사용하려면 설치 창에서 마우스 비행 조종을 끄세요. 화면·자막 위치·한국어 번역은 켜둘 수 있습니다. HOTAS 바인딩과 파일은 보존했습니다."},
+   {Core.HotasRuntimeRepairMessage,"AC8HOTAS 설치로 공용 UE4SS 파일이 교체되었습니다. 게임을 종료하고 Setup에서 마우스 비행 조종을 끈 채 다시 설치하세요. HOTAS 바인딩과 파일을 보존하면서 이 모드의 검증된 공용 런타임으로 통합합니다."},
    {"Close ACE COMBAT 8 first.","먼저 ACE COMBAT 8을 종료해 주세요."},
    {"Close the game before saving its quality settings.","게임 품질을 저장하기 전에 게임을 종료해 주세요."},
    {"Start the game once so it can create its settings.","게임을 한 번 실행해 설정 파일을 만든 뒤 다시 시도해 주세요."},

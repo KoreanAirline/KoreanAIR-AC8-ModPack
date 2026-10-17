@@ -59,6 +59,7 @@ flight::ScreenPoint last_aim{};std::vector<flight::ScreenPoint> aim_points;
 namespace ac8pack {const char* version="fixture";}
 namespace ac8profile {std::atomic<bool> enabled{false};}
 std::atomic<uint64_t> overlay_uploads{0};
+std::atomic<uint64_t> engine_span_topology_revision{0};
 struct Features {bool diagnostics=false;} pack_features;
 struct FakePhysicalPixels {};
 struct FakeMonitorRefresh {

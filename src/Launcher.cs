@@ -63,7 +63,7 @@ partial class Launcher : Form {
   language.RowCount=2;language.RowStyles.Add(new RowStyle(SizeType.AutoSize));language.RowStyles.Add(new RowStyle(SizeType.AutoSize));
   language.Controls.Add(new Label{Text="Language / 언어",AutoSize=true,Font=new Font("Segoe UI",9),Margin=new Padding(0,4,0,4),Tag="muted"},0,0);language.Controls.Add(ui.Selector(),0,1);header.Controls.Add(language,1,0);
   layout.Controls.Add(header,0,0);layout.Controls.Add(tabs,0,2);layout.Controls.Add(message,0,3);
-  Play();ControlsTab();CrosshairTab();DisplayTab();FrameGenerationTab();SubtitlesTab();Manage();Status("Settings are saved on this PC.","설정은 이 PC에 저장됩니다.");
+  Play();ControlsTab();CrosshairTab();DisplayTab();FrameGenerationTab();SubtitlesTab();Manage();SupportTab();Status("Settings are saved on this PC.","설정은 이 PC에 저장됩니다.");
   InitializeUpdates(layout);LauncherTheme.Apply(this);ui.OnChange(()=>tabs.Invalidate());
   HandleCreated+=(s,e)=>LauncherTheme.DarkTitleBar(this);
   Shown+=(s,e)=>UiWindow.Fit(this);ResizeEnd+=(s,e)=>UiWindow.Fit(this);
@@ -110,27 +110,51 @@ partial class Launcher : Form {
   Button(Actions(p),"saveControls","Save controls & keys","조종·키 설정 저장",()=>{var keyValues=ReadHotkeys(bindings);Core.WriteIni(Core.Config(root,"config.ini"),"keys",keyValues);Core.WriteIni(Core.Config(root,"config.ini"),"control",new Dictionary<string,string>{{"sensitivity",V(sensitivity.Number)},{"look_sensitivity",V(look.Number)}});Core.WriteIni(Core.Config(root,"config.ini"),"zoom",new Dictionary<string,string>{{"enabled",zoomEnabled.Checked?"1":"0"},{"ratio",V(zoomRatio.Number)}});Status("Controls, zoom and keys saved; changes apply automatically in the game.","조종·확대·키 설정을 저장했습니다. 게임 중 자동으로 적용됩니다.");});
  }
  void RefreshMode(){state=Core.ReadState(root);ui.Change(ui.Language,false);}
- string Geometry(out bool ok){
-  ok=false;try{IntPtr old=SetThreadDpiAwarenessContext(new IntPtr(-4));try{
-   var ss=Screen.AllScreens;var c=ss.Single(x=>x.Primary);
-   var left=ss.FirstOrDefault(x=>x.Bounds.Right==c.Bounds.Left&&x.Bounds.Y==c.Bounds.Y&&x.Bounds.Size==c.Bounds.Size);
-   var right=ss.FirstOrDefault(x=>x.Bounds.Left==c.Bounds.Right&&x.Bounds.Y==c.Bounds.Y&&x.Bounds.Size==c.Bounds.Size);
-   if(left!=null&&right!=null&&c.Bounds.Width*3<=16384&&c.Bounds.Height<=16384&&ss.Count(x=>x.Bounds.Right==c.Bounds.Left&&x.Bounds.Y==c.Bounds.Y&&x.Bounds.Size==c.Bounds.Size)==1&&ss.Count(x=>x.Bounds.Left==c.Bounds.Right&&x.Bounds.Y==c.Bounds.Y&&x.Bounds.Size==c.Bounds.Size)==1){ok=true;return ui.T("Three aligned displays: ","정렬된 모니터 3대: ")+(c.Bounds.Width*3)+" × "+c.Bounds.Height;}
-   return ui.T("Main display: ","주 모니터: ")+c.Bounds.Width+" × "+c.Bounds.Height+" ("+((double)c.Bounds.Width/c.Bounds.Height).ToString("0.00",CultureInfo.InvariantCulture)+":1)\n"+ui.T("Single-display FOV and ultrawide correction are available.\nTriple span needs equal-size, aligned displays on both sides of the main display.","단일 모니터 FOV와 울트라와이드 화면 보정을 사용할 수 있습니다.\n트리플 화면은 주 모니터 양옆에 해상도가 같은 모니터를 나란히 배치해야 합니다.");
-  }finally{SetThreadDpiAwarenessContext(old);}}catch{return ui.T("Monitor layout could not be read. Check Windows display settings.","모니터 배치를 읽지 못했습니다. Windows 디스플레이 설정을 확인하세요.");}
+ string Geometry(out bool ok){var layout=DisplayTopology.ReadPhysical();ok=layout.CanSpan;return Geometry(layout);}
+ string Geometry(DisplayTopology.Layout layout){
+  if(layout.CanSpan)return ui.T("Three aligned displays: ","정렬된 모니터 3대: ")+layout.SpanBounds.Width+" × "+layout.SpanBounds.Height+ui.T(". These three displays form the game view.",". 이 모니터 3대에 게임 화면을 표시합니다.");
+  if(layout.Monitors.Length==1&&layout.Monitors[0].Bounds.Height>0&&(double)layout.Monitors[0].Bounds.Width/layout.Monitors[0].Bounds.Height>2.3){
+   var r=layout.Monitors[0].Bounds;
+   return ui.T("Windows exposes one wide display: ","Windows에 와이드 모니터 1대로 표시됩니다: ")+r.Width+" × "+r.Height+"\n"+ui.T("This can be an ultrawide display or NVIDIA Surround. Three-monitor span is not needed.\nEnable screen & camera and select this native resolution in the game's borderless/fullscreen mode.","울트라와이드 모니터나 NVIDIA Surround는 이처럼 표시됩니다. 모니터 3대 확장은 필요 없습니다.\n화면·카메라 설정을 켜고 게임의 테두리 없는 창 / 전체 화면에서 위 해상도를 선택하세요.");
+  }
+  string reason;
+  switch(layout.Reason){
+   case "three_aligned_adjacent_monitors_required":reason=ui.T("Use Windows Extend mode with three equal-resolution displays touching side by side, with their top and bottom edges aligned. The main display can be any of the three.","Windows 확장 모드에서 해상도가 같은 모니터 3대의 위아래를 맞추고 좌우로 붙여 배치하세요. 주 모니터는 셋 중 어느 것이어도 됩니다.");break;
+   case "selected_monitor_missing":reason=ui.T("A selected display is disconnected or missing. Refresh detection and choose all three displays again.","선택한 모니터가 연결되지 않았거나 없습니다. 다시 인식한 뒤 모니터 3대를 선택하세요.");break;
+   case "selected_monitor_duplicate":case "selected_monitor_ambiguous":reason=ui.T("Choose a different connected display for each of Left, Center and Right.","왼쪽·가운데·오른쪽에 각각 다른 모니터를 선택하세요.");break;
+   case "selected_monitors_not_aligned":reason=ui.T("The selected displays must have the same resolution and touch left-to-right with their top and bottom edges aligned in Windows display settings.","선택한 모니터 3대는 해상도가 같고 Windows 디스플레이 설정에서 위아래를 맞춰 좌우로 붙어 있어야 합니다.");break;
+   case "invalid_monitor_dimensions":reason=ui.T("The selected triple exceeds the supported 16384-pixel render dimensions.","모니터 3대를 합친 크기가 지원되는 렌더링 한계인 16384픽셀을 벗어납니다.");break;
+   case "ambiguous_span_layout":case "duplicate_monitor_bounds":reason=ui.T("The display layout does not identify one safe triple. Check Windows display arrangement.","모니터 배치에서 사용할 모니터 3대를 확정할 수 없습니다. Windows 디스플레이 배치를 확인하세요.");break;
+   default:reason=ui.T("Monitor layout could not be read. Check Windows display settings and refresh detection.","모니터 배치를 읽지 못했습니다. Windows 디스플레이 설정을 확인한 뒤 다시 인식하세요.");break;
+  }
+  return ui.T("Windows displays detected: ","Windows에서 인식한 모니터: ")+layout.Monitors.Length+"\n"+reason+"\n"+ui.T("Single-display FOV and ultrawide correction remain available.","단일 모니터 FOV와 울트라와이드 화면 보정은 사용할 수 있습니다.");
  }
  void DisplayTab(){
   var p=Tab("Screen & camera","화면·카메라");if(!state.display){Paragraph(p,"Screen & camera is not installed. Add it in Installation.","화면·카메라 기능이 설치되지 않았습니다. 설치 탭에서 추가하세요.");return;}
-  var d=Core.ReadIni(Core.Config(root,"display.ini"),"display");bool ok;Geometry(out ok);var geometry=Paragraph(p,"","");ui.Bind(geometry,()=>{bool detected;return Geometry(out detected);});
+  var d=Core.ReadIni(Core.Config(root,"display.ini"),"display");var keys=new[]{"left_monitor","center_monitor","right_monitor"};var selected=keys.Select(k=>d.ContainsKey(k)?d[k]:"").ToArray();
+  var manual=Check(p,"manualMonitorSelection","Choose the game displays manually","게임에 사용할 모니터 직접 선택",selected.Any(x=>!String.IsNullOrEmpty(x)));
+  var diagram=new MonitorLayoutDiagram();Row(p,diagram);
+  Paragraph(p,"The diagram shows your Windows desktop. Choose the three displays used for the game;\nGame center can differ from the Windows main display. This does not rearrange Windows displays.","그림은 Windows에 배치된 모니터입니다. 게임에 사용할 모니터 3대를 선택하세요.\n게임 가운데 모니터와 Windows 주 모니터는 달라도 됩니다. Windows 배치는 변경하지 않습니다.");
+  var combos=new ComboBox[3];var roleEn=new[]{"Game left","Game center","Game right"};var roleKo=new[]{"게임 왼쪽","게임 가운데","게임 오른쪽"};
+  for(int role=0;role<3;++role){var row=new TableLayoutPanel{AutoSize=true,Dock=DockStyle.Top,ColumnCount=2};row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,35));row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,65));var label=new Label{AutoSize=true};int r=role;ui.Bind(label,()=>ui.T(roleEn[r],roleKo[r]));row.Controls.Add(label,0,0);var combo=new ComboBox{Name=keys[role],DropDownStyle=ComboBoxStyle.DropDownList,Dock=DockStyle.Top,DisplayMember="Label",ValueMember="Device"};combos[role]=combo;row.Controls.Add(combo,1,0);Row(p,row);}
+  var geometry=Paragraph(p,"","");geometry.Name="displayGeometry";
   var enable=Check(p,"cameraEnabled","Enable screen & camera settings","화면·카메라 설정 사용",Value(d,"enabled",1)!=0);
-  var span=Check(p,"spanEnabled","Span across three monitors (no NVIDIA Surround)","모니터 3대에 화면 확장 (NVIDIA Surround 불필요)",ok&&Value(d,"span",0)!=0);span.Enabled=ok;
+  var span=Check(p,"spanEnabled","Span across three monitors (no NVIDIA Surround)","모니터 3대에 화면 확장 (NVIDIA Surround 불필요)",Value(d,"span",0)!=0);
+  DisplayTopology.Layout desktop=null;bool filling=false;
+  Func<string[]> selection=()=>manual.Checked?selected:new string[3];
+  Action validate=()=>{if(desktop==null)return;var layout=DisplayTopology.Select(desktop.Monitors,selection());span.Enabled=layout.CanSpan;geometry.Text=Geometry(layout);diagram.Monitors=desktop.Monitors;var drawn=selection();if(!manual.Checked&&layout.CanSpan){drawn=new string[3];for(int role=0;role<3;++role){int x=layout.SpanBounds.Left+role*layout.SpanBounds.Width/3;var monitor=desktop.Monitors.FirstOrDefault(m=>m.Bounds.Left==x&&m.Bounds.Top==layout.SpanBounds.Top&&m.Bounds.Height==layout.SpanBounds.Height);drawn[role]=monitor==null?"":monitor.Device;}}diagram.Selection=drawn;diagram.Korean=ui.Language=="ko";diagram.Invalidate();for(int i=0;i<3;++i)combos[i].Enabled=manual.Checked;};
+  Action refresh=()=>{desktop=DisplayTopology.ReadPhysical();filling=true;for(int role=0;role<3;++role){var combo=combos[role];combo.Items.Clear();combo.Items.Add(new MonitorChoice("",ui.T("Select a display…","모니터 선택…")));for(int i=0;i<desktop.Monitors.Length;++i){var m=desktop.Monitors[i];combo.Items.Add(new MonitorChoice(m.Device,"#"+(i+1)+" · "+m.Bounds.Width+" × "+m.Bounds.Height+(m.Primary?ui.T(" · Windows main"," · Windows 주 모니터"):"")));}int index=0;for(int i=1;i<combo.Items.Count;++i)if(String.Equals(((MonitorChoice)combo.Items[i]).Device,selected[role],StringComparison.OrdinalIgnoreCase))index=i;if(index==0&&!String.IsNullOrEmpty(selected[role])){combo.Items.Add(new MonitorChoice(selected[role],ui.T("Disconnected: ","연결되지 않음: ")+selected[role]));index=combo.Items.Count-1;}combo.SelectedIndex=index;}filling=false;validate();};
+  for(int role=0;role<3;++role){int r=role;combos[role].SelectedIndexChanged+=(sender,e)=>{if(!filling){var choice=combos[r].SelectedItem as MonitorChoice;selected[r]=choice==null?"":choice.Device;validate();}};}
+  manual.CheckedChanged+=(sender,e)=>validate();ui.OnChange(refresh);
+  Button(Actions(p),"refreshDisplayDetection","Refresh monitor detection","모니터 다시 인식",()=>refresh());
   var fov=Number(p,"fov","FOV (16:9 reference)","시야각 FOV (16:9 기준)",Value(d,"fov",100),60,120,1,0.1M);
   var distance=Number(p,"cameraDistance","Chase camera distance","추적 카메라 거리",Value(d,"distance",3000),1500,6000,0,1);
   var height=Number(p,"cameraHeight","Chase camera height","추적 카메라 높이",Value(d,"height",600),0,1500,0,1);
   if(!state.mouse){distance.Enabled=height.Enabled=false;Paragraph(p,"Camera distance and height require Mouse flight.","카메라 거리·높이를 조절하려면 마우스 조종도 설치해야 합니다.");}
-  Paragraph(p,"Enable screen & camera for automatic aspect correction in supported rendered scenes,\nusing the actual game viewport. FOV affects flight; prerecorded videos stay unchanged.\nFor a single 21:9 / 32:9 display, leave triple span unchecked and select its native resolution\nin the game using borderless/fullscreen mode. Save changes, then focus the game.","화면·카메라 설정을 켜면 지원하는 실시간 렌더링 장면을 실제 게임 화면 비율에 맞춰\n자동 보정합니다. FOV는 비행 중 적용되며 미리 제작된 동영상은 변경하지 않습니다.\n21:9 / 32:9 단일 모니터는 모니터 3대 확장을 끄고 게임의 테두리 없는 창 / 전체 화면에서\n기본 해상도를 선택하세요. 게임 중에도 저장한 뒤 게임으로 돌아가면 적용됩니다.");
-  Button(Actions(p),"saveDisplay","Save screen & camera","화면·카메라 설정 저장",()=>{Core.WriteIni(Core.Config(root,"display.ini"),"display",new Dictionary<string,string>{{"enabled",enable.Checked?"1":"0"},{"span",span.Checked&&ok?"1":"0"},{"fov",V(fov.Number)},{"distance",V(distance.Number)},{"height",V(height.Number)}});Status("Screen & camera settings saved.","화면·카메라 설정을 저장했습니다.");});
+  Paragraph(p,"Enable screen & camera for automatic aspect correction in supported rendered scenes.\nFor one ultrawide display or NVIDIA Surround, leave triple span off and select its native\nresolution in the game's borderless/fullscreen mode. Save changes, then focus the game.","화면·카메라 설정을 켜면 지원하는 실시간 렌더링 장면의 비율을 자동 보정합니다.\n울트라와이드 모니터 1대나 NVIDIA Surround는 모니터 3대 확장을 끄고 게임의 테두리 없는 창 /\n전체 화면에서 기본 해상도를 선택하세요. 저장한 뒤 게임으로 돌아가면 적용됩니다.");
+  Button(Actions(p),"saveDisplay","Save screen & camera","화면·카메라 설정 저장",()=>{refresh();if(enable.Checked&&manual.Checked&&span.Checked&&!DisplayTopology.Select(desktop.Monitors,selection()).CanSpan){Status("Choose three connected, aligned displays before saving triple span.","모니터 3대를 연결하고 올바른 순서로 선택한 뒤 화면 확장을 저장하세요.");return;}var values=new Dictionary<string,string>{{"enabled",enable.Checked?"1":"0"},{"span",span.Checked?"1":"0"},{"fov",V(fov.Number)},{"distance",V(distance.Number)},{"height",V(height.Number)}};var names=selection();for(int i=0;i<3;++i)values[keys[i]]=names[i]??"";Core.WriteIni(Core.Config(root,"display.ini"),"display",values);Status("Screen & camera settings saved.","화면·카메라 설정을 저장했습니다.");});
  }
+ sealed class MonitorChoice{public string Device{get;private set;}public string Label{get;private set;}public MonitorChoice(string device,string label){Device=device;Label=label;}}
  void SubtitlesTab(){
   var p=Tab("Subtitles","자막");
   var translation=new CheckBox{Name="koreanTranslation",Checked=state.campaign,AutoSize=true};ui.Bind(translation,"Korean campaign translation","캠페인 한국어 번역");Row(p,translation);
@@ -190,12 +214,40 @@ partial class Launcher : Form {
   var p=Tab("Installation","설치");Paragraph(p,"Add, remove or update the three modules with the installer.\nClose the game before changing installed modules.","설치 프로그램에서 각 기능을 추가·제거하거나 업데이트할 수 있습니다.\n설치 구성을 바꾸기 전에 게임을 종료하세요.");
   var compatibility=Paragraph(p,"","");compatibility.Name="campaignLoaderCompatibility";
   ui.Bind(compatibility,()=>{bool foreign=Core.InspectCampaignLoader(root).ForeignLoader;compatibility.Visible=foreign;return foreign?ui.T("Another mod uses Game/Binaries/Win64/dinput8.dll.\nTo keep it, install Mouse flight or Screen & camera with Korean campaign subtitles off.\nAfter removing the other loader, add Korean campaign subtitles in Installation.\nUsing these mods together in game has not been verified.","다른 모드가 Game/Binaries/Win64/dinput8.dll을 사용하고 있습니다.\n이 파일을 보존하려면 한국어 캠페인 자막을 끄고 마우스 조종·화면 기능을 설치하세요.\n기존 로더를 제거한 뒤 설치 탭에서 한국어 캠페인 자막을 추가할 수 있습니다.\n실제 게임에서 모드를 함께 사용하는 동작은 아직 검증되지 않았습니다."):"";});
+  var hotasCompatibility=Paragraph(p,"","");hotasCompatibility.Name="hotasCompatibility";
+  ui.Bind(hotasCompatibility,()=>{bool present;try{present=Core.InspectHotas(root).Present;}catch{hotasCompatibility.Visible=true;return ui.T("HOTAS compatibility could not be read. Create a support report before changing modules.","HOTAS 호환 상태를 읽지 못했습니다. 설치 구성을 바꾸기 전에 문제 보고서를 만들어 주세요.");}hotasCompatibility.Visible=present;return ui.T("AC8HOTAS / AnalogueYaw: use these with Mouse flight OFF. Screen and subtitles can stay enabled. If the shared UE4SS was replaced by the recognized HOTAS0.2.0 bundle, rerun Setup to merge the runtime; HOTAS folders and bindings are retained. Do not copy the full HOTAS runtime over this pack again. Combined in-game operation remains unverified.","AC8HOTAS / AnalogueYaw는 마우스 비행 조종을 끈 상태로 사용하세요. 화면과 자막 기능은 켜둘 수 있습니다. 확인된 HOTAS0.2.0 묶음으로 공용 UE4SS가 교체됐다면 Setup을 다시 실행해 통합하세요. HOTAS 폴더와 바인딩은 보존합니다. 통합 후에는 HOTAS의 공용 런타임을 다시 덮어쓰지 마세요. 실제 게임 병용은 아직 검증하지 못했습니다.");});
   var actions=Actions(p);
   Button(actions,"changeModules","Change installed modules","설치된 기능 변경",()=>OpenModuleSetup(null));
   Button(actions,"openFolder","Open game folder","게임 폴더 열기",()=>Process.Start("explorer.exe",root));
   var docs=Actions(p);Button(docs,"openReadme","Open README","사용 안내 열기",()=>Process.Start(new ProcessStartInfo(Core.Safe(root,Core.Folder+"/README_"+(ui.Language=="ko"?"KOR":"ENG")+".txt")){UseShellExecute=true}));
   Button(docs,"openLicenses","Licenses & credits","라이선스·제작 정보",()=>Process.Start("explorer.exe",Core.Safe(root,Core.Folder+"/Licenses")));
   Paragraph(p,"Original-file backups are kept outside the game folder.\nThe installer preserves saves and files belonging to other mods.","설치 전 원본 파일은 게임 폴더 밖에 보관됩니다.\n설치 프로그램은 세이브와 다른 모드의 파일을 보존합니다.");
+ }
+ void SupportTab(){
+  var p=Tab("Support","문제 보고");
+  Paragraph(p,"Create one text file with your monitor layout, selected modules, settings and recent logs. It stays on this PC until you choose to share it.","모니터 배치·설치된 기능·설정·최근 로그를 텍스트 파일 하나로 모읍니다. 직접 보내기 전에는 이 PC에만 저장됩니다.");
+  Paragraph(p,"For mouse steering problems: start input recording just before reproducing the issue. It records up to two minutes of flight at four samples per second, then stops automatically. Start the game within ten minutes if it is closed. Normal play does not run this recording.","마우스 조종 문제라면 증상 재현 직전에 입력 기록을 시작하세요. 비행 중 초당 4회, 최대 2분만 기록하고 자동으로 멈춥니다. 게임이 꺼져 있다면 10분 안에 시작하세요. 평소에는 이 기록을 실행하지 않습니다.");
+  var actions=Actions(p);
+  var capture=Button(actions,"recordSupportInput","Start input recording","입력 기록 시작",()=>{
+   if(!state.mouse)throw new Exception(ui.T("Mouse flight is not installed.","마우스 조종이 설치되지 않았습니다."));
+   long token=(long)(DateTime.UtcNow-new DateTime(1970,1,1,0,0,0,DateTimeKind.Utc)).TotalMilliseconds;
+   Core.WriteIni(Core.Config(root,"config.ini"),"diagnostics",new Dictionary<string,string>{{"support_token",token.ToString(CultureInfo.InvariantCulture)}});
+   Status("Input recording armed. Reproduce the issue, close the game, then create a report.","입력 기록을 준비했습니다. 문제를 재현하고 게임을 종료한 뒤 보고서를 만드세요.");
+  });capture.Enabled=state.mouse;
+  Button(actions,"stopSupportInput","Stop input recording","입력 기록 중지",()=>{Core.WriteIni(Core.Config(root,"config.ini"),"diagnostics",new Dictionary<string,string>{{"support_token","0"}});Status("Input recording stopped; existing logs are retained.","입력 기록을 중지했습니다. 기존 로그는 유지합니다.");});
+  Paragraph(p,"After reproducing the issue, close the game and create a report so its logs are saved. Share BugReport_*.txt together with the mission, camera mode, issue time and what you were doing. A short video also helps with steering or display problems.","증상 재현 후 게임을 종료하고 보고서를 만들어야 로그가 모두 저장됩니다. BugReport_*.txt와 함께 미션·시점·발생 시각·당시 조작을 알려주세요. 조종이나 화면 문제라면 짧은 영상도 도움이 됩니다.");
+  var export=Button(Actions(p),"createSupportReport","Create bug report","버그 보고서 만들기",()=>{});
+  export.Click+=async(s,e)=>{
+   if(!export.Enabled)return;export.Enabled=false;string language=ui.Language;
+   try{
+    Status("Collecting recent logs…","최근 로그를 모으고 있습니다…");
+    string path=await System.Threading.Tasks.Task.Run(()=>SupportReport.Create(root,language));
+    if(IsDisposed)return;
+    Status("Report saved. Review the text before sharing it.","보고서를 저장했습니다. 보내기 전에 내용을 확인하세요.");
+    Process.Start("explorer.exe","/select,\""+path+"\"");
+   }catch(Exception ex){if(!IsDisposed)Dialog(ui.Error(ex),MessageBoxIcon.Error);}
+   finally{if(!IsDisposed)export.Enabled=true;}
+  };
  }
  void OpenModuleSetup(bool? campaign){
   if(Core.Running(root))throw new Exception("Close ACE COMBAT 8 first.");
@@ -206,4 +258,88 @@ partial class Launcher : Form {
  }
  protected override void Dispose(bool disposing){if(disposing){if(fgStatusTimer!=null)fgStatusTimer.Dispose();help.Dispose();}base.Dispose(disposing);}
  protected override void WndProc(ref Message m){base.WndProc(ref m);if(m.Msg==0x02E0&&IsHandleCreated&&!IsDisposed)BeginInvoke(new Action(()=>UiWindow.Fit(this)));}
+}
+
+// Physical desktop discovery is shared by the launcher explanation and support
+// reports. Selection deliberately mirrors ac8display::choose_span.
+internal static class DisplayTopology {
+ internal sealed class Monitor {
+  internal Rectangle Bounds;internal bool Primary;internal string Device;
+  internal Monitor(Rectangle bounds,bool primary,string device){Bounds=bounds;Primary=primary;Device=device;}
+ }
+ internal sealed class Layout {
+  internal Monitor[] Monitors=new Monitor[0];internal Rectangle SpanBounds;
+  internal bool CanSpan;internal string Reason="no_primary_monitor";
+ }
+ internal static Layout Select(Monitor[] monitors,string[] selection=null){
+  var result=new Layout{Monitors=monitors??new Monitor[0]};var all=result.Monitors;
+  if(selection!=null&&selection.Any(x=>!String.IsNullOrEmpty(x))){
+   if(selection.Length!=3||selection.Any(String.IsNullOrEmpty)){result.Reason="selected_monitor_missing";return result;}
+   var chosen=new Monitor[3];
+   for(int role=0;role<3;++role){var matches=all.Where(x=>String.Equals(x.Device,selection[role],StringComparison.OrdinalIgnoreCase)).ToArray();if(matches.Length!=1){result.Reason=matches.Length==0?"selected_monitor_missing":"selected_monitor_ambiguous";return result;}chosen[role]=matches[0];}
+   if(Object.ReferenceEquals(chosen[0],chosen[1])||Object.ReferenceEquals(chosen[0],chosen[2])||Object.ReferenceEquals(chosen[1],chosen[2])){result.Reason="selected_monitor_duplicate";return result;}
+   var l=chosen[0].Bounds;var c=chosen[1].Bounds;var r=chosen[2].Bounds;long w=c.Width,h=c.Height;
+   if(w<=0||h<=0||w*3>16384||h>16384){result.Reason="invalid_monitor_dimensions";return result;}
+   if(l.Width!=w||r.Width!=w||l.Top!=c.Top||r.Top!=c.Top||l.Bottom!=c.Bottom||r.Bottom!=c.Bottom||l.Right!=c.Left||c.Right!=r.Left){result.Reason="selected_monitors_not_aligned";return result;}
+   result.SpanBounds=new Rectangle(l.Left,c.Top,(int)(w*3),(int)h);result.CanSpan=true;result.Reason="ok";return result;
+  }
+  var primaries=all.Where(x=>x.Primary).ToArray();
+  if(primaries.Length!=1){result.Reason=primaries.Length==0?"no_primary_monitor":"multiple_primary_monitors";return result;}
+  var primary=primaries[0];long width=primary.Bounds.Width,height=primary.Bounds.Height;
+  if(width<=0||height<=0||width*3>16384||height>16384){result.Reason="invalid_monitor_dimensions";return result;}
+  for(int i=0;i<all.Length;++i)for(int j=i+1;j<all.Length;++j)if(all[i].Bounds==all[j].Bounds){result.Reason="duplicate_monitor_bounds";return result;}
+  Rectangle selected=Rectangle.Empty;int candidates=0;
+  foreach(var center in all){
+   var c=center.Bounds;if(c.Width!=width||c.Height!=height)continue;
+   Monitor left=null,right=null;
+   foreach(var monitor in all){
+    if(Object.ReferenceEquals(monitor,center))continue;var r=monitor.Bounds;
+    if(r.Width!=width||r.Top!=c.Top||r.Bottom!=c.Bottom)continue;
+    if(r.Right==c.Left)left=monitor;if(r.Left==c.Right)right=monitor;
+   }
+   if(left==null||right==null||(!Object.ReferenceEquals(primary,left)&&!Object.ReferenceEquals(primary,center)&&!Object.ReferenceEquals(primary,right)))continue;
+   var next=new Rectangle(left.Bounds.Left,c.Top,(int)(width*3),(int)height);
+   if(Object.ReferenceEquals(primary,center)){result.SpanBounds=next;result.CanSpan=true;result.Reason="ok";return result;}
+   selected=next;++candidates;
+  }
+  if(candidates==1){result.SpanBounds=selected;result.CanSpan=true;result.Reason="ok";}else result.Reason=candidates>1?"ambiguous_span_layout":"three_aligned_adjacent_monitors_required";
+  return result;
+ }
+ [StructLayout(LayoutKind.Sequential)] struct NativeRect{public int Left,Top,Right,Bottom;}
+ [StructLayout(LayoutKind.Sequential,CharSet=CharSet.Unicode)] struct MonitorInfo{public int Size;public NativeRect Bounds,Work;public uint Flags;[MarshalAs(UnmanagedType.ByValTStr,SizeConst=32)]public string Device;}
+ delegate bool MonitorCallback(IntPtr monitor,IntPtr dc,IntPtr rect,IntPtr data);
+ [DllImport("user32.dll",SetLastError=true)]static extern bool EnumDisplayMonitors(IntPtr dc,IntPtr rect,MonitorCallback callback,IntPtr data);
+ [DllImport("user32.dll",CharSet=CharSet.Unicode,SetLastError=true,EntryPoint="GetMonitorInfoW")]static extern bool GetMonitorInfo(IntPtr monitor,ref MonitorInfo info);
+ [DllImport("user32.dll",SetLastError=true)]static extern IntPtr SetThreadDpiAwarenessContext(IntPtr context);
+ internal static Layout ReadPhysical(params string[] selection){
+  IntPtr old=IntPtr.Zero;var monitors=new List<Monitor>();
+  try{
+   old=SetThreadDpiAwarenessContext(new IntPtr(-4));if(old==IntPtr.Zero)return new Layout{Reason="physical_dpi_context_unavailable"};
+   bool failed=false;
+   MonitorCallback callback=(monitor,dc,rect,data)=>{var info=new MonitorInfo{Size=Marshal.SizeOf(typeof(MonitorInfo))};if(!GetMonitorInfo(monitor,ref info)){failed=true;return false;}var r=info.Bounds;monitors.Add(new Monitor(new Rectangle(r.Left,r.Top,r.Right-r.Left,r.Bottom-r.Top),(info.Flags&1)!=0,info.Device));return true;};
+   if(!EnumDisplayMonitors(IntPtr.Zero,IntPtr.Zero,callback,IntPtr.Zero)||failed)return new Layout{Monitors=monitors.ToArray(),Reason="monitor_enumeration_failed"};
+   return Select(monitors.ToArray(),selection);
+  }catch{return new Layout{Monitors=monitors.ToArray(),Reason="monitor_enumeration_failed"};}
+  finally{if(old!=IntPtr.Zero)SetThreadDpiAwarenessContext(old);}
+ }
+}
+
+internal sealed class MonitorLayoutDiagram : Control {
+ internal DisplayTopology.Monitor[] Monitors=new DisplayTopology.Monitor[0];
+ internal string[] Selection=new string[3];internal bool Korean;
+ internal MonitorLayoutDiagram(){Name="monitorLayoutDiagram";DoubleBuffered=true;Height=205;MinimumSize=new Size(100,170);Dock=DockStyle.Top;Margin=new Padding(0,8,0,8);}
+ protected override void OnPaint(PaintEventArgs e){
+  base.OnPaint(e);var g=e.Graphics;g.SmoothingMode=System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+  if(Monitors.Length==0)return;var all=Monitors.Select(x=>x.Bounds).Aggregate(Rectangle.Union);
+  if(all.Width<=0||all.Height<=0)return;float scale=Math.Min((ClientSize.Width-30f)/all.Width,(ClientSize.Height-26f)/all.Height);if(scale<=0)return;
+  float ox=(ClientSize.Width-all.Width*scale)/2f,oy=(ClientSize.Height-all.Height*scale)/2f;
+  for(int i=0;i<Monitors.Length;++i){var m=Monitors[i];var b=m.Bounds;var r=new RectangleF(ox+(b.X-all.X)*scale,oy+(b.Y-all.Y)*scale,b.Width*scale,b.Height*scale);
+   int role=Array.FindIndex(Selection,x=>!String.IsNullOrEmpty(x)&&String.Equals(x,m.Device,StringComparison.OrdinalIgnoreCase));
+   using(var fill=new SolidBrush(role>=0?Color.FromArgb(36,94,132):Color.FromArgb(38,44,54)))g.FillRectangle(fill,r);
+   using(var edge=new Pen(role>=0?Color.DeepSkyBlue:Color.SlateGray,role==1?3:1))g.DrawRectangle(edge,r.X,r.Y,r.Width,r.Height);
+   string name="#"+(i+1)+"  "+b.Width+" × "+b.Height+(m.Primary?(Korean?"\nWindows 주 모니터":"\nWindows main display"):"");
+   if(role>=0)name+="\n"+(Korean?new[]{"게임 왼쪽","게임 가운데","게임 오른쪽"}[role]:new[]{"Game left","Game center","Game right"}[role]);
+   using(var brush=new SolidBrush(Color.White))using(var font=new Font("Segoe UI",Math.Max(6,Math.Min(10,r.Width/16f))))using(var format=new StringFormat{Alignment=StringAlignment.Center,LineAlignment=StringAlignment.Center})g.DrawString(name,font,brush,r,format);
+  }
+ }
 }

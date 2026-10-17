@@ -40,6 +40,8 @@ prefix = r'''
 #include <cstdlib>
 #include <cstring>
 #include "scene_mouse.h"
+#include "support_capture.h"
+ac8support::Capture support_capture;
 #include "free_look.h"
 #include "geometric_guidance.h"
 #include "aim_zoom.h"
@@ -102,6 +104,7 @@ lua_State scene(uintptr_t owner=0,bool paused=false){lua_State state;state.args[
 void capture(long x,long y){RAWINPUT packet{},out{};packet.header.dwType=RIM_TYPEMOUSE;packet.data.mouse.lLastX=x;packet.data.mouse.lLastY=y;UINT bytes=sizeof(out);require(capture_get_raw_input_data(reinterpret_cast<HRAWINPUT>(&packet),RID_INPUT,&out,&bytes,sizeof(RAWINPUTHEADER))==sizeof(out),"actual raw capture preserves native packet result");}
 int main(){
     using namespace flight;const auto view=basis(0,0,0);
+    support_capture.request(1,1,clock_tick); // Passive recording must retain the same input behavior.
     auto goal=[] {return basis(target_pitch.load(),target_yaw.load(),0).f;};
     auto camera=[] {return basis(look_pitch.load(),look_yaw.load(),0).f;};
     for(int frame=0;frame<40;++frame){

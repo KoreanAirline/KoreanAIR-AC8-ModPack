@@ -24,7 +24,7 @@ def compile(name,source,resources=[]):
     icon=D/'assets/launcher.ico'
     assert icon.is_file(), 'The launcher icon in assets/launcher.ico is required.'
     args+=['/win32icon:'+str(icon),'/resource:'+str(icon)+',KoreanAIR.LauncherIcon']
-    if source=='Launcher.cs':args.extend(str(D/'src'/p) for p in ('Hud.cs','Keys.cs','UpdateUI.cs','MouseInputWorker.cs'))
+    if source=='Launcher.cs':args.extend(str(D/'src'/p) for p in ('Hud.cs','Keys.cs','UpdateUI.cs','MouseInputWorker.cs','SupportReport.cs'))
     subprocess.run(args,check=True)
 
 def installer_resources():

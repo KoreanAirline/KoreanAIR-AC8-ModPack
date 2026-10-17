@@ -1,13 +1,13 @@
-KoreanAIR_AC8_ModPack_2.2
+KoreanAIR_AC8_ModPack_2.3
 English user guide
 
 INSTALL AND PLAY
 
 1. Start ACE COMBAT 8 normally through Steam at least once, then close the game.
 2. Extract the complete ZIP, keeping Payload.zip beside the installer, then run
-   KoreanAIR_AC8_ModPack_2.2_Setup.exe. Select the game folder containing
+   KoreanAIR_AC8_ModPack_2.3_Setup.exe. Select the game folder containing
    start_protected_game.exe, then choose the modules and click Install / Update.
-3. Open KoreanAIR_AC8_ModPack_2.2.exe in the game folder. Keep Steam open and
+3. Open KoreanAIR_AC8_ModPack_2.3.exe in the game folder. Keep Steam open and
    choose Play with selected mods.
 
 The standalone installer downloads the matching verified mod files when needed.
@@ -176,12 +176,17 @@ leave Span across three monitors unchecked. Select the display's native resoluti
 in the game's borderless or fullscreen mode. Three monitors are not required;
 correction follows the actual game render viewport.
 
-Triple span requires three displays with equal pixel resolutions, arranged directly
-left/main/right in Windows display settings. The middle display must be the main
-display, and all three must align along the top with no gaps. NVIDIA Surround is
-not required. If the layout is unsuitable, only triple span is unavailable;
-single-display FOV and ultrawide correction remain available.
-Save changes, then focus the game to see them.
+Automatic detection uses three adjacent equal-resolution displays, including the
+Windows main display. Different refresh rates and additional displays are allowed.
+Use manual selection to choose the game left, centre and right displays, even when
+the Windows main display is elsewhere. The diagram shows the actual desktop layout;
+it does not rearrange Windows displays. The selected three must touch side by side
+with equal heights/resolutions and aligned top/bottom edges. Use Windows display
+settings to correct a gap or misalignment, then Refresh monitor detection.
+For Surround or a single ultrawide surface, leave triple span off and choose its
+native wide resolution in the game.
+
+Save screen & camera, then focus the game to apply changes.
 
 Supported rendered hangar aircraft/weapon selection, sortie and departure scenes,
 real-time cinematics, T target-view and interactive head-look scenes adapt to the
@@ -244,3 +249,31 @@ stops and preserves it instead of deleting it.
 
 Recoverable migration/original-file backups are stored outside the game folder:
 %LocalAppData%\KoreanAIR_AC8_ModPack\Backups
+
+
+AC8HOTAS / ANALOGUE YAW
+
+Use HOTAS controls with Mouse flight OFF; Screen & camera and subtitles can remain
+installed. The installer recognises the inspected AC8HOTAS0.2.0 runtime bundle and
+can use this pack's shared UE4SS while retaining HOTAS mod folders and bindings.
+Close the game and rerun Setup with Mouse flight unchecked after a shared-runtime
+replacement error. Do not overwrite the shared runtime with the HOTAS bundle again.
+Unknown replacement files are preserved. Actual combined in-game HOTAS operation
+has not been verified. To use this pack's mouse steering, disable AC8HOTAS and
+AC8AnalogYaw in UE4SS first; do not enable both flight controllers together.
+
+BUG REPORTS (Support)
+
+For mouse steering issues, select Start input recording just before reproducing
+the problem. The next active flight records up to two minutes at4Hz, then stops;
+start the game within ten minutes if it is closed. This recording is off in normal
+play and does not enable the large binary controller trace.
+After reproducing the issue, close the game and select Create bug report. The
+launcher opens the generated text file's folder:
+<game folder>\KoreanAIR_AC8_ModPack\Reports\BugReport_*.txt
+Send that text with the mission, camera mode, approximate issue time and actions.
+If the game folder is not writable, Reports is stored under
+%LocalAppData%\KoreanAIR_AC8_ModPack instead; the launcher opens that folder.
+A short video helps with steering/display issues. The file contains selected
+settings, monitor layout, file verification and bounded recent logs; private paths
+are redacted. Review it before sharing. Nothing is uploaded automatically.
