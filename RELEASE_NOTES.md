@@ -135,3 +135,16 @@ Stationary-target weaving reported on another PC remains under investigation; th
 - 확인된 공용 런타임 충돌과 HOTAS·마우스 조종 중복에 구체적인 설치 안내를 표시합니다.
 
 다른 PC에서 제보된 정지 조준점의 좌우 흔들림은 조사 중이며, 기존 조종 계산을 유지했습니다. 그래픽·DLSS 품질·프레임 생성 설정도 유지합니다.
+
+
+## Bug fixes — 2.3 (build 2026101901)
+
+- Fixed an input timing edge where releasing S and pressing it again between fresh game input packets could lose the new pitch-up press. The pending repress is applied to the next fresh input packet only.
+
+This synthetic input regression is verified. The cause of the individual cobra report and in-game maneuver success have not been confirmed. Maneuver activation conditions and ordinary flight calculations are unchanged.
+
+### 버그 수정 — 2.3 (빌드 2026101901)
+
+- S를 놓았다가 다시 누르는 입력이 새 게임 입력 패킷 사이에서 누락될 수 있던 경계를 보완했습니다. 재입력은 다음 새 입력 패킷 한 개에만 전달합니다.
+
+입력 경계는 재현 시험으로 검증했습니다. 개별 코브라 제보의 원인과 실제 게임의 기동 성공 여부는 아직 확인하지 못했습니다. 기동 발동 조건과 평소 조종 계산은 유지합니다.
