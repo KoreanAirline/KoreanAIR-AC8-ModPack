@@ -37,7 +37,13 @@ sealed class UiLanguage {
  }
  public string Error(Exception ex) {
   var write=ex as PackWriteException;
-  if(write!=null)return T("The file could not be saved safely. The operation has stopped.\nFile: ","파일을 안전하게 저장하지 못해 작업을 중단했습니다.\n대상 파일: ")+write.Target+"\n"+T("Operation: ","작업: ")+(write.Stage=="write"?T("Writing","파일 기록"):T("Replacing","파일 교체"))+"\n"+write.InnerException.Message;
+  if(write!=null) {
+   string operation=write.Stage=="prepare"?T("Preparing the folder","폴더 준비"):write.Stage=="write"?T("Writing the temporary file","임시 파일 기록"):T("Committing the installed file","설치 파일 저장");
+   string message=T("Windows could not save this file. The operation has stopped.\nFile: ","Windows에서 파일을 저장하지 못해 작업을 중단했습니다.\n대상 파일: ")+write.Target+"\n"+T("Operation: ","작업: ")+operation+"\n"+write.InnerException.Message;
+   if(write.InnerException is UnauthorizedAccessException)message+="\n\n"+T("Close the game and retry. If the error remains, check your security software's protection history for this file and send the error log below. Running as administrator does not resolve every file restriction.","게임을 종료한 뒤 다시 시도해 주세요. 계속 실패하면 보안 프로그램의 보호 기록에서 이 파일의 차단 여부를 확인하고 아래 오류 로그를 보내 주세요. 관리자 실행으로도 해결되지 않는 파일 제한이 있습니다.");
+   else if((write.InnerException.HResult&0xFFFF)==32||(write.InnerException.HResult&0xFFFF)==33)message+="\n\n"+T("Another process is using the file. Close the game and retry. If the error remains, send the error log below.","다른 프로세스가 파일을 사용 중입니다. 게임을 종료하고 다시 시도해 주세요. 계속 실패하면 아래 오류 로그를 보내 주세요.");
+   return message;
+  }
   var multiple=ex as AggregateException;
   if(multiple!=null&&multiple.Message.StartsWith("Rollback could not restore every file."))return T("Some files could not be restored after the operation failed.\n","작업 실패 후 일부 파일을 복원하지 못했습니다.\n")+String.Join("\n\n",multiple.InnerExceptions.Select(Error));
   // Preserve filenames and unexpected diagnostics; translate the operation's known error.

@@ -11,7 +11,7 @@ using System.Web.Script.Serialization;
 
 [assembly:System.Reflection.AssemblyVersion("2.3.0.0")]
 [assembly:System.Reflection.AssemblyFileVersion("2.3.0.0")]
-[assembly:System.Reflection.AssemblyInformationalVersion("2.3+b2026101901")]
+[assembly:System.Reflection.AssemblyInformationalVersion("2.3+b2026101902")]
 [assembly:System.Reflection.AssemblyProduct("KoreanAIR AC8 Mod Pack")]
 
 namespace KoreanAIR {
@@ -23,12 +23,53 @@ public sealed class Manifest { public List<Item> files; public Dictionary<string
 public sealed class LoaderCompatibility { public bool ForeignLoader; public string Path; public string Hash; public string Kind; }
 public sealed class HotasCompatibility { public bool Present,InputEnabled,KnownSharedRuntime,HotasEnabled,AnalogYawEnabled; }
 public sealed class PackWriteException : IOException {
- public readonly string Target,Stage;
- public PackWriteException(string target,string stage,Exception cause):base("Unable to write installed file: "+target+"\n"+cause.Message,cause){Target=target;Stage=stage;}
+ public readonly string Target,Stage,Operation,Temporary,FailureEvidence;
+ public readonly int CauseHResult;
+ public readonly int? Win32Error;
+ public PackWriteException(string target,string stage,Exception cause):this(target,stage,stage,null,cause){}
+ public PackWriteException(string target,string stage,string operation,string temporary,Exception cause):base("Unable to write installed file: "+target+"\n"+cause.Message,cause){
+  Target=target;Stage=stage;Operation=operation;Temporary=temporary;CauseHResult=cause.HResult;
+  if(((uint)CauseHResult>>16&0x1fff)==7)Win32Error=CauseHResult&0xffff;
+  // Capture before Atomic's cleanup and the install transaction's rollback.
+  // In particular, File.Exists(false) must not be treated as proof of absence.
+  var evidence=new StringBuilder();evidence.AppendLine("Captured UTC: "+DateTime.UtcNow.ToString("o"));
+  evidence.AppendLine("Target metadata: "+Describe(target));evidence.AppendLine("Staged metadata: "+Describe(temporary));
+  try{evidence.AppendLine("Parent metadata: "+Describe(Path.GetDirectoryName(target)));}catch(Exception ex){evidence.AppendLine("Parent metadata: unavailable; "+ex.GetType().Name+" HRESULT=0x"+ex.HResult.ToString("X8"));}
+  evidence.AppendLine("ACL summaries: matching current user/group rules; NOT effective access determination.");
+  evidence.AppendLine("Target ACL: "+DescribeAccess(target));evidence.AppendLine("Staged ACL: "+DescribeAccess(temporary));
+  try{evidence.AppendLine("Parent ACL: "+DescribeAccess(Path.GetDirectoryName(target)));}catch(Exception ex){evidence.AppendLine("Parent ACL: unavailable; "+ex.GetType().Name+" HRESULT=0x"+ex.HResult.ToString("X8"));}
+  FailureEvidence=evidence.ToString();
+ }
+ static string Describe(string path){
+  if(String.IsNullOrEmpty(path))return "not assigned";
+  try{var attributes=File.GetAttributes(path);return ((attributes&FileAttributes.Directory)!=0?"directory":"file")+"; attributes="+attributes+" (0x"+((int)attributes).ToString("X8")+")";}
+  catch(FileNotFoundException ex){return "missing file; HRESULT=0x"+ex.HResult.ToString("X8");}
+  catch(DirectoryNotFoundException ex){return "missing parent/path; HRESULT=0x"+ex.HResult.ToString("X8");}
+  catch(Exception ex){return "unavailable; "+ex.GetType().Name+" HRESULT=0x"+ex.HResult.ToString("X8");}
+ }
+ static string DescribeAccess(string path){
+  if(String.IsNullOrEmpty(path))return "not assigned";
+  try{
+   using(var identity=System.Security.Principal.WindowsIdentity.GetCurrent()){
+    var current=identity.User;var ids=new HashSet<string>(StringComparer.OrdinalIgnoreCase);if(current!=null)ids.Add(current.Value);
+    bool groupsLimited=false;if(identity.Groups!=null)foreach(System.Security.Principal.IdentityReference group in identity.Groups){if(ids.Count>=64){groupsLimited=true;break;}ids.Add(group.Value);}
+    var attributes=File.GetAttributes(path);
+    System.Security.AccessControl.FileSystemSecurity security=(attributes&FileAttributes.Directory)!=0?(System.Security.AccessControl.FileSystemSecurity)Directory.GetAccessControl(path,System.Security.AccessControl.AccessControlSections.Access):File.GetAccessControl(path,System.Security.AccessControl.AccessControlSections.Access);
+    var rules=security.GetAccessRules(true,true,typeof(System.Security.Principal.SecurityIdentifier));var text=new StringBuilder();int inspected=0,matched=0;
+    foreach(System.Security.AccessControl.FileSystemAccessRule rule in rules){
+     if(++inspected>256){text.Append(" [Rule inspection limited to 256.]");break;}
+     if(!ids.Contains(rule.IdentityReference.Value))continue;
+     if(matched>=64){text.Append(" [Matching rule output limited to 64.]");break;}
+     text.Append("\n  principal=").Append(current!=null&&rule.IdentityReference.Value==current.Value?"current user":"current token group").Append("; type=").Append(rule.AccessControlType).Append("; rights=").Append(rule.FileSystemRights).Append("; inherited=").Append(rule.IsInherited).Append("; inheritance=").Append(rule.InheritanceFlags).Append("; propagation=").Append(rule.PropagationFlags);matched++;
+    }
+    if(matched==0)text.Append("No matching rules among those inspected.");if(groupsLimited)text.Append(" [Token identity matching limited to 64.]");return text.ToString();
+   }
+  }catch(Exception ex){return "unavailable; "+ex.GetType().Name+" HRESULT=0x"+ex.HResult.ToString("X8");}
+ }
 }
 public static class Core {
  public const string Brand="KoreanAIR_AC8_ModPack_2.3";
- public const long ReleaseBuild=2026101901;
+ public const long ReleaseBuild=2026101902;
  public const string Folder="KoreanAIR_AC8_ModPack";
  public const string Mod="Game/Binaries/Win64/UE4SS/Mods/AC8MouseAim/";
  public const string CampaignLoader="Game/Binaries/Win64/dinput8.dll";
@@ -46,22 +87,22 @@ public static class Core {
   return full;
  }
  public static void Atomic(string path,byte[] bytes) {
-  Directory.CreateDirectory(Path.GetDirectoryName(path)); string tmp=Path.Combine(Path.GetDirectoryName(path),"."+Guid.NewGuid().ToString("N")+".tmp");
-  string stage="write";
+  string tmp=null,stage="prepare",operation="prepare";
   try {
-   File.WriteAllBytes(tmp,bytes);stage="commit";
+   string parent=Path.GetDirectoryName(path);Directory.CreateDirectory(parent);tmp=Path.Combine(parent,"."+Guid.NewGuid().ToString("N")+".tmp");
+   stage="write";operation="write";File.WriteAllBytes(tmp,bytes);stage="commit";
    if(File.Exists(path)) {
 #if ATOMIC_TEST
     if(AtomicBeforeCommit!=null)AtomicBeforeCommit(path,tmp);
 #endif
-    try {File.Replace(tmp,path,null);}
+    operation="replace";try {File.Replace(tmp,path,null);}
     catch(FileNotFoundException){
      // Recover only a destination-removal race. Never recreate a missing staged file.
-     if(File.Exists(tmp)&&!File.Exists(path))File.Move(tmp,path);else throw;
+     if(File.Exists(tmp)&&!File.Exists(path)){operation="recovery-move";File.Move(tmp,path);}else throw;
     }
-   } else File.Move(tmp,path);
-  } catch(IOException ex){throw new PackWriteException(path,stage,ex);}
-    catch(UnauthorizedAccessException ex){throw new PackWriteException(path,stage,ex);}
+   } else {operation="create-move";File.Move(tmp,path);}
+  } catch(IOException ex){throw new PackWriteException(path,stage,operation,tmp,ex);}
+    catch(UnauthorizedAccessException ex){throw new PackWriteException(path,stage,operation,tmp,ex);}
   finally {try{if(File.Exists(tmp))File.Delete(tmp);}catch{}}
  }
 #if ATOMIC_TEST
@@ -69,18 +110,76 @@ public static class Core {
 #endif
  public static string RecordInstallError(Exception ex) {
   string log=Path.Combine(Path.GetTempPath(),"KoreanAIR_AC8_Setup_error.txt");
-  try{File.WriteAllText(log,DateTime.UtcNow.ToString("o")+"\n"+ex.ToString());return log;}catch{return null;}
+  try{
+   var text=new StringBuilder();text.AppendLine(DateTime.UtcNow.ToString("o"));text.AppendLine("Pack: "+Brand+"; build="+ReleaseBuild);
+   text.AppendLine("OS: "+Environment.OSVersion.VersionString+"; OS 64-bit="+Environment.Is64BitOperatingSystem+"; process 64-bit="+Environment.Is64BitProcess);
+   text.AppendLine(".NET CLR: "+Environment.Version+"; framework release="+FrameworkRelease()+"; administrator token="+AdministratorToken());
+   text.AppendLine("\nException and original stack:");text.AppendLine(ex.ToString());text.AppendLine("\nFailure diagnostics (captured before temporary cleanup/rollback where available):");
+   AppendFailure(text,ex,"0",new HashSet<Exception>(),0);File.WriteAllText(log,text.ToString(),new UTF8Encoding(false));return log;
+  }catch{return null;}
  }
+ static string FrameworkRelease(){try{using(var key=Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full")){return key==null?"unavailable":Convert.ToString(key.GetValue("Release","unavailable"));}}catch{return "unavailable";}}
+ static string AdministratorToken(){try{using(var identity=System.Security.Principal.WindowsIdentity.GetCurrent()){return new System.Security.Principal.WindowsPrincipal(identity).IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator).ToString();}}catch{return "unavailable";}}
+ static void AppendFailure(StringBuilder text,Exception ex,string index,HashSet<Exception> seen,int depth){
+  if(ex==null||depth>16||seen.Count>=64||!seen.Add(ex))return;
+  int hr=ex.HResult;text.AppendLine("Exception "+index+": "+ex.GetType().FullName+"; HRESULT=0x"+hr.ToString("X8")+"; Win32="+((((uint)hr>>16&0x1fff)==7)?(hr&0xffff).ToString():"not a Win32 HRESULT"));
+  var write=ex as PackWriteException;if(write!=null){text.AppendLine("Stage="+write.Stage+"; operation="+write.Operation+"; cause HRESULT=0x"+write.CauseHResult.ToString("X8")+"; cause Win32="+(write.Win32Error.HasValue?write.Win32Error.Value.ToString():"not a Win32 HRESULT"));text.AppendLine("Target="+write.Target);text.AppendLine("Staged="+(write.Temporary??"not assigned"));text.Append(write.FailureEvidence);}
+  foreach(string key in new[]{"Pack.RollbackStatus","Pack.RollbackChecked","Pack.RollbackCompleted","Pack.RollbackFailures","Pack.RollbackPath","Pack.PreflightScope","Pack.PreflightPackageChangesStarted"})try{if(ex.Data.Contains(key))text.AppendLine(key+"="+Convert.ToString(ex.Data[key]));}catch{}
+  var aggregate=ex as AggregateException;
+  if(aggregate!=null){for(int i=0;i<aggregate.InnerExceptions.Count&&i<64;i++)AppendFailure(text,aggregate.InnerExceptions[i],index+"."+i,seen,depth+1);}
+  else AppendFailure(text,ex.InnerException,index+".0",seen,depth+1);
+ }
+ static void MarkRollback(Exception ex,int checkedCount,int completed,List<string> failures){try{ex.Data["Pack.RollbackStatus"]=failures.Count==0?"completed":"incomplete";ex.Data["Pack.RollbackChecked"]=checkedCount;ex.Data["Pack.RollbackCompleted"]=completed;ex.Data["Pack.RollbackFailures"]=String.Join("\n",failures);}catch{}}
  static void Rollback(string root,IEnumerable<KeyValuePair<string,byte[]>> journal,Exception initiating) {
-  var errors=new List<Exception>{initiating};
+  var errors=new List<Exception>{initiating};var failures=new List<string>();int checkedCount=0,completed=0;
   foreach(var entry in journal) {
+   checkedCount++;
    try {
     string path=Safe(root,entry.Key);
     if(entry.Value==null){if(File.Exists(path))File.Delete(path);}
     else if(!File.Exists(path)||!File.ReadAllBytes(path).SequenceEqual(entry.Value))Atomic(path,entry.Value);
-   }catch(Exception ex){errors.Add(ex);}
+    completed++;
+   }catch(Exception ex){errors.Add(ex);failures.Add(entry.Key);try{ex.Data["Pack.RollbackPath"]=entry.Key;}catch{}}
   }
-  if(errors.Count>1)throw new AggregateException("Rollback could not restore every file.",errors);
+  MarkRollback(initiating,checkedCount,completed,failures);
+  if(errors.Count>1){var error=new AggregateException("Rollback could not restore every file.",errors);MarkRollback(error,checkedCount,completed,failures);throw error;}
+ }
+ static PackWriteException PreflightFailure(string target,string operation,string temporary,Exception cause){
+  var error=new PackWriteException(target,"prepare",operation,temporary,cause);
+  error.Data["Pack.PreflightPackageChangesStarted"]=false;
+  error.Data["Pack.PreflightScope"]="InstallCore package replacements/removals have not started. Earlier update preparation or resume is outside this check.";return error;
+ }
+ static void PreflightWrites(string root,Dictionary<string,byte[]> wanted){
+  var checkedParents=new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+  foreach(var pair in wanted){
+   string target=Safe(root,pair.Key);if(File.Exists(target)&&HashFile(target)==Hash(pair.Value))continue;
+   string parent=Path.GetDirectoryName(target),operation="preflight-inspect",temporary=null;FileStream probe=null;
+   try{
+    // This is an early check, not a promise that a later file replacement or
+    // a security product will permit the payload. Never alter ACLs/attributes.
+    try{var attributes=File.GetAttributes(target);
+     if((attributes&FileAttributes.Directory)!=0)throw new IOException("A directory occupies the required installed-file path.");
+     if((attributes&FileAttributes.ReadOnly)!=0)throw new UnauthorizedAccessException("The installed file has the read-only attribute.");
+    }catch(FileNotFoundException){}catch(DirectoryNotFoundException){}
+    // New package folders need no speculative creation: test their nearest
+    // existing parent and let the ordinary transaction create them later.
+    for(;;){
+     try{var attributes=File.GetAttributes(parent);if((attributes&FileAttributes.Directory)==0)throw new IOException("A file occupies a required installation folder.");if((attributes&FileAttributes.ReparsePoint)!=0)throw new IOException("A required installation folder is a redirected link.");break;}
+     catch(FileNotFoundException){}catch(DirectoryNotFoundException){}
+     if(String.Equals(parent,root,StringComparison.OrdinalIgnoreCase))throw new DirectoryNotFoundException("The game folder is unavailable.");
+     parent=Path.GetDirectoryName(parent);if(String.IsNullOrEmpty(parent))throw new DirectoryNotFoundException("The installation parent is unavailable.");
+    }
+    if(!checkedParents.Add(parent))continue;
+    // Keep both probe names no longer than Atomic's .{GUID}.tmp staging name.
+    // A longer diagnostic name would reject otherwise valid deep game paths.
+    string id=Guid.NewGuid().ToString("N");temporary=Path.Combine(parent,"."+id+".tmp");string moved=Path.Combine(parent,"_"+id+".tmp");
+    operation="preflight-create";probe=new FileStream(temporary,FileMode.CreateNew,FileAccess.Write,FileShare.ReadWrite|FileShare.Delete,4096,FileOptions.DeleteOnClose);
+    operation="preflight-write";probe.WriteByte(1);probe.Flush();
+    operation="preflight-rename";File.Move(temporary,moved);
+   }catch(IOException ex){throw PreflightFailure(target,operation,temporary,ex);}
+    catch(UnauthorizedAccessException ex){throw PreflightFailure(target,operation,temporary,ex);}
+   finally{if(probe!=null)try{probe.Dispose();}catch{}}
+  }
  }
  public static void Text(string path,string text) { Atomic(path,new UTF8Encoding(false).GetBytes(text)); }
  public static State ReadState(string root) { string p=Safe(root,Folder+"/installed.json"); if(!File.Exists(p)) return null; var s=Json.Deserialize<State>(File.ReadAllText(p)); if(s==null||!String.Equals(Path.GetFullPath(s.root).TrimEnd(Path.DirectorySeparatorChar),Path.GetFullPath(root).TrimEnd(Path.DirectorySeparatorChar),StringComparison.OrdinalIgnoreCase)) throw new Exception("Installation record belongs to another game folder."); foreach(var f in s.files) { Safe(root,f.path); if(f.original!=null) Safe(s.backup,f.original); } return s; }
@@ -201,6 +300,7 @@ public static class Core {
    if(before!=null&&File.Exists(target)&&!before.mutable&&p!=Mod+"pack.ini"&&HashFile(target)!=before.hash&&!(String.Equals(p,CampaignLoader,StringComparison.OrdinalIgnoreCase)&&!loader.ForeignLoader)&&!hotasReplacements.Contains(p)) throw new Exception("An installed file was changed outside this installer. It has been preserved: "+p);
   }
   foreach(var f in oldFiles.Values) if(!wanted.ContainsKey(f.path)&&File.Exists(Safe(root,f.path))&&!f.mutable&&HashFile(Safe(root,f.path))!=f.hash) throw new Exception("An installed file was changed and cannot be removed: "+f.path);
+  PreflightWrites(root,wanted);
   var journal=new Dictionary<string,byte[]>(StringComparer.OrdinalIgnoreCase); Action<string> capture=p=> { if(!journal.ContainsKey(p)) { string t=Safe(root,p); journal[p]=File.Exists(t)?File.ReadAllBytes(t):null; } };
   try {
    foreach(var f in oldFiles.Values) if(!wanted.ContainsKey(f.path)) { capture(f.path); Restore(root,old,f); }

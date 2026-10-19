@@ -1,0 +1,547 @@
+{
+  "brand": "KoreanAIR_AC8_ModPack_2.3",
+  "baseline_native_sha256": "3cb6eca1c036cce8623cb9554933e577f8bab95872d0c6646b78afa0cf0c4ff1",
+  "distribution_native_sha256": "40c3f3e16042913bee599f31f5eb410cd7b937c0599919b83f398ffc7c52a140",
+  "ship_files": [
+    {
+      "path": "pack.ini",
+      "size": 217,
+      "sha256": "8cc3ff9200158a4d72f5aada87ae25e4a1f611da0004390538f5502b50686fc1"
+    },
+    {
+      "path": "config.ini",
+      "size": 1510,
+      "sha256": "b642b54670ab12f46ba25dd7367fd2518a8de93dfbafa34a5db7a884a24149a8"
+    },
+    {
+      "path": "display.ini",
+      "size": 134,
+      "sha256": "bc1cdcee458119925afc2b993f996ac65e0ebebaf6d8f6fdd0c1192e4a3da434"
+    },
+    {
+      "path": "subtitle.ini",
+      "size": 79,
+      "sha256": "7a384b451991c682de3de0521d620133ade70551e7925168c25e1842c5bcb8fe"
+    },
+    {
+      "path": "scripts/ac8_mouse_aim_010.dll",
+      "size": 342016,
+      "sha256": "40c3f3e16042913bee599f31f5eb410cd7b937c0599919b83f398ffc7c52a140"
+    },
+    {
+      "path": "scripts/camera.lua",
+      "size": 3338,
+      "sha256": "6712a2e93ed3301bf815cdfcc526b9570b75bbc3ee133e6fe3e2d3f24fb18387"
+    },
+    {
+      "path": "scripts/display.lua",
+      "size": 13044,
+      "sha256": "a017159c872a4725dcf73c7d2cd4e568f6e0d0cef7deec7c0c8c8e8cb1cf0cea"
+    },
+    {
+      "path": "scripts/frame_profile.lua",
+      "size": 3021,
+      "sha256": "233698aaf6d31663d051e9a1a8684429afea33441691677ee924e741570b2ec8"
+    },
+    {
+      "path": "scripts/gaze.lua",
+      "size": 6575,
+      "sha256": "d82b832819224ce8e39f7235b955e60a6c78cef402c0cba9e7f051464046d581"
+    },
+    {
+      "path": "scripts/gaze_probe.lua",
+      "size": 8201,
+      "sha256": "675b9614ae1046da950671b485035db296c2d0b55ce56749b7fc0b3c22d36d73"
+    },
+    {
+      "path": "scripts/headlook.lua",
+      "size": 2379,
+      "sha256": "1d67b006ab20e545ba71365536e2ba40df73df138cdd1b982b45f3af23256eb4"
+    },
+    {
+      "path": "scripts/ini.lua",
+      "size": 1080,
+      "sha256": "fa62d1fe86b657ce2d8b47415f85ec8200547b70ceebca3a1c7b004f5fa44303"
+    },
+    {
+      "path": "scripts/main.lua",
+      "size": 18872,
+      "sha256": "08ba2cbf9941e4a980eda92717a4399a7b411bde2fb94a0f9d9147d0d3f92d00"
+    },
+    {
+      "path": "scripts/pack.lua",
+      "size": 1196,
+      "sha256": "426a8d414ed5c695499edd133b868d6222f9d218b0aeb861f006e3aeeb3b1bd0"
+    },
+    {
+      "path": "scripts/reticle_target.lua",
+      "size": 9310,
+      "sha256": "3819d5acae0760d24d8dc234b872adef77f6f16ae6e48398753895f25c9016d4"
+    },
+    {
+      "path": "scripts/rig_math.lua",
+      "size": 2033,
+      "sha256": "f66c013f281e83bf32844076a79fd4540d9906b5e874f34b795d3f49d0387ce5"
+    },
+    {
+      "path": "scripts/scene.lua",
+      "size": 9268,
+      "sha256": "f8d3b9e2320605bd6c719c403477372da4a1532c5628130a96349cb35010cdd7"
+    },
+    {
+      "path": "scripts/subtitle.lua",
+      "size": 33815,
+      "sha256": "698ef5ec26218e78fa1340b5b691cb363faf652484e7450201e528b83784a4b6"
+    },
+    {
+      "path": "scripts/target_probe.lua",
+      "size": 2278,
+      "sha256": "029665f69cdaeaa439609503ca9146c3029860328176d1a7038dc2ac1b551396"
+    },
+    {
+      "path": "scripts/upscaler_status.lua",
+      "size": 5824,
+      "sha256": "f53c891d7d72ec0e4ea6e2f353822c2aad4163eb922f3e0bf611f3a6861883d3"
+    }
+  ],
+  "exports": [
+    "ac8_mouseaim_begin",
+    "ac8_mouseaim_camera",
+    "ac8_mouseaim_displayack",
+    "ac8_mouseaim_displaycamera",
+    "ac8_mouseaim_displaypoll",
+    "ac8_mouseaim_frame",
+    "ac8_mouseaim_perf",
+    "ac8_mouseaim_release",
+    "ac8_mouseaim_reload",
+    "ac8_mouseaim_scenelook",
+    "ac8_mouseaim_start",
+    "ac8_mouseaim_targetscore"
+  ],
+  "modified_existing_native_sources": [
+    "src/async_diagnostics.h",
+    "src/display_engine.h",
+    "src/display_math.h",
+    "src/display_runtime.h",
+    "src/display_window.h",
+    "src/geometric_guidance.h",
+    "src/input_trace.h",
+    "src/mouse_aim.cpp",
+    "src/native_camera.h",
+    "src/native_servo.h",
+    "src/native_tracking.h",
+    "src/pose_math.h"
+  ],
+  "new_native_sources": [
+    "src/absolute_hook.h",
+    "src/aim_input_state.h",
+    "src/aim_zoom.h",
+    "src/glyph_overlay.h",
+    "src/hud_render.h",
+    "src/manual_rotation_input.h",
+    "src/mod_keys.h",
+    "src/mouse_counter_state.h",
+    "src/native_headlook.h",
+    "src/native_landing_guard.h",
+    "src/native_maneuver_guard.h",
+    "src/native_player_maneuver.h",
+    "src/native_profile.h",
+    "src/native_psm_admission.h",
+    "src/native_raw_input.h",
+    "src/overlay_refresh.h",
+    "src/overlay_update_policy.h",
+    "src/pack_features.h",
+    "src/raw_mouse_worker.h",
+    "src/scene_mouse.h"
+  ],
+  "unchanged_native_sources": [
+    "src/actuator_map.h",
+    "src/camera_probe.cpp",
+    "src/camera_projection.h",
+    "src/coupled_pursuit.h",
+    "src/flight_math.h",
+    "src/free_look.h",
+    "src/input_lifecycle.h",
+    "src/lua_bridge.h",
+    "src/native_actuator.h",
+    "src/native_attenuation.h",
+    "src/native_extra_rotation.h",
+    "src/native_orientation.h",
+    "src/native_response.h",
+    "src/recorded_response.h",
+    "src/terminal_vector.h",
+    "src/ue4ss_lua.def",
+    "src/vendor/minhook/include/MinHook.h",
+    "src/vendor/minhook/LICENSE.txt",
+    "src/vendor/minhook/src/buffer.c",
+    "src/vendor/minhook/src/buffer.h",
+    "src/vendor/minhook/src/hde/hde32.c",
+    "src/vendor/minhook/src/hde/hde32.h",
+    "src/vendor/minhook/src/hde/hde64.c",
+    "src/vendor/minhook/src/hde/hde64.h",
+    "src/vendor/minhook/src/hde/pstdint.h",
+    "src/vendor/minhook/src/hde/table32.h",
+    "src/vendor/minhook/src/hde/table64.h",
+    "src/vendor/minhook/src/hook.c",
+    "src/vendor/minhook/src/trampoline.c",
+    "src/vendor/minhook/src/trampoline.h",
+    "src/vendor/ue4ss/LICENSE",
+    "src/vendor/ue4ss/LuaMadeSimple.hpp",
+    "src/yaw_signature.h"
+  ],
+  "exact_preserved_native_functions": [
+    "read_live_basis",
+    "find_hook",
+    "sample_native_response",
+    "sample_extra_diagnostics",
+    "sample_response_sync"
+  ],
+  "exact_preserved_control_math_files": [
+    "flight_math.h",
+    "actuator_map.h",
+    "native_response.h",
+    "input_lifecycle.h",
+    "camera_projection.h"
+  ],
+  "controller_math_unchanged": false,
+  "manual_pitch_allocation_changed": true,
+  "ordinary_automatic_guidance_unchanged": false,
+  "native_input_provenance_changed": true,
+  "native_instruction_evidence": [
+    {
+      "path": "build/native_raw_capture_evidence.json",
+      "sha256": "b42e9c53c84f24a6aa709e38861190de506dfbe236a5b1757101c9f66243e191",
+      "checks": 46,
+      "scope": "Pinned EXE read-only; exact native mapper, exact relocated prefix, exact full native admission in synthetic memory. Caller fingerprints verify direct synchronous order. No complete flight physics, game process, live device sampling or live Cobra success claim."
+    },
+    {
+      "path": "build/native_player_maneuver_evidence.json",
+      "sha256": "1a32eda5098f7a3bc9241621277093f9983a9bd646c313ac3284edd4bf622bc8",
+      "checks": 31,
+      "scope": "Unmodified full native admission and native phase prefix; synthetic memory/settings, no orientation helpers or live flight. EXE opened read-only; no game process or file writes."
+    }
+  ],
+  "flight_handling_changed": true,
+  "offline_launch_marker_required": true,
+  "default_diagnostics": "off",
+  "general_graphics_overrides": false,
+  "frame_generation_startup_setting": true,
+  "frame_generation_default_request": "inherit",
+  "frame_generation_preserves_existing_user_intent": true,
+  "frame_generation_force_on_by_default": false,
+  "tests": [
+    {
+      "name": "feature_flags_test",
+      "passed": true,
+      "log": "build/feature_flags_test.txt"
+    },
+    {
+      "name": "input_lifecycle_test",
+      "passed": true,
+      "log": "build/input_lifecycle_test.txt"
+    },
+    {
+      "name": "display_geometry_test",
+      "passed": true,
+      "log": "build/display_geometry_test.txt"
+    },
+    {
+      "name": "display_projection_test",
+      "passed": true,
+      "log": "build/display_projection_test.txt"
+    },
+    {
+      "name": "camera_projection_r430_test",
+      "passed": true,
+      "log": "build/camera_projection_r430_test.txt"
+    },
+    {
+      "name": "free_look_test",
+      "passed": true,
+      "log": "build/free_look_test.txt"
+    },
+    {
+      "name": "scene_mouse_test",
+      "passed": true,
+      "log": "build/scene_mouse_test.txt"
+    },
+    {
+      "name": "native_tracking_modes_test",
+      "passed": true,
+      "log": "build/native_tracking_modes_test.txt"
+    },
+    {
+      "name": "native_response_test",
+      "passed": true,
+      "log": "build/native_response_test.txt"
+    },
+    {
+      "name": "native_maneuver_guard_test",
+      "passed": true,
+      "log": "build/native_maneuver_guard_test.txt"
+    },
+    {
+      "name": "native_player_maneuver_test",
+      "passed": true,
+      "log": "build/native_player_maneuver_test.txt"
+    },
+    {
+      "name": "native_raw_input_test",
+      "passed": true,
+      "log": "build/native_raw_input_test.txt"
+    },
+    {
+      "name": "native_raw_hook_startup_test",
+      "passed": true,
+      "log": "build/native_raw_hook_startup_test.txt"
+    },
+    {
+      "name": "manual_pitch_allocation_test",
+      "passed": true,
+      "log": "build/manual_pitch_allocation_test.txt"
+    },
+    {
+      "name": "hud_render_test",
+      "passed": true,
+      "log": "build/hud_render_test.txt"
+    },
+    {
+      "name": "overlay_update_policy_test",
+      "passed": true,
+      "log": "build/overlay_update_policy_test.txt"
+    },
+    {
+      "name": "guidance_objective_test",
+      "passed": true,
+      "log": "build/guidance_objective_test.txt"
+    },
+    {
+      "name": "guidance_baseline_test",
+      "passed": true,
+      "log": "build/guidance_baseline_test.txt"
+    },
+    {
+      "name": "full_pipeline_ownership_test",
+      "passed": true,
+      "log": "build/full_pipeline_ownership_test.txt"
+    },
+    {
+      "name": "zoom_projection_compare_test",
+      "passed": true,
+      "log": "build/zoom_projection_compare_test.txt"
+    },
+    {
+      "name": "aim_zoom_test",
+      "passed": true,
+      "log": "build/aim_zoom_test.txt"
+    },
+    {
+      "name": "native_zoom_camera_test",
+      "passed": true,
+      "log": "build/native_zoom_camera_test.txt"
+    },
+    {
+      "name": "absolute_processor_hook_test",
+      "passed": true,
+      "log": "build/absolute_processor_hook_test.txt"
+    },
+    {
+      "name": "lua_feature_lifecycle_test",
+      "passed": true,
+      "log": "build/lua_feature_lifecycle_test.txt"
+    },
+    {
+      "name": "lua_dependency_test",
+      "passed": true,
+      "log": "build/lua_dependency_test.txt"
+    },
+    {
+      "name": "lua_camera_modes_test",
+      "passed": true,
+      "log": "build/lua_camera_modes_test.txt"
+    },
+    {
+      "name": "lua_display_cinematic_test",
+      "passed": true,
+      "log": "build/lua_display_cinematic_test.txt"
+    },
+    {
+      "name": "lua_headlook_test",
+      "passed": true,
+      "log": "build/lua_headlook_test.txt"
+    },
+    {
+      "name": "lua_subtitle_lifecycle_test",
+      "passed": true,
+      "log": "build/lua_subtitle_lifecycle_test.txt"
+    },
+    {
+      "name": "lua_subtitle_test",
+      "passed": true,
+      "log": "build/lua_subtitle_test.txt"
+    },
+    {
+      "name": "native_landing_guard_test",
+      "passed": true,
+      "log": "build/native_landing_guard_test.txt"
+    },
+    {
+      "name": "lua_upscaler_status_test",
+      "passed": true,
+      "log": "build/lua_upscaler_status_test.txt"
+    },
+    {
+      "name": "lua_display_resolution_lifecycle_test",
+      "passed": true,
+      "log": "build/lua_display_resolution_lifecycle_test.txt"
+    },
+    {
+      "name": "overlay_refresh_test",
+      "passed": true,
+      "log": "build/overlay_refresh_test.txt"
+    },
+    {
+      "name": "glyph_overlay_test",
+      "passed": true,
+      "log": "build/glyph_overlay_test.txt"
+    },
+    {
+      "name": "aim_input_state_test",
+      "passed": true,
+      "log": "build/aim_input_state_test.txt"
+    },
+    {
+      "name": "mouse_counter_state_test",
+      "passed": true,
+      "log": "build/mouse_counter_state_test.txt"
+    },
+    {
+      "name": "raw_mouse_worker_test",
+      "passed": true,
+      "log": "build/raw_mouse_worker_test.txt"
+    },
+    {
+      "name": "lua_frame_profile_test",
+      "passed": true,
+      "log": "build/lua_frame_profile_test.txt"
+    },
+    {
+      "name": "native_psm_admission",
+      "passed": true,
+      "evidence": "tests/native_psm_admission_evidence.json",
+      "scope": "Complete native instructions and extracted production provenance in synthetic memory; no game process, trajectory or live-flight claim."
+    },
+    {
+      "name": "native_psm_windows_abi",
+      "passed": true,
+      "evidence": "tests/native_psm_abi_build/evidence.json",
+      "scope": "Real Windows GP/XMM/flags/helper/cloned-admission execution and RtlVirtualUnwind of actual single-step contexts; pinned native bytes and synthetic memory. No game process or live-flight quality claim."
+    }
+  ],
+  "aim_shape": "fixed_circle",
+  "crosshair_styles": 5,
+  "automatic_config_reload_ms": 250,
+  "limitations": [
+    "Actual-goal guidance, body-lift allocation, input ownership and aim zoom changed; not live mission-piloted.",
+    "Pinned native instruction tests use synthetic memory and do not establish live Cobra flight success.",
+    "Triple span needs equal-size aligned monitors.",
+    "Module selection is startup-only; controls, HUD and mod keys reload within 250ms."
+  ],
+  "manual_axis_allocation_evidence": {
+    "path": "build/manual_pitch_allocation_evidence.json",
+    "sha256": "b2183d96285e490898512cd8927286185a44224be79c17502e11f3387947b25e",
+    "checks": {
+      "stationary": 84,
+      "arbitrary": 240,
+      "lateral": 112,
+      "lateral_descent": 480,
+      "fallback": 240,
+      "baseline_spurious": 7,
+      "wingtip_ties": 2,
+      "roll_rate_damping": 2,
+      "held_native_axes_exact": true,
+      "ordinary_bounded": 780
+    },
+    "scope": "Actual runtime headers with synthetic native q/S/quaternion fixtures. Free yaw/roll descend only lateral pitch-plane error while pitch is owned; held native pitch/roll transitions remain exact. Ordinary side-axis geometry and bounded outputs remain valid with restored r4.31 native path planning. No game process, live flight, or live Cobra success claim."
+  },
+  "guidance_regression_evidence": {
+    "path": "build/guidance_regression_evidence.json",
+    "sha256": "e94db5df70ee4618d6c20ae7b8408c8e89af72b8ed6dc93cdbb5834e14e3c0cf",
+    "checks": [
+      "216 native controller snapshots, ordinary commands/plans/next-S exactly match original r4.31 across sync/fallback, both turn signs, bank, motion rate and positive/negative/neutral warmed native response.",
+      "Both native planners retain full useful elevator for +/-20-degree pitch,35-degree yaw targets.",
+      "Actual live native planner at120/240Hz retains motion between60Hz publications; first new unchanged publication zeroes goal rate and every trajectory target equals current aim.",
+      "Recorded neutral-release travel remains finite; a warmed positive native response still receives braking before aim crossing.",
+      "Near180-degree maneuver retains full roll authority; tiny forward residual does not command bank flip.",
+      "Manual pitch allocation, direct keyboard-axis response preservation and ordinary side geometry regression passes."
+    ],
+    "scope": "Direct compiled runtime/source baseline comparisons and native-stage fixtures; no post-change game flight or zero-overshoot claim.",
+    "baseline": {
+      "identity": "Immutable responsive Native-Slew-Path-Servo r4.31 source comparison; original public1.0 payload independently identifies the same controller revision family, not proven exact source/binary identity.",
+      "source_sha256": {
+        "geometric_guidance.h": "55a1cb3f7ab10db64e717dbe7d2a9464e7572ff4716cc34bc12a8939a3d5617a",
+        "native_tracking.h": "a430c5f84a0d666066277609b641aa9a967d977847fba9b4b0b83efee6fdc875",
+        "native_servo.h": "3eaa9ec95233cb146b53c2aee5faeabdf7ca8becefce072b09912daba5176d3c",
+        "pose_math.h": "c6f55b9fe9e13f061cb8b41131be5a7b455c894e75a4fe763140ec57d6bbc3a6"
+      },
+      "fixture_sha256": {
+        "r431_geometric_guidance.h": "eeca23c29e659f655548616366bdccff3f4b1a2bc896859ac8dc90b21ad0d304",
+        "r431_native_servo.h": "13df1f891eaedd56ea8521066f0f5990272832181bb4cfc65d7a57cadd59839e",
+        "r431_native_tracking.h": "5ee8d5a571262eae18917c920ea128692cefe1b15ce7cc8fba330486eefb38e5"
+      },
+      "fixture_transform": "Original content retained; only include paths and namespace change for co-compilation.",
+      "original_public_1_0_payload": {
+        "setup": "build/KoreanAIR_AC8_ModPack_1.0_Setup.exe",
+        "setup_sha256": "609132ecf7586a3b67f8f5dee5c1d7ef2c3c55b785377def7a6967c41b3a2f85",
+        "archive_member": "payload/Game/Binaries/Win64/UE4SS/Mods/AC8MouseAim/Scripts/ac8_mouse_aim_010.dll",
+        "native_bytes": 221184,
+        "native_sha256": "8a55cb69ea205570475840129033a25ceeda4c16924090af32d74369bb009b2c",
+        "embedded_revision_strings": [
+          "TargetUpdate r4.31",
+          "ready: Display r4.34 / Native-Slew-Path-Servo r4.31"
+        ],
+        "revision_family_confirmed": true,
+        "exact_source_binary_identity_proven": false,
+        "scope": "Read directly from the original1.0 setup embedded ZIP. Revision strings corroborate r4.31 controller family; distinct binary hashes or matching strings do not prove exact historical source/compiled-code identity."
+      }
+    }
+  },
+  "native_raw_hook_startup_evidence": {
+    "path": "build/native_raw_hook_startup_evidence.json",
+    "sha256": "93677508710673af28c03aaf1bab962fad3ca462f4522d1dde4b1a57336d806a",
+    "checks": 1253,
+    "scope": "Standalone synthetic Windows memory and bundled MinHook. No game process inspected or operated; no production source/build file modified."
+  },
+  "target_selection_candidate": {
+    "build": 2026101502,
+    "native_hit_center": true,
+    "single_selection_snapshot": true,
+    "evidence": "../tests/target_selection_1502/preservation.json",
+    "gameplay_tested": false,
+    "prior_full_source_evidence_applies_via_preservation": true
+  },
+  "local_candidate_1503": {
+    "alt_manual_takeover": true,
+    "replay_debrief_projection": true,
+    "independent_mouse_worker_identity_from_release": true,
+    "existing_target_selection_preserved": true,
+    "published": false,
+    "owner_test_pending": true
+  },
+  "local_candidate_1504": {
+    "published": false,
+    "changes": [
+      "Immediate input with final native camera axes",
+      "Bounded cosmetic camera compensation at display refresh",
+      "Target selection uses last presented circle center"
+    ]
+  },
+  "local_candidate_1505": {
+    "published": false,
+    "changes": [
+      "All owned active ReplayPawn camera families",
+      "Persistent interactive mouse headlook",
+      "Constructor-based sequence discovery during cinematics"
+    ]
+  }
+}
