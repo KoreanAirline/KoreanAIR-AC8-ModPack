@@ -155,18 +155,49 @@ public static class ReleasePayload {
 public sealed class UpdateManifest {
  public int schema; public string version; public long build; public string tag;
  public string installer; public string sha256; public long size;
+ // Optional plain text. Existing schema-1 feeds without notes remain valid.
+ public string notes_en,notes_ko;
 }
 public static class UpdateCore {
  public const string Repository="KoreanAirline/KoreanAIR-AC8-ModPack";
  public const string Feed="https://github.com/"+Repository+"/releases/latest/download/update.json";
  const long MaximumInstaller=128L*1024*1024;
  static readonly UTF8Encoding Utf8=new UTF8Encoding(false,true);
+ public static string ReleaseLabel(string version,long build) {
+  Version parsed;
+  if(!Version.TryParse(version,out parsed)||parsed.Major<1||parsed.Build!=-1||build<0)return "Unknown";
+  return version+(build>0?" · b"+build:"");
+ }
+ static bool ValidNotes(string notes) {
+  if(notes==null)return true;
+  if(notes.Length>8000)return false;
+  foreach(char c in notes)if(Char.IsControl(c)&&c!='\r'&&c!='\n'&&c!='\t')return false;
+  return true;
+ }
+ public static string Notes(UpdateManifest manifest,bool korean) {
+  if(manifest==null)return null;
+  string text=korean?manifest.notes_ko:manifest.notes_en;
+  if(String.IsNullOrWhiteSpace(text))text=korean?manifest.notes_en:manifest.notes_ko;
+  return ValidNotes(text)&&!String.IsNullOrWhiteSpace(text)?text:null;
+ }
+ public static string CurrentReleaseNotes(bool korean) {
+  return korean?
+   "• 설치된 버전·빌드와 업데이트 내역을 런처에서 확인할 수 있습니다.\r\n\r\n"+
+   "• 모니터 3대를 직접 선택하고 간격·해상도 차이를 포함한 전체 영역으로 확장할 수 있습니다. 표시할 영역과 배치 차이를 화면에서 확인할 수 있습니다.\r\n\r\n"+
+   "• 확인된 IoStoreLoaderMod와 로더를 공유하는 설치 경로를 추가했습니다. 다른 모드 파일과 로드 순서를 보존합니다.\r\n\r\n"+
+   "• 지원 게임 버전과 설치 파일은 적용 전에 검사합니다. 기체 추가 모드와 조합한 실제 비행 검증은 별도로 필요합니다.":
+   "• The launcher shows the installed version/build, update transition and changes.\r\n\r\n"+
+   "• Select three displays and span their complete area, including gaps and different sizes. The launcher shows the game area and layout differences.\r\n\r\n"+
+   "• Added an installation path that shares the recognized IoStoreLoaderMod. Other mod files and load order are preserved.\r\n\r\n"+
+   "• Supported game versions and installed files are checked before applying changes. Actual flight with aircraft add-ons still needs separate verification.";
+ }
  public static UpdateManifest Parse(string json) {
   if(json==null||json.Length>65536)throw new InvalidDataException("Invalid update information.");
   var m=Core.Json.Deserialize<UpdateManifest>(json);Version version;
   if(m==null||m.schema!=1||!Version.TryParse(m.version,out version)||version.Major<1||version.Build!=-1||m.build<=0||
      m.tag!="v"+m.version+"-b"+m.build||m.installer!="KoreanAIR_AC8_ModPack_"+m.version+"_Setup.exe"||
-     m.size<1024||m.size>MaximumInstaller||m.sha256==null||!Regex.IsMatch(m.sha256,"^[a-f0-9]{64}$"))
+     m.size<1024||m.size>MaximumInstaller||m.sha256==null||!Regex.IsMatch(m.sha256,"^[a-f0-9]{64}$")||
+     !ValidNotes(m.notes_en)||!ValidNotes(m.notes_ko))
    throw new InvalidDataException("Invalid update information.");
   return m;
  }

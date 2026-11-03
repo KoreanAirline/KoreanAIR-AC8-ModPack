@@ -67,6 +67,27 @@ if options.payload_zip:
     raise SystemExit(0)
 if G is None:parser.error('Full payload rebuild requires --game-root or AC8_GAME_ROOT. Use --launcher-only or --payload-zip with release sources.')
 if not (D/'runtime/payload_manifest.json').is_file():parser.error('Prepared runtime and campaign payloads are required. See BUILDING.md or use --payload-zip.')
+native_sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+def verified_campaign_loader(distribution,identity):
+    folder=distribution/'campaign-loader'
+    verified=json.loads((folder/'build/loader_identity.json').read_text(encoding='utf-8'))
+    assert verified['passed'] and (verified['version'],verified['build'])==(identity['version'],identity['build']),'Rebuild the campaign loader for this release identity.'
+    paths=[p for p in folder.iterdir()if p.is_file()and p.suffix in('.h','.cpp','.def','.cmd','.py')]
+    paths.extend(p for p in (distribution/'runtime/src/vendor/minhook').rglob('*')if p.is_file()and p.suffix in('.h','.c'))
+    current={p.relative_to(distribution).as_posix():native_sha(p)for p in sorted(paths)}
+    assert verified['source_sha256']==current,'Campaign loader sources changed after build; rebuild the loader.'
+    dll=folder/'build/dinput8.dll'
+    assert verified['dll_sha256']==native_sha(dll),'Campaign loader DLL changed after its verified build.'
+    assert verified['abi_sha256']==native_sha(folder/'ABI_AND_GUARDS.json'),'Campaign executable guards changed after build; rebuild the loader.'
+    proof=json.loads((folder/'ABI_AND_GUARDS.json').read_text(encoding='utf-8'))
+    assert proof['game']['sha256']==verified['game_sha256'],'Campaign game identity does not match its verified guards.'
+    assert proof['approved_pak']['sha256']==verified['approved_pak_sha256']==native_sha(distribution/'campaign-source/rebuilt.pak'),'Campaign PAK does not match its verified loader.'
+    required={'policy_tests.txt','forwarder_tests.txt','hash_tests.txt','hash_approved_pak.txt','detour_tests.txt'}
+    assert set(verified['test_sha256'])==required,'Campaign verification is incomplete.'
+    for name,expected in verified['test_sha256'].items():
+        assert native_sha(folder/'build'/name)==expected,'Campaign verification changed: '+name
+    return dll
+campaign_loader=verified_campaign_loader(D,release)
 files=[];data={}
 def add(path,content,group='common',mutable=False):
     if isinstance(content,Path):content=content.read_bytes()
@@ -84,9 +105,7 @@ for f in runtime['ship_files']:
     add(mod+('Scripts/'+path[8:] if path.startswith('scripts/') else path),content,'runtime',path in ('config.ini','display.ini','subtitle.ini'))
 for path in ['Game/Binaries/Win64/dwmapi.dll','Game/Binaries/Win64/override.txt','Game/Binaries/Win64/UE4SS/UE4SS.dll','Game/Binaries/Win64/UE4SS/UE4SS-settings.ini','Game/Binaries/Win64/UE4SS/UE4SS_SDK_Backends/UE4SS.json']:
     add(path,G/path,'runtime',path.endswith('UE4SS-settings.ini'))
-loader=D/'campaign-loader/build/dinput8.dll'
-if not loader.exists():loader=D/'campaign-loader/dinput8.dll'
-add('Game/Binaries/Win64/dinput8.dll',loader,'campaign')
+add('Game/Binaries/Win64/dinput8.dll',campaign_loader,'campaign')
 campaign_pak=D/'campaign-source/rebuilt.pak'
 campaign_source=json.loads((D/'campaign-source/release_source_manifest.json').read_text(encoding='utf-8'))
 assert campaign_pak.stat().st_size==campaign_source['release_pak_size']

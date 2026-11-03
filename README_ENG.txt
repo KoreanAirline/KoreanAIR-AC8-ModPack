@@ -1,31 +1,34 @@
-KoreanAIR_AC8_ModPack_2.3
-English user guide
+KoreanAIR_AC8_ModPack_2.4
+English user guide — build 2026110301
 
 INSTALL AND PLAY
 
 1. Start ACE COMBAT 8 normally through Steam at least once, then close the game.
 2. Extract the complete ZIP, keeping Payload.zip beside the installer, then run
-   KoreanAIR_AC8_ModPack_2.3_Setup.exe. Select the game folder containing
+   KoreanAIR_AC8_ModPack_2.4_Setup.exe. Select the game folder containing
    start_protected_game.exe, then choose the modules and click Install / Update.
-3. Open KoreanAIR_AC8_ModPack_2.3.exe in the game folder. Keep Steam open and
+3. Open KoreanAIR_AC8_ModPack_2.4.exe in the game folder. Keep Steam open and
    choose Play with selected mods.
 
 The standalone installer downloads the matching verified mod files when needed.
 
 Close the game before installing, removing or changing modules. A writable Steam
 library does not need administrator rights; a protected folder may require running
-Setup as administrator. The supported executable has timestamp 0x6AA0E27D and
-image size 0x2195A000. Installation/launch rejects unsupported game updates.
+Setup as administrator. The inspected executable has timestamp 0x6AD2D0A7 and
+image size 0x215A2000. A different game build receives an unverified-version
+warning. Its version alone does not prevent installation or launch; native
+features still require matching code guards and may stay inactive after updates.
 
 If your installed launcher does not have an update banner, run the latest installer
 once without uninstalling. Your settings are preserved.
 
-If another mod uses Game/Binaries/Win64/dinput8.dll, the installer warns you before
-changing files. Choose Yes to install without Korean campaign subtitles; the
-existing loader and other mod files are preserved, and your selected Mouse flight
-and Screen options remain available. To add Korean campaign subtitles later,
-remove the conflicting loader yourself, then use Change installed modules on
-the launcher's Installation tab. Playing alongside other mods has not been verified.
+An installed, enabled ACE8 Mod Loader / IoStoreLoaderMod 1.3.1 with the recognized
+shared UE4SS files can load the Korean campaign archive as well. Setup uses that
+one loader and removes only this pack's previous campaign hook. See OTHER MODS
+below. An unknown dinput8.dll or runtime is preserved and reported; Setup does
+not overwrite it to force compatibility. If only the campaign loader conflicts,
+you may install without Korean campaign translation while keeping Mouse flight
+and Screen options with a recognized runtime.
 
 UPDATES
 
@@ -33,6 +36,9 @@ The launcher checks for updates every time you open it. An available update appe
 in a prominent banner at the top. Close the game, then choose Update now. The launcher
 downloads and verifies the update, applies it and restarts. A newer bug-fix build can
 keep the same displayed version number; these updates also appear in the banner.
+The banner shows the installed version/build and the offered version/build.
+After updating, the installed banner retains the previous-to-current transition.
+Choose What's changed to read the matching English or Korean update notes.
 
 Updates preserve your selected modules, saved INI settings, controls and keybindings,
 HUD and crosshair settings, aim zoom, FOV and camera settings, frame generation
@@ -180,9 +186,20 @@ Automatic detection uses three adjacent equal-resolution displays, including the
 Windows main display. Different refresh rates and additional displays are allowed.
 Use manual selection to choose the game left, centre and right displays, even when
 the Windows main display is elsewhere. The diagram shows the actual desktop layout;
-it does not rearrange Windows displays. The selected three must touch side by side
-with equal heights/resolutions and aligned top/bottom edges. Use Windows display
-settings to correct a gap or misalignment, then Refresh monitor detection.
+it does not rearrange Windows displays. With five displays, only the three chosen
+game displays determine the manual span; the other two displays' resolution or
+refresh rate does not disqualify that selection.
+
+Include gaps and different screen sizes is on by default in manual selection.
+It spans one rectangle
+covering your selected displays, allowing different sizes, gaps and vertical
+offsets. The launcher shows the physical pixel bounds and any gaps/overlaps.
+That rectangle may include desktop space between displays or outside their edges;
+an irregular Windows arrangement cannot become a continuous physical screen.
+Turn this option off to require three equal-resolution displays touching side by
+side with aligned top/bottom edges. If needed, arrange them in Windows and refresh
+detection. Send a Support report if the selected area is incorrect. The individual
+five-display reporter's original PC-specific cause has not been confirmed.
 For Surround or a single ultrawide surface, leave triple span off and choose its
 native wide resolution in the game.
 
@@ -236,6 +253,8 @@ The mod launcher uses the game's offline Null-client configuration. Modules are
 for offline play. Before standard or online play, close the game, choose Disable
 pack for standard play on the Play tab, then start the game normally in Steam.
 This parks this pack's loaders and subtitle archive outside the active game paths.
+In recognized shared-loader mode, it parks this pack's entry script and subtitle
+archive while retaining the external loader and runtime needed by other mods.
 Check other installed mods yourself before online play. Resume mod pack enables
 this pack again for offline play.
 
@@ -249,6 +268,33 @@ stops and preserves it instead of deleting it.
 
 Recoverable migration/original-file backups are stored outside the game folder:
 %LocalAppData%\KoreanAIR_AC8_ModPack\Backups
+
+OTHER MODS / ACE8 MOD LOADER
+
+Download ACE8 Mod Loader 1.3.1 separately from its author and follow its installation
+instructions: https://www.nexusmods.com/acecombat8wingsoftheve/mods/64
+The third-party loader is not included in this pack. Once its IoStoreLoaderMod is
+installed and enabled, close the game and run this pack's Setup over your existing
+installation. Setup recognizes only the inspected loader and shared runtime files.
+In this mode there is one archive-loading owner: IoStoreLoaderMod loads the Korean
+campaign PAK and this pack omits its own campaign constructor hook. Existing mod
+folders, runtime settings and load-order entries are preserved.
+
+Keep KoreanAIRCampaign enabled in IoStoreLoaderMod's loadorder.txt if you use the
+translation. An explicit disabled entry is reported rather than silently changed.
+Updating or removing this pack does not remove that external loader, its runtime
+or its other mod folders. Changes to unknown shared DLLs are reported for review;
+they are not treated as compatible merely because their filenames match.
+
+Use this pack's launcher for its offline mod play. Do not use two launchers to
+repeatedly move or replace the same shared files. A third-party manager's Unmodded
+mode may move the whole UE4SS tree; restore that manager's modded files before
+resuming this pack. Disabling this pack alone does not disable external mods.
+
+FALKEN Add On 1.0.3 was checked for package files, imports and loader structure.
+It needs IoStoreLoaderMod for its new assets. Combined in-game FALKEN flight has
+not been verified. This compatibility path is limited to the recognized files;
+arbitrary aircraft, camera or flight-controller mods are not guaranteed compatible.
 
 
 AC8HOTAS / ANALOGUE YAW

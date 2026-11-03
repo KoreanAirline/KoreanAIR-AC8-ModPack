@@ -29,7 +29,8 @@ partial class Launcher : Form {
     else if(args[0]=="--verify") {
      Core.VerifyGame(r);var s=Core.ReadState(r);if(s==null)throw new Exception("Missing installation");
      foreach(var f in s.files.Where(x=>!x.mutable)) {
-      string p=Core.Safe(r,s.suspended&&(f.path.EndsWith("/dinput8.dll")||f.path.EndsWith("/dwmapi.dll")||f.path.EndsWith("/pakchunk0-Windows_999_P.pak"))?Core.Folder+"/Disabled/"+f.path:f.path);
+      bool parked=s.suspended&&(f.path.EndsWith("/dinput8.dll")||f.path.EndsWith("/dwmapi.dll")||f.path.EndsWith("/pakchunk0-Windows_999_P.pak")||(s.sharedRuntime&&f.path==Core.Mod+"Scripts/main.lua"));
+      string p=Core.Safe(r,parked?Core.Folder+"/Disabled/"+f.path:f.path);
       if(!File.Exists(p)||Core.HashFile(p)!=f.hash)throw new Exception("Changed file: "+f.path);
      }
     } else throw new Exception("Invalid command line.");
@@ -88,11 +89,13 @@ partial class Launcher : Form {
   var installed=Paragraph(hero,"","");installed.Tag="accent";
   ui.Bind(installed,()=>ui.T("Installed: ","설치된 기능: ")+String.Join(" · ",new[]{state.campaign?ui.T("Korean subtitles","한국어 자막"):null,state.mouse?ui.T("Mouse flight","마우스 조종"):null,state.display?ui.T("Screen & camera","화면·카메라"):null}.Where(x=>x!=null)));
   Paragraph(hero,"Open Steam before playing. This launch uses offline mode.","Steam을 켠 상태에서 실행하세요. 모드는 오프라인 플레이로 실행됩니다.");
-  var launch=Button(Actions(hero),"playMods","Play with selected mods","선택한 모드로 게임 실행",()=>{Core.Launch(root);Status("Game launch requested.","게임 실행을 요청했습니다.");RefreshMode();});launch.MinimumSize=new Size(260,48);launch.Font=new Font("Segoe UI",11,FontStyle.Bold);
+  if(!Core.IsTestedGame(root))Paragraph(hero,"This game update has not been verified with this mod build. Some features may not work until a mod update is available. Version numbers do not block installation or launch; native code checks still protect each feature.","현재 게임 업데이트는 이 모드 빌드에서 아직 검증하지 않았습니다. 모드 업데이트 전까지 일부 기능이 작동하지 않을 수 있습니다. 버전 번호 때문에 설치·실행을 막지는 않으며, 기능별 실제 코드 검사는 유지됩니다.");
+  var launch=Button(Actions(hero),"playMods","Play with selected mods","선택한 모드로 게임 실행",()=>{if(!Core.IsTestedGame(root))Dialog(ui.T("This game update has not been verified yet. Some mod features may not work until the mod is updated. Launch will continue; unmatched native functions are not modified.","아직 이 게임 업데이트에 맞춘 모드 검증이 끝나지 않았습니다. 업데이트 전까지 일부 모드 기능이 작동하지 않을 수 있습니다. 게임 실행은 계속하며, 실제 코드가 맞지 않는 기능은 적용하지 않습니다."),MessageBoxIcon.Warning);Core.Launch(root);Status("Game launch requested.","게임 실행을 요청했습니다.");RefreshMode();});launch.MinimumSize=new Size(260,48);launch.Font=new Font("Segoe UI",11,FontStyle.Bold);
   var standard=Card(p);var heading=new Label{AutoSize=true,Font=new Font("Segoe UI",12,FontStyle.Bold),Margin=new Padding(0,0,0,8)};ui.Bind(heading,"Standard & online play","기본·온라인 플레이");Row(standard,heading);
-  Paragraph(standard,"For standard / online play, disable this pack before opening the game in Steam.\nThis removes this pack's loaders and subtitle archive from active game paths.","기본·온라인 플레이는 아래 버튼으로 모드를 끈 뒤 Steam에서 실행하세요.\n이 모드의 로더와 자막 파일을 게임이 읽는 위치에서 제외합니다.");
-  var toggle=Button(Actions(standard),"standardPlay","","",()=>{Core.Suspend(root,!Core.ReadState(root).suspended);state=Core.ReadState(root);Status(state.suspended?"Pack disabled. Open the game normally in Steam.":"Pack enabled for offline launch.",state.suspended?"모드를 껐습니다. Steam에서 게임을 실행하세요.":"오프라인 모드 실행을 사용할 수 있습니다.");RefreshMode();});
-  ui.Bind(toggle,()=>state.suspended?ui.T("Resume mod pack","모드 다시 사용"):ui.T("Disable pack for standard play","기본·온라인 플레이용 모드 끄기"));
+  if(state.sharedRuntime)Paragraph(standard,"This installation shares a loader with other mods. This button disables only KoreanAIR controls, display and subtitles; the shared loader and other mods remain installed.\nUse your other mod manager to disable all mods before standard / online play.","다른 모드와 로더를 공유 중입니다. 아래 버튼은 KoreanAIR 조종·화면·자막만 끄며 공용 로더와 다른 모드는 보존합니다.\n기본·온라인 플레이 전에는 사용하는 모드 관리자에서 나머지 모드도 모두 꺼 주세요.");
+  else Paragraph(standard,"For standard / online play, disable this pack before opening the game in Steam.\nThis removes this pack's loaders and subtitle archive from active game paths.","기본·온라인 플레이는 아래 버튼으로 모드를 끈 뒤 Steam에서 실행하세요.\n이 모드의 로더와 자막 파일을 게임이 읽는 위치에서 제외합니다.");
+  var toggle=Button(Actions(standard),"standardPlay","","",()=>{Core.Suspend(root,!Core.ReadState(root).suspended);state=Core.ReadState(root);if(state.sharedRuntime&&state.suspended)Status("KoreanAIR features disabled. Other mods remain active.","KoreanAIR 기능을 껐습니다. 다른 모드와 공용 로더는 유지됩니다.");else Status(state.suspended?"Pack disabled. Open the game normally in Steam.":"Pack enabled for offline launch.",state.suspended?"모드를 껐습니다. Steam에서 게임을 실행하세요.":"오프라인 모드 실행을 사용할 수 있습니다.");RefreshMode();});
+  ui.Bind(toggle,()=>state.suspended?ui.T("Resume mod pack","모드 다시 사용"):state.sharedRuntime?ui.T("Disable KoreanAIR features only","KoreanAIR 기능만 끄기"):ui.T("Disable pack for standard play","기본·온라인 플레이용 모드 끄기"));
  }
  TableLayoutPanel Card(TableLayoutPanel parent){var card=new TableLayoutPanel{AutoSize=true,AutoSizeMode=AutoSizeMode.GrowAndShrink,ColumnCount=1,Padding=new Padding(18,16,18,10),Margin=new Padding(0,0,0,16),Tag="card"};card.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));Row(parent,card);return card;}
  void ControlsTab(){
@@ -112,7 +115,11 @@ partial class Launcher : Form {
  void RefreshMode(){state=Core.ReadState(root);ui.Change(ui.Language,false);}
  string Geometry(out bool ok){var layout=DisplayTopology.ReadPhysical();ok=layout.CanSpan;return Geometry(layout);}
  string Geometry(DisplayTopology.Layout layout){
-  if(layout.CanSpan)return ui.T("Three aligned displays: ","정렬된 모니터 3대: ")+layout.SpanBounds.Width+" × "+layout.SpanBounds.Height+ui.T(". These three displays form the game view.",". 이 모니터 3대에 게임 화면을 표시합니다.");
+  if(layout.CanSpan){var b=layout.SpanBounds;string area=ui.T("Game area: ","게임 표시 영역: ")+b.X+", "+b.Y+" · "+b.Width+" × "+b.Height;
+   if(layout.Reason=="selected_bounds")area+="\n"+ui.T("The selected screens are not aligned. The yellow rectangle includes their gaps and unused desktop space. Choose different screens or change their Windows arrangement to change this area.","선택한 화면의 좌표·크기가 서로 다릅니다. 노란 사각형은 사이의 간격과 사용하지 않는 바탕 화면도 포함합니다. 다른 모니터를 선택하거나 Windows 배치를 바꾸면 영역이 달라집니다.");
+   if(!String.IsNullOrEmpty(layout.SelectionDetails))area+="\n"+layout.SelectionDetails+"\n"+ui.T("Gaps L–C / C–R: ","간격 왼쪽–가운데 / 가운데–오른쪽: ")+layout.LeftGap+" / "+layout.RightGap+ui.T(" px; top offsets L / R: "," 픽셀; 위쪽 차이 왼쪽 / 오른쪽: ")+layout.LeftTop+" / "+layout.RightTop;
+   return area;
+  }
   if(layout.Monitors.Length==1&&layout.Monitors[0].Bounds.Height>0&&(double)layout.Monitors[0].Bounds.Width/layout.Monitors[0].Bounds.Height>2.3){
    var r=layout.Monitors[0].Bounds;
    return ui.T("Windows exposes one wide display: ","Windows에 와이드 모니터 1대로 표시됩니다: ")+r.Width+" × "+r.Height+"\n"+ui.T("This can be an ultrawide display or NVIDIA Surround. Three-monitor span is not needed.\nEnable screen & camera and select this native resolution in the game's borderless/fullscreen mode.","울트라와이드 모니터나 NVIDIA Surround는 이처럼 표시됩니다. 모니터 3대 확장은 필요 없습니다.\n화면·카메라 설정을 켜고 게임의 테두리 없는 창 / 전체 화면에서 위 해상도를 선택하세요.");
@@ -122,7 +129,7 @@ partial class Launcher : Form {
    case "three_aligned_adjacent_monitors_required":reason=ui.T("Use Windows Extend mode with three equal-resolution displays touching side by side, with their top and bottom edges aligned. The main display can be any of the three.","Windows 확장 모드에서 해상도가 같은 모니터 3대의 위아래를 맞추고 좌우로 붙여 배치하세요. 주 모니터는 셋 중 어느 것이어도 됩니다.");break;
    case "selected_monitor_missing":reason=ui.T("A selected display is disconnected or missing. Refresh detection and choose all three displays again.","선택한 모니터가 연결되지 않았거나 없습니다. 다시 인식한 뒤 모니터 3대를 선택하세요.");break;
    case "selected_monitor_duplicate":case "selected_monitor_ambiguous":reason=ui.T("Choose a different connected display for each of Left, Center and Right.","왼쪽·가운데·오른쪽에 각각 다른 모니터를 선택하세요.");break;
-   case "selected_monitors_not_aligned":reason=ui.T("The selected displays must have the same resolution and touch left-to-right with their top and bottom edges aligned in Windows display settings.","선택한 모니터 3대는 해상도가 같고 Windows 디스플레이 설정에서 위아래를 맞춰 좌우로 붙어 있어야 합니다.");break;
+   case "selected_monitors_not_aligned":reason=ui.T("Only the selected three displays are checked. Their resolution and Windows desktop edges must match; other displays and refresh rates do not disable this selection.","선택한 모니터 3대만 검사합니다. 해상도와 Windows 배치의 경계가 맞아야 하며, 다른 모니터나 주사율 때문에 선택이 막히지는 않습니다.")+"\n"+ui.T("Physical coordinates (pixels): ","실제 좌표(픽셀): ")+layout.SelectionDetails+"\n"+ui.T("Horizontal gap (+) / overlap (-), left-center / center-right: ","좌우 간격(+) / 겹침(-), 왼쪽-가운데 / 가운데-오른쪽: ")+layout.LeftGap+" / "+layout.RightGap+"; "+ui.T("top / bottom offset from center, left: ","가운데와의 위 / 아래 차이, 왼쪽: ")+layout.LeftTop+" / "+layout.LeftBottom+", "+ui.T("right: ","오른쪽: ")+layout.RightTop+" / "+layout.RightBottom+"\n"+ui.T("Enable Include gaps and different screen sizes to use the selected bounding area, or align them in Windows. Other displays can stay connected.","위의 ‘간격·해상도 차이를 포함해 선택 영역으로 확장’을 켜면 현재 배치로 사용할 수 있습니다. 다른 모니터를 끌 필요는 없습니다.");break;
    case "invalid_monitor_dimensions":reason=ui.T("The selected triple exceeds the supported 16384-pixel render dimensions.","모니터 3대를 합친 크기가 지원되는 렌더링 한계인 16384픽셀을 벗어납니다.");break;
    case "ambiguous_span_layout":case "duplicate_monitor_bounds":reason=ui.T("The display layout does not identify one safe triple. Check Windows display arrangement.","모니터 배치에서 사용할 모니터 3대를 확정할 수 없습니다. Windows 디스플레이 배치를 확인하세요.");break;
    default:reason=ui.T("Monitor layout could not be read. Check Windows display settings and refresh detection.","모니터 배치를 읽지 못했습니다. Windows 디스플레이 설정을 확인한 뒤 다시 인식하세요.");break;
@@ -133,6 +140,7 @@ partial class Launcher : Form {
   var p=Tab("Screen & camera","화면·카메라");if(!state.display){Paragraph(p,"Screen & camera is not installed. Add it in Installation.","화면·카메라 기능이 설치되지 않았습니다. 설치 탭에서 추가하세요.");return;}
   var d=Core.ReadIni(Core.Config(root,"display.ini"),"display");var keys=new[]{"left_monitor","center_monitor","right_monitor"};var selected=keys.Select(k=>d.ContainsKey(k)?d[k]:"").ToArray();
   var manual=Check(p,"manualMonitorSelection","Choose the game displays manually","게임에 사용할 모니터 직접 선택",selected.Any(x=>!String.IsNullOrEmpty(x)));
+  var bounds=Check(p,"spanBounds","Include gaps and different screen sizes","간격·해상도 차이를 포함해 선택 영역으로 확장",Value(d,"span_bounds",1)!=0);
   var diagram=new MonitorLayoutDiagram();Row(p,diagram);
   Paragraph(p,"The diagram shows your Windows desktop. Choose the three displays used for the game;\nGame center can differ from the Windows main display. This does not rearrange Windows displays.","그림은 Windows에 배치된 모니터입니다. 게임에 사용할 모니터 3대를 선택하세요.\n게임 가운데 모니터와 Windows 주 모니터는 달라도 됩니다. Windows 배치는 변경하지 않습니다.");
   var combos=new ComboBox[3];var roleEn=new[]{"Game left","Game center","Game right"};var roleKo=new[]{"게임 왼쪽","게임 가운데","게임 오른쪽"};
@@ -142,17 +150,17 @@ partial class Launcher : Form {
   var span=Check(p,"spanEnabled","Span across three monitors (no NVIDIA Surround)","모니터 3대에 화면 확장 (NVIDIA Surround 불필요)",Value(d,"span",0)!=0);
   DisplayTopology.Layout desktop=null;bool filling=false;
   Func<string[]> selection=()=>manual.Checked?selected:new string[3];
-  Action validate=()=>{if(desktop==null)return;var layout=DisplayTopology.Select(desktop.Monitors,selection());span.Enabled=layout.CanSpan;geometry.Text=Geometry(layout);diagram.Monitors=desktop.Monitors;var drawn=selection();if(!manual.Checked&&layout.CanSpan){drawn=new string[3];for(int role=0;role<3;++role){int x=layout.SpanBounds.Left+role*layout.SpanBounds.Width/3;var monitor=desktop.Monitors.FirstOrDefault(m=>m.Bounds.Left==x&&m.Bounds.Top==layout.SpanBounds.Top&&m.Bounds.Height==layout.SpanBounds.Height);drawn[role]=monitor==null?"":monitor.Device;}}diagram.Selection=drawn;diagram.Korean=ui.Language=="ko";diagram.Invalidate();for(int i=0;i<3;++i)combos[i].Enabled=manual.Checked;};
+  Action validate=()=>{if(desktop==null)return;var layout=DisplayTopology.Select(desktop.Monitors,selection(),bounds.Checked);span.Enabled=layout.CanSpan;geometry.Text=Geometry(layout);diagram.Monitors=desktop.Monitors;diagram.GameBounds=layout.CanSpan?(Rectangle?)layout.SpanBounds:null;bounds.Enabled=manual.Checked;var drawn=selection();if(!manual.Checked&&layout.CanSpan){drawn=new string[3];for(int role=0;role<3;++role){int x=layout.SpanBounds.Left+role*layout.SpanBounds.Width/3;var monitor=desktop.Monitors.FirstOrDefault(m=>m.Bounds.Left==x&&m.Bounds.Top==layout.SpanBounds.Top&&m.Bounds.Height==layout.SpanBounds.Height);drawn[role]=monitor==null?"":monitor.Device;}}diagram.Selection=drawn;diagram.Korean=ui.Language=="ko";diagram.Invalidate();for(int i=0;i<3;++i)combos[i].Enabled=manual.Checked;};
   Action refresh=()=>{desktop=DisplayTopology.ReadPhysical();filling=true;for(int role=0;role<3;++role){var combo=combos[role];combo.Items.Clear();combo.Items.Add(new MonitorChoice("",ui.T("Select a display…","모니터 선택…")));for(int i=0;i<desktop.Monitors.Length;++i){var m=desktop.Monitors[i];combo.Items.Add(new MonitorChoice(m.Device,"#"+(i+1)+" · "+m.Bounds.Width+" × "+m.Bounds.Height+(m.Primary?ui.T(" · Windows main"," · Windows 주 모니터"):"")));}int index=0;for(int i=1;i<combo.Items.Count;++i)if(String.Equals(((MonitorChoice)combo.Items[i]).Device,selected[role],StringComparison.OrdinalIgnoreCase))index=i;if(index==0&&!String.IsNullOrEmpty(selected[role])){combo.Items.Add(new MonitorChoice(selected[role],ui.T("Disconnected: ","연결되지 않음: ")+selected[role]));index=combo.Items.Count-1;}combo.SelectedIndex=index;}filling=false;validate();};
   for(int role=0;role<3;++role){int r=role;combos[role].SelectedIndexChanged+=(sender,e)=>{if(!filling){var choice=combos[r].SelectedItem as MonitorChoice;selected[r]=choice==null?"":choice.Device;validate();}};}
-  manual.CheckedChanged+=(sender,e)=>validate();ui.OnChange(refresh);
+  manual.CheckedChanged+=(sender,e)=>validate();bounds.CheckedChanged+=(sender,e)=>validate();ui.OnChange(refresh);
   Button(Actions(p),"refreshDisplayDetection","Refresh monitor detection","모니터 다시 인식",()=>refresh());
   var fov=Number(p,"fov","FOV (16:9 reference)","시야각 FOV (16:9 기준)",Value(d,"fov",100),60,120,1,0.1M);
   var distance=Number(p,"cameraDistance","Chase camera distance","추적 카메라 거리",Value(d,"distance",3000),1500,6000,0,1);
   var height=Number(p,"cameraHeight","Chase camera height","추적 카메라 높이",Value(d,"height",600),0,1500,0,1);
   if(!state.mouse){distance.Enabled=height.Enabled=false;Paragraph(p,"Camera distance and height require Mouse flight.","카메라 거리·높이를 조절하려면 마우스 조종도 설치해야 합니다.");}
   Paragraph(p,"Enable screen & camera for automatic aspect correction in supported rendered scenes.\nFor one ultrawide display or NVIDIA Surround, leave triple span off and select its native\nresolution in the game's borderless/fullscreen mode. Save changes, then focus the game.","화면·카메라 설정을 켜면 지원하는 실시간 렌더링 장면의 비율을 자동 보정합니다.\n울트라와이드 모니터 1대나 NVIDIA Surround는 모니터 3대 확장을 끄고 게임의 테두리 없는 창 /\n전체 화면에서 기본 해상도를 선택하세요. 저장한 뒤 게임으로 돌아가면 적용됩니다.");
-  Button(Actions(p),"saveDisplay","Save screen & camera","화면·카메라 설정 저장",()=>{refresh();if(enable.Checked&&manual.Checked&&span.Checked&&!DisplayTopology.Select(desktop.Monitors,selection()).CanSpan){Status("Choose three connected, aligned displays before saving triple span.","모니터 3대를 연결하고 올바른 순서로 선택한 뒤 화면 확장을 저장하세요.");return;}var values=new Dictionary<string,string>{{"enabled",enable.Checked?"1":"0"},{"span",span.Checked?"1":"0"},{"fov",V(fov.Number)},{"distance",V(distance.Number)},{"height",V(height.Number)}};var names=selection();for(int i=0;i<3;++i)values[keys[i]]=names[i]??"";Core.WriteIni(Core.Config(root,"display.ini"),"display",values);Status("Screen & camera settings saved.","화면·카메라 설정을 저장했습니다.");});
+  Button(Actions(p),"saveDisplay","Save screen & camera","화면·카메라 설정 저장",()=>{refresh();if(enable.Checked&&manual.Checked&&span.Checked&&!DisplayTopology.Select(desktop.Monitors,selection(),bounds.Checked).CanSpan){Status("Choose three connected displays. Enable the include-gaps option if their desktop edges differ.","연결된 서로 다른 모니터 3대를 선택하세요. 배치가 다르면 ‘간격·해상도 차이를 포함해 선택 영역으로 확장’을 켜세요.");return;}var values=new Dictionary<string,string>{{"enabled",enable.Checked?"1":"0"},{"span",span.Checked?"1":"0"},{"span_bounds",bounds.Checked?"1":"0"},{"fov",V(fov.Number)},{"distance",V(distance.Number)},{"height",V(height.Number)}};var names=selection();for(int i=0;i<3;++i)values[keys[i]]=names[i]??"";Core.WriteIni(Core.Config(root,"display.ini"),"display",values);Status("Screen & camera settings saved.","화면·카메라 설정을 저장했습니다.");});
  }
  sealed class MonitorChoice{public string Device{get;private set;}public string Label{get;private set;}public MonitorChoice(string device,string label){Device=device;Label=label;}}
  void SubtitlesTab(){
@@ -270,8 +278,9 @@ internal static class DisplayTopology {
  internal sealed class Layout {
   internal Monitor[] Monitors=new Monitor[0];internal Rectangle SpanBounds;
   internal bool CanSpan;internal string Reason="no_primary_monitor";
+  internal string SelectionDetails="";internal long LeftGap,RightGap,LeftTop,LeftBottom,RightTop,RightBottom;
  }
- internal static Layout Select(Monitor[] monitors,string[] selection=null){
+ internal static Layout Select(Monitor[] monitors,string[] selection=null,bool allowBounds=false){
   var result=new Layout{Monitors=monitors??new Monitor[0]};var all=result.Monitors;
   if(selection!=null&&selection.Any(x=>!String.IsNullOrEmpty(x))){
    if(selection.Length!=3||selection.Any(String.IsNullOrEmpty)){result.Reason="selected_monitor_missing";return result;}
@@ -279,6 +288,14 @@ internal static class DisplayTopology {
    for(int role=0;role<3;++role){var matches=all.Where(x=>String.Equals(x.Device,selection[role],StringComparison.OrdinalIgnoreCase)).ToArray();if(matches.Length!=1){result.Reason=matches.Length==0?"selected_monitor_missing":"selected_monitor_ambiguous";return result;}chosen[role]=matches[0];}
    if(Object.ReferenceEquals(chosen[0],chosen[1])||Object.ReferenceEquals(chosen[0],chosen[2])||Object.ReferenceEquals(chosen[1],chosen[2])){result.Reason="selected_monitor_duplicate";return result;}
    var l=chosen[0].Bounds;var c=chosen[1].Bounds;var r=chosen[2].Bounds;long w=c.Width,h=c.Height;
+   result.SelectionDetails="L "+l.X+","+l.Y+" "+l.Width+"x"+l.Height+"; C "+c.X+","+c.Y+" "+c.Width+"x"+c.Height+"; R "+r.X+","+r.Y+" "+r.Width+"x"+r.Height;
+   result.LeftGap=(long)c.Left-l.Right;result.RightGap=(long)r.Left-c.Right;result.LeftTop=(long)l.Top-c.Top;result.LeftBottom=(long)l.Bottom-c.Bottom;result.RightTop=(long)r.Top-c.Top;result.RightBottom=(long)r.Bottom-c.Bottom;
+   if(allowBounds){
+    long x=chosen.Min(m=>(long)m.Bounds.Left),y=chosen.Min(m=>(long)m.Bounds.Top),right=chosen.Max(m=>(long)m.Bounds.Right),bottom=chosen.Max(m=>(long)m.Bounds.Bottom);
+    if(chosen.Any(m=>m.Bounds.Width<=0||m.Bounds.Height<=0)||right-x<=0||bottom-y<=0||right-x>16384||bottom-y>16384){result.Reason="invalid_monitor_dimensions";return result;}
+    bool aligned=l.Width==w&&r.Width==w&&l.Top==c.Top&&r.Top==c.Top&&l.Bottom==c.Bottom&&r.Bottom==c.Bottom&&l.Right==c.Left&&c.Right==r.Left;
+    result.SpanBounds=new Rectangle((int)x,(int)y,(int)(right-x),(int)(bottom-y));result.CanSpan=true;result.Reason=aligned?"ok":"selected_bounds";return result;
+   }
    if(w<=0||h<=0||w*3>16384||h>16384){result.Reason="invalid_monitor_dimensions";return result;}
    if(l.Width!=w||r.Width!=w||l.Top!=c.Top||r.Top!=c.Top||l.Bottom!=c.Bottom||r.Bottom!=c.Bottom||l.Right!=c.Left||c.Right!=r.Left){result.Reason="selected_monitors_not_aligned";return result;}
    result.SpanBounds=new Rectangle(l.Left,c.Top,(int)(w*3),(int)h);result.CanSpan=true;result.Reason="ok";return result;
@@ -326,7 +343,7 @@ internal static class DisplayTopology {
 
 internal sealed class MonitorLayoutDiagram : Control {
  internal DisplayTopology.Monitor[] Monitors=new DisplayTopology.Monitor[0];
- internal string[] Selection=new string[3];internal bool Korean;
+ internal string[] Selection=new string[3];internal bool Korean;internal Rectangle? GameBounds;
  internal MonitorLayoutDiagram(){Name="monitorLayoutDiagram";DoubleBuffered=true;Height=205;MinimumSize=new Size(100,170);Dock=DockStyle.Top;Margin=new Padding(0,8,0,8);}
  protected override void OnPaint(PaintEventArgs e){
   base.OnPaint(e);var g=e.Graphics;g.SmoothingMode=System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
@@ -341,5 +358,6 @@ internal sealed class MonitorLayoutDiagram : Control {
    if(role>=0)name+="\n"+(Korean?new[]{"게임 왼쪽","게임 가운데","게임 오른쪽"}[role]:new[]{"Game left","Game center","Game right"}[role]);
    using(var brush=new SolidBrush(Color.White))using(var font=new Font("Segoe UI",Math.Max(6,Math.Min(10,r.Width/16f))))using(var format=new StringFormat{Alignment=StringAlignment.Center,LineAlignment=StringAlignment.Center})g.DrawString(name,font,brush,r,format);
   }
+  if(GameBounds.HasValue){var b=GameBounds.Value;using(var edge=new Pen(Color.Gold,2)){edge.DashStyle=System.Drawing.Drawing2D.DashStyle.Dash;g.DrawRectangle(edge,ox+(b.X-all.X)*scale,oy+(b.Y-all.Y)*scale,b.Width*scale,b.Height*scale);}}
  }
 }

@@ -40,7 +40,7 @@ class Setup : Form {
    if(uiRoot&&args.Length==3){if(args[2]!="0"&&args[2]!="1")throw new Exception("Invalid translation selection.");translation=args[2]=="1";}
    if(uiRoot&&args.Length>3)throw new Exception("Invalid command line.");
    Application.EnableVisualStyles();Application.Run(new Setup(uiRoot?args[1]:null,translation));return 0;
-  }catch(Exception e){if(args.Length>0){Console.Error.WriteLine(e.Message);try{File.WriteAllText(Path.Combine(Path.GetTempPath(),"KoreanAIR_AC8_Setup_error.txt"),e.ToString());}catch{}}else MessageBox.Show(new UiLanguage().Error(e),Core.Brand,MessageBoxButtons.OK,MessageBoxIcon.Error);return 1;}
+  }catch(Exception e){string log=Core.RecordInstallError(e);if(args.Length>0){Console.Error.WriteLine(e.Message);if(log!=null)Console.Error.WriteLine("Details: "+log);}else{var ui=new UiLanguage();MessageBox.Show(ui.Error(e)+(log==null?"":"\n\n"+ui.T("Details: ","오류 기록: ")+log),Core.Brand,MessageBoxButtons.OK,MessageBoxIcon.Error);}return 1;}
  }
  public Setup(string preferred):this(preferred,null){}
  public Setup(string preferred,bool? translation) {

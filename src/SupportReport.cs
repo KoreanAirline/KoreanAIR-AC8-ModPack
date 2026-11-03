@@ -80,6 +80,7 @@ public static class SupportReport {
    for(int i=0;i<monitors.Length;i++) {
     var m=monitors[i];report.Add("Monitor "+(i+1)+" "+(m.Primary?"PRIMARY ":"")+"bounds="+Rect(m.X,m.Y,m.Width,m.Height)+" work="+Rect(m.WorkX,m.WorkY,m.WorkWidth,m.WorkHeight)+" current mode="+m.ModeWidth+"x"+m.ModeHeight+" refresh="+m.Refresh+" Hz");
    }
+   report.Add(DescribeSelectedTopology(monitors,Core.ReadIni(Core.Safe(root,Core.Mod+"display.ini"),"display")));
   });
   report.Section("Mod settings (allowlisted values)",delegate {
    foreach(string name in new[]{"pack.ini","config.ini","display.ini","subtitle.ini","upscaler_status.ini"})
@@ -130,12 +131,30 @@ public static class SupportReport {
    value+="\r\nOne already-wide logical display detected (ultrawide or Surround); three-monitor span is not required.";
   return value;
  }
+ public static string DescribeSelectedTopology(Monitor[] monitors,Dictionary<string,string> display) {
+  string[] keys={"left_monitor","center_monitor","right_monitor"};var selected=new Monitor[3];var text=new StringBuilder("Triple selection: ");
+  var names=keys.Select(k=>display!=null&&display.ContainsKey(k)?display[k]:"").ToArray();
+  if(names.All(String.IsNullOrEmpty))return text+"automatic; refresh rate is not a span eligibility constraint.";
+  for(int i=0;i<3;i++) {
+   var matches=(monitors??new Monitor[0]).Where(m=>String.Equals(m.Device,names[i],StringComparison.OrdinalIgnoreCase)).ToArray();
+   if(String.IsNullOrEmpty(names[i])||matches.Length!=1)return text+"manual; "+keys[i]+" matches="+matches.Length+"; reason=selected_monitor_missing_or_ambiguous";
+   selected[i]=matches[0];text.Append(keys[i]+"="+names[i]+" bounds="+Rect(selected[i].X,selected[i].Y,selected[i].Width,selected[i].Height)+"; ");
+  }
+  if(Object.ReferenceEquals(selected[0],selected[1])||Object.ReferenceEquals(selected[0],selected[2])||Object.ReferenceEquals(selected[1],selected[2]))return text+"reason=selected_monitor_duplicate";
+  var l=selected[0];var c=selected[1];var r=selected[2];long lg=(long)c.X-l.X-l.Width,rg=(long)r.X-c.X-c.Width;
+  long lt=(long)l.Y-c.Y,lb=(long)l.Y+l.Height-c.Y-c.Height,rt=(long)r.Y-c.Y,rb=(long)r.Y+r.Height-c.Y-c.Height;
+  bool valid=c.Width>0&&c.Height>0&&(long)c.Width*3<=16384&&c.Height<=16384&&l.Width==c.Width&&r.Width==c.Width&&lg==0&&rg==0&&lt==0&&lb==0&&rt==0&&rb==0;
+  bool boundsMode=display==null||!display.ContainsKey("span_bounds")||display["span_bounds"]!="0";
+  if(boundsMode){long x=selected.Min(m=>(long)m.X),y=selected.Min(m=>(long)m.Y),right=selected.Max(m=>(long)m.X+m.Width),bottom=selected.Max(m=>(long)m.Y+m.Height);bool usable=selected.All(m=>m.Width>0&&m.Height>0)&&right-x>0&&bottom-y>0&&right-x<=16384&&bottom-y<=16384;text.Append("bounds policy=include gaps; game area="+x+","+y+" "+(right-x)+"x"+(bottom-y)+"; reason="+(usable?(valid?"ok":"selected_bounds"):"invalid_monitor_dimensions")+"; ");}
+  text.Append("left-center gap="+lg+"; center-right gap="+rg+"; left top/bottom delta="+lt+"/"+lb+"; right top/bottom delta="+rt+"/"+rb+"; reason="+(valid?"ok":"selected_monitors_not_aligned"));
+  text.Append("; only these three selected displays are evaluated; extra displays and refresh rates are ignored.");return text.ToString();
+ }
  static bool ModKey(string section,string key,string value) {
   section=section.ToLowerInvariant();key=key.ToLowerInvariant();
   string keys=null;
   if(section=="modules")keys="mouseflight display subtitles";
   else if(section=="diagnostics")keys="enabled support support_token";
-  else if(section=="display")keys="span fov distance height enabled left_monitor center_monitor right_monitor";
+  else if(section=="display")keys="span span_bounds fov distance height enabled left_monitor center_monitor right_monitor";
   else if(section=="subtitles")keys="position";
   else if(section=="control")keys="sensitivity roll_gain pitch_gain yaw_gain turn_pull max_bank smoothing roll_damping pitch_damping yaw_damping dead_zone pitch_sign roll_sign yaw_sign horizontal_fov vertical_fov pitch_slot roll_slot look_sensitivity bank_limit response native_response_sync";
   else if(section=="hud")keys="aim_style heading_style aim_size heading_size aim_color heading_color line_width outline outline_width outline_color opacity";

@@ -8,7 +8,7 @@ using KoreanAIR;
 partial class Launcher {
  public bool CheckUpdatesOnOpen=true;
  readonly CancellationTokenSource updateCancellation=new CancellationTokenSource();
- Label updateTitle,updateDescription;Button updateAction;ProgressBar updateProgress;
+ Label updateTitle,updateDescription;Button updateAction,updateChanges;ProgressBar updateProgress;
  UpdateManifest availableUpdate;bool checkingUpdate,applyingUpdate;
  internal Task UpdateWork;
  void InitializeUpdates(TableLayoutPanel layout) {
@@ -19,9 +19,12 @@ partial class Launcher {
   banner.Controls.Add(updateTitle,0,0);banner.Controls.Add(updateDescription,0,1);
   updateAction=new Button{Name="updateAction",Tag="primary",AutoSize=true,MinimumSize=new Size(150,40),Margin=new Padding(4,0,0,0),Padding=new Padding(12,5,12,5)};
   banner.Controls.Add(updateAction,1,0);banner.SetRowSpan(updateAction,2);
-  updateProgress=new ProgressBar{Name="updateProgress",Dock=DockStyle.Top,Visible=false,Height=5,Margin=new Padding(0,8,0,0)};banner.Controls.Add(updateProgress,0,2);banner.SetColumnSpan(updateProgress,2);
+  updateChanges=new Button{Name="updateChanges",AutoSize=true,MinimumSize=new Size(130,30),Margin=new Padding(0,8,0,0),Padding=new Padding(8,2,8,2),Anchor=AnchorStyles.Left};
+  ui.Bind(updateChanges,"What's changed","업데이트 내역");updateChanges.Click+=(s,e)=>ShowUpdateChanges();
+  banner.Controls.Add(updateChanges,0,2);banner.SetColumnSpan(updateChanges,2);
+  updateProgress=new ProgressBar{Name="updateProgress",Dock=DockStyle.Top,Visible=false,Height=5,Margin=new Padding(0,8,0,0)};banner.Controls.Add(updateProgress,0,3);banner.SetColumnSpan(updateProgress,2);
   layout.Controls.Add(banner,0,1);
-  SetUpdateState("Automatic update check","자동 업데이트 확인","A new release is checked each time the launcher opens.","런처를 열 때마다 새 배포본을 확인합니다.","Check now","지금 확인",true);
+  ShowInstalledUpdateState("Check now","지금 확인");
   updateAction.Click+=(s,e)=>{if(availableUpdate!=null)ApplyUpdate();else CheckForUpdate();};
   Shown+=(s,e)=>{if(CheckUpdatesOnOpen)CheckForUpdate();};
   FormClosing+=(s,e)=>updateCancellation.Cancel();
@@ -42,8 +45,49 @@ partial class Launcher {
  // Shared with fixture UI verification: all production manifests are validated by Fetch.
  internal void ShowUpdate(UpdateManifest manifest) {
   availableUpdate=UpdateCore.IsNewer(manifest)?manifest:null;
-  if(availableUpdate==null)SetUpdateState("You're up to date · "+state.version,"최신 버전 · "+state.version,"Installed settings and modules are unchanged.","설치된 기능과 사용자 설정은 그대로 유지됩니다.","Check again","다시 확인",true);
-  else SetUpdateState("UPDATE AVAILABLE · "+manifest.version,"업데이트 가능 · "+manifest.version,"Your settings and selected modules will be kept.","사용자 설정과 선택한 기능을 유지하며 업데이트합니다.","Update now","지금 업데이트",true);
+  if(availableUpdate==null)ShowInstalledUpdateState("Check again","다시 확인",true);
+  else {string transition=UpdateCore.ReleaseLabel(state.version,state.build)+" → "+UpdateCore.ReleaseLabel(manifest.version,manifest.build);
+   SetUpdateState("UPDATE AVAILABLE · "+transition,"업데이트 가능 · "+transition,"Your settings and selected modules will be kept. Open What's changed for the release notes.","사용자 설정과 선택한 기능을 유지합니다. 업데이트 내역에서 변경 사항을 확인할 수 있습니다.","Update now","지금 업데이트",true);
+  }
+ }
+ string InstalledTransition() {
+  if(state==null||String.IsNullOrWhiteSpace(state.previousVersion)||state.previousBuild<=0||
+    (state.previousVersion==state.version&&state.previousBuild==state.build))return null;
+  string old=UpdateCore.ReleaseLabel(state.previousVersion,state.previousBuild);
+  return old=="Unknown"?null:old+" → "+UpdateCore.ReleaseLabel(state.version,state.build);
+ }
+ void ShowInstalledUpdateState(string buttonEn,string buttonKo,bool checkedCurrent=false) {
+  string current=UpdateCore.ReleaseLabel(state.version,state.build),transition=InstalledTransition();
+  if(transition!=null)SetUpdateState("UPDATE INSTALLED · "+transition,"업데이트 설치됨 · "+transition,
+    "Your settings and selected modules were kept. Open What's changed to review this build.","사용자 설정과 선택한 기능을 유지했습니다. 업데이트 내역에서 이번 빌드의 변경 사항을 확인하세요.",buttonEn,buttonKo,true);
+  else SetUpdateState((checkedCurrent?"You're up to date · ":"INSTALLED · ")+current,(checkedCurrent?"최신 버전 · ":"설치된 버전 · ")+current,
+    "Updates are checked when the launcher opens. Open What's changed for this build's notes.","런처를 열 때 새 배포본을 확인합니다. 업데이트 내역에서 이번 빌드의 변경 사항을 볼 수 있습니다.",buttonEn,buttonKo,true);
+ }
+ internal string UpdateChangesText() {
+  bool korean=ui.Language=="ko";var manifest=availableUpdate;
+  string label,notes;
+  if(manifest!=null) {
+   label=UpdateCore.ReleaseLabel(state.version,state.build)+" → "+UpdateCore.ReleaseLabel(manifest.version,manifest.build);
+   notes=UpdateCore.Notes(manifest,korean)??ui.T("This update feed does not include release notes.","이 업데이트 정보에는 변경 내역이 포함되어 있지 않습니다.");
+  } else {
+   label=InstalledTransition()??UpdateCore.ReleaseLabel(state.version,state.build);
+   string current=Core.Brand.Substring("KoreanAIR_AC8_ModPack_".Length);
+   notes=state.version==current&&state.build==Core.ReleaseBuild?UpdateCore.CurrentReleaseNotes(korean):
+    ui.T("Open the launcher installed with this build to view its changes.","이 빌드와 함께 설치된 런처에서 해당 변경 내역을 확인하세요.");
+  }
+  return label+"\r\n\r\n"+notes;
+ }
+ void ShowUpdateChanges() {
+  using(var dialog=new Form {Text=ui.T("What's changed","업데이트 내역"),StartPosition=FormStartPosition.CenterParent,
+    MinimumSize=new Size(460,330),Size=new Size(620,480),ShowIcon=false,MinimizeBox=false,MaximizeBox=false}) {
+   var content=new TableLayoutPanel {Dock=DockStyle.Fill,ColumnCount=1,RowCount=2,Padding=new Padding(16)};
+   content.RowStyles.Add(new RowStyle(SizeType.Percent,100));content.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+   var text=new TextBox {Name="releaseNotesText",Dock=DockStyle.Fill,Multiline=true,ReadOnly=true,ScrollBars=ScrollBars.Vertical,
+    WordWrap=true,Text=UpdateChangesText(),BorderStyle=BorderStyle.None};
+   var close=new Button {Text=ui.T("Close","닫기"),AutoSize=true,Anchor=AnchorStyles.Right,DialogResult=DialogResult.OK,Margin=new Padding(0,12,0,0)};
+   content.Controls.Add(text,0,0);content.Controls.Add(close,0,1);dialog.Controls.Add(content);dialog.AcceptButton=close;dialog.CancelButton=close;
+   LauncherTheme.Apply(dialog);dialog.ShowDialog(this);
+  }
  }
  void ApplyUpdate() {
   if(applyingUpdate)return;
