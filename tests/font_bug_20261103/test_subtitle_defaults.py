@@ -11,7 +11,7 @@ D = H.parents[1]
 CSC = Path('C:/Windows/Microsoft.NET/Framework64/v4.0.30319/csc.exe')
 MOD = 'Game/Binaries/Win64/UE4SS/Mods/AC8MouseAim/'
 sources = [D / 'src' / name for name in (
-    'PackCore.cs', 'CampaignSubtitles.cs', 'Setup.cs', 'Launcher.cs', 'Ui.cs',
+    'PackCore.cs', 'CampaignSubtitles.cs', 'GameInputCompatibility.cs', 'Setup.cs', 'Launcher.cs', 'Ui.cs',
     'UpdateCore.cs', 'Hud.cs', 'Keys.cs', 'UpdateUI.cs', 'MouseInputWorker.cs',
     'SupportReport.cs',
 )] + [H / 'SubtitleDefaultsTests.cs']

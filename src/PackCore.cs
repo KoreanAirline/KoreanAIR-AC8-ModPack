@@ -11,7 +11,7 @@ using System.Web.Script.Serialization;
 
 [assembly:System.Reflection.AssemblyVersion("2.4.0.0")]
 [assembly:System.Reflection.AssemblyFileVersion("2.4.0.0")]
-[assembly:System.Reflection.AssemblyInformationalVersion("2.4+b2026110401")]
+[assembly:System.Reflection.AssemblyInformationalVersion("2.4+b2026110402")]
 [assembly:System.Reflection.AssemblyProduct("KoreanAIR AC8 Mod Pack")]
 
 namespace KoreanAIR {
@@ -69,13 +69,14 @@ public sealed class PackWriteException : IOException {
 }
 public static class Core {
  public const string Brand="KoreanAIR_AC8_ModPack_2.4";
- public const long ReleaseBuild=2026110401;
+ public const long ReleaseBuild=2026110402;
  public const string Folder="KoreanAIR_AC8_ModPack";
  public const string Mod="Game/Binaries/Win64/UE4SS/Mods/AC8MouseAim/";
  public const string CampaignLoader="Game/Binaries/Win64/dinput8.dll";
  public const string CampaignPatch=Folder+"/Translation/campaign-dialogue.json.gz";
  public const string CampaignPak="Game/Content/Paks/pakchunk0-Windows_999_P.pak";
  public static Action<string> SubtitleFallbackNotice;
+ public static Action<string> InputCompatibilityNotice;
  public static JavaScriptSerializer Json=new JavaScriptSerializer{MaxJsonLength=32*1024*1024};
  public static string Hash(byte[] b) { using(var s=SHA256.Create()) return BitConverter.ToString(s.ComputeHash(b)).Replace("-","").ToLowerInvariant(); }
  public static string HashFile(string p) { using(var s=SHA256.Create()) using(var f=File.OpenRead(p)) return BitConverter.ToString(s.ComputeHash(f)).Replace("-","").ToLowerInvariant(); }
@@ -590,6 +591,13 @@ public static class Core {
   VerifyGame(root);var s=ReadState(root);if(s==null)throw new Exception("Run the installer first.");
   if(Running(root))throw new Exception("ACE COMBAT 8 is already running.");
   if(s.mouse&&InspectHotas(root).InputEnabled)throw new Exception(HotasMouseConflict);
+  if(s.mouse) {
+   string sharedKey=null;
+   // Read saved game bindings once before launch. Unknown or unreadable saves
+   // must not prevent play; this check never writes or changes a binding.
+   try {var input=GameInputCompatibility.Inspect(GameInputCompatibility.SystemPath);if(input.Known&&input.Conflict)sharedKey=input.SharedKey;}catch{}
+   if(!String.IsNullOrEmpty(sharedKey)&&InputCompatibilityNotice!=null)InputCompatibilityNotice(sharedKey);
+  }
   if(s.suspended)Suspend(root,false);s=ReadState(root);
   RefreshCampaignSubtitlesCore(root);s=ReadState(root);
   ValidateFrameGeneration(root,s);if(s.frameGeneration!=null)FgLocked(()=>FgSave(root,s.frameGeneration.enabled));s=ReadState(root);ValidateLaunchFiles(root,s);

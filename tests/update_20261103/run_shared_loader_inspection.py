@@ -9,7 +9,7 @@ source=next(DOWNLOAD.rglob('UE4SS.dll')).parent.parent
 fixture=HERE/('shared_loader_inspection_'+datetime.now(timezone.utc).strftime('%H%M%S_%f'))
 exe=HERE/'SharedLoaderInspectionTests.exe'
 refs=['System.Windows.Forms.dll','System.Drawing.dll','System.Web.Extensions.dll','System.IO.Compression.dll','System.IO.Compression.FileSystem.dll']
-sources=(D/'src/PackCore.cs',D/'src/CampaignSubtitles.cs',HERE/'SharedLoaderInspectionTests.cs',Path(__file__))
+sources=(D/'src/PackCore.cs',D/'src/CampaignSubtitles.cs',D/'src/GameInputCompatibility.cs',HERE/'SharedLoaderInspectionTests.cs',Path(__file__))
 command=[str(CSC),'/nologo','/target:exe','/platform:x64','/optimize+','/out:'+str(exe)]+['/r:'+x for x in refs]+[str(p)for p in sources if p.suffix=='.cs']
 build=subprocess.run(command,capture_output=True,text=True)
 if build.returncode:raise RuntimeError(build.stdout+build.stderr)

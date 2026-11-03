@@ -1,5 +1,5 @@
 KoreanAIR_AC8_ModPack_2.4
-English user guide — build 2026110401
+English user guide — build 2026110402
 
 INSTALL AND PLAY
 
@@ -94,6 +94,14 @@ Camera distance and height use steps of 1.
 Use the tab's Save button to store your changes.
 
 MOUSE FLIGHT (Controls)
+
+Set acceleration, braking, weapons and WASD in the game's key assignment menu.
+The default separate bindings are Left Shift for acceleration and Left Ctrl for
+braking. If Accelerate + Decelerate shares either key, remove that duplicate
+binding; it can apply the brake when you intend to accelerate. Before a mouse
+flight launch, the KoreanAIR launcher checks saved throttle bindings and explains
+confirmed conflicts. It does not edit game settings or block unknown save formats.
+Check the same in-game bindings when starting through another mod launcher.
 
 The mouse steering circle updates independently of game frames, using the current
 refresh rate of the displays covered by the game window. Unchanged glyph images

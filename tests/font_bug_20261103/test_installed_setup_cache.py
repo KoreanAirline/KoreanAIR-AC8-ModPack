@@ -102,7 +102,7 @@ static IntPtr SetThreadDpiAwarenessContext(IntPtr context){return IntPtr.Zero;}
 public Setup(string root,bool? translation){}
 ''' + extracted['Setup.Main'] + '\n}\n')
 library = candidate / 'Setup.exe'
-sources = [core_path, isolated, H / 'InstalledSetupCacheAudit.cs']
+sources = [core_path, D / 'src/GameInputCompatibility.cs', isolated, H / 'InstalledSetupCacheAudit.cs']
 refs = ['System.Windows.Forms.dll', 'System.Drawing.dll', 'System.Web.Extensions.dll',
         'System.IO.Compression.dll', 'System.IO.Compression.FileSystem.dll']
 subprocess.run([str(CSC), '/nologo', '/target:library', '/platform:x64',

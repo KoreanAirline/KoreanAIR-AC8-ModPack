@@ -23,7 +23,7 @@ with zipfile.ZipFile(payload,'w',zipfile.ZIP_DEFLATED) as z:
     z.writestr('manifest.json',json.dumps(manifest))
 refs=['System.Windows.Forms.dll','System.Drawing.dll','System.Web.Extensions.dll','System.IO.Compression.dll','System.IO.Compression.FileSystem.dll']
 exe=H/'SharedProviderIntegrationTests.exe'
-sources=[D/'src/PackCore.cs',D/'src/CampaignSubtitles.cs',H/'SharedProviderIntegrationTests.cs',Path(__file__)]
+sources=[D/'src/PackCore.cs',D/'src/CampaignSubtitles.cs',D/'src/GameInputCompatibility.cs',H/'SharedProviderIntegrationTests.cs',Path(__file__)]
 build=subprocess.run([str(CSC),'/nologo','/target:exe','/platform:x64','/optimize+','/define:CAMPAIGN_SUBTITLES_TEST','/out:'+str(exe)]+['/r:'+x for x in refs]+[str(p)for p in sources if p.suffix=='.cs'],capture_output=True,text=True)
 if build.returncode:raise RuntimeError(build.stdout+build.stderr)
 destination=Path(tempfile.gettempdir())/('ac8sp_'+datetime.now(timezone.utc).strftime('%H%M%S_%f'))

@@ -4,7 +4,7 @@ import hashlib,json,subprocess,sys
 H=Path(__file__).resolve().parent;D=H.parents[1];R=D/'runtime';T=D/'tests';B=D/'build'
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 release=json.loads((D/'release.json').read_text());BUILD=release['build'];assert release['version']=='2.4' and BUILD>=2026110303
-tests=['update_20261103/verify_native_guards.py','font_bug_20261103/test_campaign_subtitles_cs.py','font_bug_20261103/test_subtitle_lifecycle.py','font_bug_20261103/test_subtitle_defaults.py','font_bug_20261103/test_installed_setup_cache.py','update_20261103/run_game_build.py','update_20261103/run_shared_loader_inspection.py','update_20261103/run_shared_provider_integration.py','update_20261103/run_update_changes.py','native_headlook_test.py','native_input_axes_test.py','native_launcher_identity_test.py','debrief_1503/validate_replay.py']
+tests=['control_0402/test_game_input_compatibility.py','update_20261103/verify_native_guards.py','font_bug_20261103/test_campaign_subtitles_cs.py','font_bug_20261103/test_subtitle_lifecycle.py','font_bug_20261103/test_subtitle_defaults.py','font_bug_20261103/test_installed_setup_cache.py','update_20261103/run_game_build.py','update_20261103/run_shared_loader_inspection.py','update_20261103/run_shared_provider_integration.py','update_20261103/run_update_changes.py','native_headlook_test.py','native_input_axes_test.py','native_launcher_identity_test.py','debrief_1503/validate_replay.py']
 results=[]
 for test in tests:
     r=subprocess.run([sys.executable,str(T/test)],cwd=D,capture_output=True,text=True,encoding='utf-8',errors='replace')

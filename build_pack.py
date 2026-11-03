@@ -20,7 +20,7 @@ assert f'AssemblyInformationalVersion("{release["version"]}+b{release["build"]}"
 assert release['repository'] in (D/'src/UpdateCore.cs').read_text(encoding='utf-8')
 refs=['System.Windows.Forms.dll','System.Drawing.dll','System.Web.Extensions.dll','System.IO.Compression.dll','System.IO.Compression.FileSystem.dll']
 def compile(name,source,resources=[]):
-    args=[str(CSC),'/nologo','/target:winexe','/optimize+','/platform:x64','/out:'+str(BIN/name)]+['/reference:'+r for r in refs]+resources+[str(D/'src/PackCore.cs'),str(D/'src/CampaignSubtitles.cs'),str(D/'src/Ui.cs'),str(D/'src/UpdateCore.cs'),str(D/'src'/source)]
+    args=[str(CSC),'/nologo','/target:winexe','/optimize+','/platform:x64','/out:'+str(BIN/name)]+['/reference:'+r for r in refs]+resources+[str(D/'src/PackCore.cs'),str(D/'src/CampaignSubtitles.cs'),str(D/'src/GameInputCompatibility.cs'),str(D/'src/Ui.cs'),str(D/'src/UpdateCore.cs'),str(D/'src'/source)]
     icon=D/'assets/launcher.ico'
     assert icon.is_file(), 'The launcher icon in assets/launcher.ico is required.'
     args+=['/win32icon:'+str(icon),'/resource:'+str(icon)+',KoreanAIR.LauncherIcon']
@@ -106,6 +106,7 @@ for f in runtime['ship_files']:
 for path in ['Game/Binaries/Win64/dwmapi.dll','Game/Binaries/Win64/override.txt','Game/Binaries/Win64/UE4SS/UE4SS.dll','Game/Binaries/Win64/UE4SS/UE4SS-settings.ini','Game/Binaries/Win64/UE4SS/UE4SS_SDK_Backends/UE4SS.json']:
     add(path,G/path,'runtime',path.endswith('UE4SS-settings.ini'))
 add('Game/Binaries/Win64/dinput8.dll',campaign_loader,'campaign')
+# Reviewed dialogue dictionary only; no historical full CP table is shipped.
 # Reviewed dialogue dictionary only; no historical full CP table is shipped.
 # Reviewed dialogue dictionary only; no historical full CP table is shipped.
 campaign_patch=D/'campaign-source/campaign-dialogue.json.gz'

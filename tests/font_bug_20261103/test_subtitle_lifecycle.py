@@ -2,7 +2,7 @@ from pathlib import Path
 import hashlib,json,subprocess,tempfile
 H=Path(__file__).resolve().parent;D=H.parents[1]
 exe=H/'SubtitleLifecycleTests.exe'
-sources=[D/'src/PackCore.cs',D/'src/CampaignSubtitles.cs',H/'SubtitleLifecycleTests.cs']
+sources=[D/'src/PackCore.cs',D/'src/CampaignSubtitles.cs',D/'src/GameInputCompatibility.cs',H/'SubtitleLifecycleTests.cs']
 refs=['System.Windows.Forms.dll','System.Drawing.dll','System.Web.Extensions.dll','System.IO.Compression.dll','System.IO.Compression.FileSystem.dll']
 subprocess.run(['C:/Windows/Microsoft.NET/Framework64/v4.0.30319/csc.exe','/nologo','/target:exe','/define:CAMPAIGN_SUBTITLES_TEST','/platform:x64','/out:'+str(exe),*['/r:'+x for x in refs],*map(str,sources)],check=True)
 r=subprocess.run([str(exe),tempfile.gettempdir()],capture_output=True,text=True)

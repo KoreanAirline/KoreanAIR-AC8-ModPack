@@ -4,7 +4,7 @@ import hashlib,json,subprocess
 H=Path(__file__).resolve().parent;D=H.parents[1]
 CSC=Path('C:/Windows/Microsoft.NET/Framework64/v4.0.30319/csc.exe');exe=H/'UpdateChangesTests.exe'
 refs=['System.Windows.Forms.dll','System.Drawing.dll','System.Web.Extensions.dll','System.IO.Compression.dll','System.IO.Compression.FileSystem.dll']
-names=['PackCore.cs','CampaignSubtitles.cs','Ui.cs','UpdateCore.cs','Launcher.cs','Hud.cs','Keys.cs','UpdateUI.cs','MouseInputWorker.cs','SupportReport.cs']
+names=['PackCore.cs','CampaignSubtitles.cs', 'GameInputCompatibility.cs','Ui.cs','UpdateCore.cs','Launcher.cs','Hud.cs','Keys.cs','UpdateUI.cs','MouseInputWorker.cs','SupportReport.cs']
 args=[str(CSC),'/nologo','/target:exe','/main:UpdateChangesTests','/platform:x64','/optimize+','/out:'+str(exe)]+['/r:'+x for x in refs]+[str(D/'src'/x)for x in names]+[str(H/'UpdateChangesTests.cs')]
 result=subprocess.run(args,capture_output=True,text=True)
 if result.returncode:raise RuntimeError(result.stdout+result.stderr)

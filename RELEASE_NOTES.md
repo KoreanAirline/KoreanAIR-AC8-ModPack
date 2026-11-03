@@ -128,7 +128,19 @@ Thanks for checking out my mod, and I hope you enjoy it!
 
 ---
 
-## Changes — 2.4 (build 2026110401)
+## Changes — 2.4 (build 2026110402)
+
+- Fixed mouse-flight response compensation falling back to slower tracking on aircraft with a fast neutral response.
+- The launcher checks for duplicate bindings between Accelerate, Decelerate and the game's Accelerate + Decelerate action. It explains how to remove the conflict without changing saved keys.
+- Existing control, camera, subtitle and display settings are retained.
+
+### 변경 내용 — 2.4 (빌드 2026110402)
+
+- 복원 응답이 빠른 기체에서 조종 응답 보정이 해제돼 추적이 느려지는 문제를 수정했습니다.
+- 게임의 가속·감속 키와 ‘가속 + 감속’ 키가 중복되면 런처에서 해제 방법을 안내합니다. 저장된 키는 자동으로 바꾸지 않습니다.
+- 기존 조종·카메라·자막·화면 설정을 유지합니다.
+
+## Previous changes — 2.4 (build 2026110401)
 
 - Module changes now run the verified installed Setup directly, removing the temporary executable copy. Verified install files are cached and reused. Missing files for an unpublished build show instructions to use the complete ZIP instead of a generic 404. This does not claim Defender's classification is resolved.
 
