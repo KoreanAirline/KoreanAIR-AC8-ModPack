@@ -128,7 +128,9 @@ Thanks for checking out my mod, and I hope you enjoy it!
 
 ---
 
-## Changes — 2.4 (build 2026110303)
+## Changes — 2.4 (build 2026110401)
+
+- Module changes now run the verified installed Setup directly, removing the temporary executable copy. Verified install files are cached and reused. Missing files for an unpublished build show instructions to use the complete ZIP instead of a generic 404. This does not claim Defender's classification is resolved.
 
 - Korean campaign translation is OFF for a new installation. Enable it explicitly in Setup or the launcher's Subtitles tab. Subtitle positioning starts at the game's original layout. Updates retain previously saved choices.
 
@@ -138,7 +140,9 @@ Thanks for checking out my mod, and I hope you enjoy it!
 - FALKEN 1.0.3's Aircraft Set crash also reproduced with this pack's native runtime absent and its campaign translation archive disabled. The underlying game/external-mod cause remains unresolved. This release does not certify FALKEN compatibility or claim that crash is fixed.
 - Defender reported Trojan:Win32/Bearfoos.A!ml for the previous local build 2026110302. That classification has not been cleared by Microsoft analysis. Source review and a manually configured exclusion do not establish that it was a false positive; no clearance is claimed for this release.
 
-### 변경 내용 — 2.4 (빌드 2026110303)
+### 변경 내용 — 2.4 (빌드 2026110401)
+
+- 기능 변경 시 검증된 설치 Setup을 직접 실행하도록 임시 EXE 복사를 제거했습니다. 확인된 설치 파일을 로컬 캐시에 보관해 재사용하며, 미공개 빌드의 온라인 파일이 없으면 404 대신 전체 ZIP 사용 방법을 안내합니다. 이 변경으로 Defender 탐지 판정이 해소됐다고 주장하지는 않습니다.
 
 - 신규 설치의 캠페인 한국어 번역은 기본 OFF입니다. Setup 또는 런처 자막 탭에서 직접 켠 경우만 적용합니다. 자막 위치도 게임 기본 배치로 시작하며, 업데이트 시 기존에 저장한 선택은 유지합니다.
 

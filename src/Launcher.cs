@@ -261,10 +261,13 @@ partial class Launcher : Form {
  }
  void OpenModuleSetup(bool? campaign){
   if(Core.Running(root))throw new Exception("Close ACE COMBAT 8 first.");
-  string temp=Path.Combine(Path.GetTempPath(),Core.Brand+"_Setup_"+Guid.NewGuid().ToString("N")+".exe");
-  File.Copy(Core.Safe(root,Core.Folder+"/Setup.exe"),temp);
+  // The installer skips identical owned bytes, including its own executable.
+  // Reuse that verified file rather than creating another executable in Temp.
+  string setup=Core.Safe(root,Core.Folder+"/Setup.exe");
+  var installed=Core.ReadState(root);var item=installed==null?null:installed.files.FirstOrDefault(x=>x.path==Core.Folder+"/Setup.exe");
+  if(item==null||!File.Exists(setup)||Core.HashFile(setup)!=item.hash)throw new Exception("Installation verification failed: "+Core.Folder+"/Setup.exe");
   string args="--ui-root \""+root+"\""+(campaign.HasValue?" "+(campaign.Value?"1":"0"):"");
-  Process.Start(new ProcessStartInfo(temp,args){WorkingDirectory=root,UseShellExecute=true});Close();
+  Process.Start(new ProcessStartInfo(setup,args){WorkingDirectory=root,UseShellExecute=true});Close();
  }
  protected override void Dispose(bool disposing){if(disposing){if(fgStatusTimer!=null)fgStatusTimer.Dispose();help.Dispose();}base.Dispose(disposing);}
  protected override void WndProc(ref Message m){base.WndProc(ref m);if(m.Msg==0x02E0&&IsHandleCreated&&!IsDisposed)BeginInvoke(new Action(()=>UiWindow.Fit(this)));}

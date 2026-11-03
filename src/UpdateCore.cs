@@ -134,7 +134,14 @@ public static class ReleasePayload {
   Directory.CreateDirectory(Path.GetDirectoryName(cached));
   string partial=Core.Safe(application,relative+"download-"+Guid.NewGuid().ToString("N")+".part");
   try {
-   using(var response=UpdateCore.Response(descriptor.url,30000))using(var source=response.GetResponseStream())
+   HttpWebResponse response;
+   try {response=UpdateCore.Response(descriptor.url,30000);}
+   catch(WebException ex) {
+    var failed=ex.Response as HttpWebResponse;
+    if(failed!=null&&failed.StatusCode==HttpStatusCode.NotFound){failed.Dispose();throw new FileNotFoundException("Install files for this build are not available online. Extract the complete mod ZIP and run Setup beside Payload.zip.",ex);}
+    throw;
+   }
+   using(response)using(var source=response.GetResponseStream())
    using(var output=new FileStream(partial,FileMode.CreateNew,FileAccess.Write,FileShare.None)) {
     if(response.ContentLength>0&&response.ContentLength!=descriptor.size)throw new InvalidDataException("Payload integrity check failed: Payload.zip");
     var buffer=new byte[65536];long total=0;int read,last=-1;
@@ -182,6 +189,7 @@ public static class UpdateCore {
  }
  public static string CurrentReleaseNotes(bool korean) {
   return korean?
+   "• 기능 설정을 바꿀 때 설치된 Setup을 직접 사용하며 임시 EXE 복사를 제거했습니다. 검증된 설치 캐시를 재사용하고 미공개 설치 파일에는 전체 ZIP 안내를 표시합니다. 백신 판정 해소를 보증하는 변경은 아닙니다.\r\n\r\n"+
    "• 신규 설치의 캠페인 한국어 번역은 기본 OFF입니다. 직접 켠 경우에만 적용하며 자막 위치도 기본 배치로 시작합니다. 기존 사용자의 저장된 선택은 유지합니다.\r\n\r\n"+
    "• 오래된 자막 표를 통째로 교체하던 문제를 수정했습니다. 현재 게임 원본에 캠페인 대사만 반영하고 메뉴·무장·파츠 문자열은 보존합니다.\r\n\r\n"+
    "• 실행 전 자막 원본을 확인합니다. 확인되지 않은 업데이트에서는 이전 번역을 제외하고 원본 자막을 사용하며 안내합니다.\r\n\r\n"+
@@ -189,6 +197,7 @@ public static class UpdateCore {
    "• 모니터 3대를 직접 선택하고 간격·해상도 차이를 포함한 전체 영역으로 확장할 수 있습니다. 표시할 영역과 배치 차이를 화면에서 확인할 수 있습니다.\r\n\r\n"+
    "• 확인된 IoStoreLoaderMod와 로더를 공유하는 설치 경로를 추가했습니다. 다른 모드 파일과 로드 순서를 보존합니다.\r\n\r\n"+
    "• 지원 게임 버전과 설치 파일은 적용 전에 검사합니다. 기체 추가 모드와 조합한 실제 비행 검증은 별도로 필요합니다.":
+   "• Module changes reuse the installed Setup without temporary EXE copies. Verified install caches are reused; unavailable files show complete-ZIP instructions. This does not certify antivirus clearance.\r\n\r\n"+
    "• Korean campaign translation is OFF by default for new installs and applies only when explicitly selected. Subtitle layout starts native; updates preserve saved choices.\r\n\r\n"+
    "• Replaced the obsolete full subtitle table with dialogue-only changes on current stock data. Menu, weapon and parts strings are preserved.\r\n\r\n"+
    "• Pre-launch stock checks remove stale translation overlays after unsupported updates and use original subtitles with a notice.\r\n\r\n"+

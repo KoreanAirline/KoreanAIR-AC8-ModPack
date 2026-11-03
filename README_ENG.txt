@@ -1,5 +1,5 @@
 KoreanAIR_AC8_ModPack_2.4
-English user guide — build 2026110303
+English user guide — build 2026110401
 
 INSTALL AND PLAY
 
@@ -11,6 +11,10 @@ INSTALL AND PLAY
    choose Play with selected mods.
 
 The standalone installer downloads the matching verified mod files when needed.
+Verified install files are cached locally for later module changes. Settings
+changes reuse the installed Setup directly, without making a temporary EXE copy.
+For unpublished candidates, extract the complete ZIP and run Setup beside
+Payload.zip once. Missing online files now show this recovery instruction.
 
 Fresh installations leave Korean campaign translation OFF and subtitle placement
 at Original position. These are separate choices. Existing explicit selections
