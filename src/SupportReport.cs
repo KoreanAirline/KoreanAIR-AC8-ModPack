@@ -73,6 +73,7 @@ public static class SupportReport {
    report.Add("Korean translation: "+state.campaign+"; Mouse flight: "+state.mouse+"; Screen & camera: "+state.display+"; Suspended: "+state.suspended);
    report.Add("Frame generation request recorded by pack: "+(state.frameGeneration==null?"unmanaged":state.frameGeneration.enabled.ToString()));
    report.Add("The pack.ini subtitles module controls layout; Korean translation is the separate installed module above.");
+   report.Add("Campaign dialogue generation: "+state.campaignStatus+"; stock/dictionary fingerprint="+state.campaignFingerprint);
   });
   report.Section("Monitors (current physical desktop)",delegate {
    var monitors=sources.Monitors==null?new Monitor[0]:sources.Monitors();

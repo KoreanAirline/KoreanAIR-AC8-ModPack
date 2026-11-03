@@ -11,14 +11,14 @@ using System.Web.Script.Serialization;
 
 [assembly:System.Reflection.AssemblyVersion("2.4.0.0")]
 [assembly:System.Reflection.AssemblyFileVersion("2.4.0.0")]
-[assembly:System.Reflection.AssemblyInformationalVersion("2.4+b2026110301")]
+[assembly:System.Reflection.AssemblyInformationalVersion("2.4+b2026110303")]
 [assembly:System.Reflection.AssemblyProduct("KoreanAIR AC8 Mod Pack")]
 
 namespace KoreanAIR {
 public sealed class Item { public string path; public string source; public string hash; public string group; public bool mutable; }
 public sealed class FileState { public string path; public string hash; public string original; public bool mutable; }
 public sealed class FrameGenerationLease { public bool enabled,live,originalExists,originalReadOnly; public string encoding,newline,prefix,previousSection; }
-public sealed class State { public string version="2.4"; public long build; public string previousVersion; public long previousBuild; public string root; public bool campaign; public bool mouse; public bool display; public bool suspended; public bool sharedRuntime; public string campaignProvider; public string backup; public string campaignLoaderHash; public string legacyCampaignLoaderHash; public FrameGenerationLease frameGeneration; public List<FileState> files=new List<FileState>(); }
+public sealed class State { public string version="2.4"; public long build; public string previousVersion; public long previousBuild; public string root; public bool campaign; public bool mouse; public bool display; public bool suspended; public bool sharedRuntime; public string campaignProvider; public string campaignFingerprint; public string campaignStatus; public string backup; public string campaignLoaderHash; public string legacyCampaignLoaderHash; public FrameGenerationLease frameGeneration; public List<FileState> files=new List<FileState>(); }
 public sealed class Manifest { public List<Item> files; public Dictionary<string,string> legacy; }
 public sealed class LoaderCompatibility { public bool ForeignLoader; public string Path; public string Hash; public string Kind; }
 public sealed class HotasCompatibility { public bool Present,InputEnabled,KnownSharedRuntime,HotasEnabled,AnalogYawEnabled; }
@@ -69,10 +69,13 @@ public sealed class PackWriteException : IOException {
 }
 public static class Core {
  public const string Brand="KoreanAIR_AC8_ModPack_2.4";
- public const long ReleaseBuild=2026110301;
+ public const long ReleaseBuild=2026110303;
  public const string Folder="KoreanAIR_AC8_ModPack";
  public const string Mod="Game/Binaries/Win64/UE4SS/Mods/AC8MouseAim/";
  public const string CampaignLoader="Game/Binaries/Win64/dinput8.dll";
+ public const string CampaignPatch=Folder+"/Translation/campaign-dialogue.json.gz";
+ public const string CampaignPak="Game/Content/Paks/pakchunk0-Windows_999_P.pak";
+ public static Action<string> SubtitleFallbackNotice;
  public static JavaScriptSerializer Json=new JavaScriptSerializer{MaxJsonLength=32*1024*1024};
  public static string Hash(byte[] b) { using(var s=SHA256.Create()) return BitConverter.ToString(s.ComputeHash(b)).Replace("-","").ToLowerInvariant(); }
  public static string HashFile(string p) { using(var s=SHA256.Create()) using(var f=File.OpenRead(p)) return BitConverter.ToString(s.ComputeHash(f)).Replace("-","").ToLowerInvariant(); }
@@ -282,6 +285,15 @@ public static class Core {
    manifest=ReadManifest(zip);
    foreach(var f in manifest.files) { Safe(root,f.path); if(!Selected(f.group,cp,mouse,display)) continue; var bytes=Entry(zip,f.source); if(Hash(bytes)!=f.hash) throw new Exception("Payload integrity check failed: "+f.path); wanted.Add(f.path,bytes); if(f.mutable) mutable.Add(f.path); }
   }
+  // Never install a historical whole-table payload. Generate only the reviewed
+  // dialogue changes on top of verified CURRENT stock strings and indices.
+  wanted.Remove(CampaignPak);wanted.Remove(SharedLoader.CampaignPak);
+  if(cp) {
+   byte[] patch;if(!wanted.TryGetValue(CampaignPatch,out patch))throw new InvalidDataException("Missing campaign dialogue dictionary.");
+   try {var translated=CampaignSubtitles.Build(root,patch);wanted[CampaignPak]=translated.Pak;next.campaignFingerprint=translated.Fingerprint;next.campaignStatus=translated.Status;}
+   catch(InvalidDataException ex) {next.campaignStatus="Original subtitles retained: "+ex.Message;}
+   catch(IOException ex) {next.campaignStatus="Original subtitles retained: "+ex.Message;}
+  }
   next.campaignLoaderHash=CampaignHash(manifest);next.legacyCampaignLoaderHash=LegacyCampaignHash(manifest);
   var loader=InspectCampaignLoader(root,old,next.campaignLoaderHash,next.legacyCampaignLoaderHash);
   var shared=InspectSharedLoader(root);
@@ -289,9 +301,9 @@ public static class Core {
   if(cp&&shared.CanProvideCampaign) {
    // Exactly one PAK constructor hook owns mounting. The third-party loader
    // reads our own approved PAK in its normal recursively scanned directory.
-   byte[] campaignPak;if(!wanted.TryGetValue("Game/Content/Paks/pakchunk0-Windows_999_P.pak",out campaignPak))throw new Exception("Missing campaign subtitle payload.");
+   byte[] campaignPak;wanted.TryGetValue(CampaignPak,out campaignPak);
    wanted.Remove("Game/Content/Paks/pakchunk0-Windows_999_P.pak");wanted.Remove(CampaignLoader);
-   wanted.Add(SharedLoader.CampaignPak,campaignPak);next.campaignProvider=SharedLoader.Provider;
+   if(campaignPak!=null)wanted.Add(SharedLoader.CampaignPak,campaignPak);next.campaignProvider=SharedLoader.Provider;
   } else next.campaignProvider=cp?"standalone":null;
   if(cp&&loader.ForeignLoader)throw new Exception("Another file already occupies this module path. It has been preserved: "+CampaignLoader+". Keep Korean campaign subtitles OFF to install Mouse and Screen modules with this loader. Coexistence in game is unverified.");
   if(File.Exists(installer)) wanted[Folder+"/Setup.exe"]=File.ReadAllBytes(installer);
@@ -543,7 +555,55 @@ public static class Core {
    throw new Exception("Installation verification failed: "+f.path);
   }
  }
- public static void Launch(string root) { Locked(root,()=>LaunchCore(root)); } static void LaunchCore(string root) { VerifyGame(root); var s=ReadState(root); if(s==null) throw new Exception("Run the installer first."); if(Running(root)) throw new Exception("ACE COMBAT 8 is already running."); if(s.mouse&&InspectHotas(root).InputEnabled)throw new Exception(HotasMouseConflict); if(s.suspended) Suspend(root,false); s=ReadState(root); ValidateFrameGeneration(root,s); if(s.frameGeneration!=null)FgLocked(()=>FgSave(root,s.frameGeneration.enabled)); s=ReadState(root);ValidateLaunchFiles(root,s); var p=new ProcessStartInfo(Safe(root,"start_protected_game.exe"),"-SaveToUserDir -anticheat_settings=KoreanAIR_AC8_Offline.json"); p.WorkingDirectory=root;p.UseShellExecute=false; p.EnvironmentVariables["EOS_USE_ANTICHEATCLIENTNULL"]="1";p.EnvironmentVariables["SteamAppId"]="2288340";p.EnvironmentVariables["KOREANAIR_AC8_MODPACK"]="1";p.EnvironmentVariables["KOREANAIR_AC8_CAMPAIGN"]=s.campaign?"1":"0";Process.Start(p); }
+ // Runs only before launch, never in the game's frame/UI path. A game update
+ // must not leave an old full-table overlay active after verification fails.
+ public static void RefreshCampaignSubtitles(string root) {
+  Locked(root,()=>RefreshCampaignSubtitlesCore(root));
+ }
+ static void RefreshCampaignSubtitlesCore(string root) {
+  var s=ReadState(root);if(s==null||!s.campaign||s.suspended)return;
+  if(Running(root))throw new Exception("Close ACE COMBAT 8 before refreshing subtitles.");
+  string relative=s.campaignProvider==SharedLoader.Provider?SharedLoader.CampaignPak:CampaignPak;
+  string target=Safe(root,relative),record=Safe(root,Folder+"/installed.json");
+  var owned=s.files.FirstOrDefault(x=>String.Equals(x.path,relative,StringComparison.OrdinalIgnoreCase));
+  if(File.Exists(target)&&(owned==null||HashFile(target)!=owned.hash))throw new Exception("A changed subtitle archive has been preserved: "+relative);
+  var dictionary=s.files.FirstOrDefault(x=>String.Equals(x.path,CampaignPatch,StringComparison.OrdinalIgnoreCase));
+  string patchPath=Safe(root,CampaignPatch);
+  if(dictionary==null||!File.Exists(patchPath)||new FileInfo(patchPath).Length>4*1024*1024||HashFile(patchPath)!=dictionary.hash)throw new Exception("Campaign dialogue dictionary verification failed. Rerun Setup.");
+  byte[] patch=File.ReadAllBytes(patchPath);CampaignSubtitles.Result result=null;string status=null;
+  try {
+   string fingerprint=CampaignSubtitles.Fingerprint(root,patch);
+   if(s.campaignFingerprint==fingerprint&&owned!=null&&File.Exists(target))return;
+   result=CampaignSubtitles.Build(root,patch);status=result.Status;
+  } catch(InvalidDataException ex) {status="Original subtitles retained: "+ex.Message;}
+    catch(IOException ex) {status="Original subtitles retained: "+ex.Message;}
+  var journal=new Dictionary<string,byte[]>(StringComparer.OrdinalIgnoreCase);
+  journal[relative]=File.Exists(target)?File.ReadAllBytes(target):null;journal[Folder+"/installed.json"]=File.ReadAllBytes(record);
+  try {
+   if(result==null){if(File.Exists(target))File.Delete(target);s.files.RemoveAll(x=>String.Equals(x.path,relative,StringComparison.OrdinalIgnoreCase));s.campaignFingerprint=null;}
+   else {Atomic(target,result.Pak);if(owned==null){owned=new FileState{path=relative};s.files.Add(owned);}owned.hash=Hash(result.Pak);owned.mutable=false;s.campaignFingerprint=result.Fingerprint;}
+   s.campaignStatus=status;Text(record,Json.Serialize(s));
+  }catch(Exception ex){Rollback(root,journal.Reverse(),ex);throw;}
+ }
+ public static void Launch(string root) { Locked(root,()=>LaunchCore(root)); }
+ static void LaunchCore(string root) {
+  VerifyGame(root);var s=ReadState(root);if(s==null)throw new Exception("Run the installer first.");
+  if(Running(root))throw new Exception("ACE COMBAT 8 is already running.");
+  if(s.mouse&&InspectHotas(root).InputEnabled)throw new Exception(HotasMouseConflict);
+  if(s.suspended)Suspend(root,false);s=ReadState(root);
+  RefreshCampaignSubtitlesCore(root);s=ReadState(root);
+  ValidateFrameGeneration(root,s);if(s.frameGeneration!=null)FgLocked(()=>FgSave(root,s.frameGeneration.enabled));s=ReadState(root);ValidateLaunchFiles(root,s);
+  var p=new ProcessStartInfo(Safe(root,"start_protected_game.exe"),"-SaveToUserDir -anticheat_settings=KoreanAIR_AC8_Offline.json");
+  p.WorkingDirectory=root;p.UseShellExecute=false;p.EnvironmentVariables["EOS_USE_ANTICHEATCLIENTNULL"]="1";
+  p.EnvironmentVariables["SteamAppId"]="2288340";p.EnvironmentVariables["KOREANAIR_AC8_MODPACK"]="1";
+  var pak=s.files.FirstOrDefault(x=>x.path==(s.campaignProvider==SharedLoader.Provider?SharedLoader.CampaignPak:CampaignPak));
+  bool translated=s.campaign&&!String.IsNullOrEmpty(s.campaignFingerprint)&&pak!=null;
+  p.EnvironmentVariables["KOREANAIR_AC8_CAMPAIGN"]=translated?"1":"0";
+  p.EnvironmentVariables["KOREANAIR_AC8_CAMPAIGN_SHA256"]=translated?pak.hash:"";
+  p.EnvironmentVariables["KOREANAIR_AC8_CAMPAIGN_SIZE"]=translated?new FileInfo(Safe(root,pak.path)).Length.ToString(System.Globalization.CultureInfo.InvariantCulture):"";
+  if(s.campaign&&!translated&&SubtitleFallbackNotice!=null)SubtitleFallbackNotice(s.campaignStatus);
+  Process.Start(p);
+ }
 }
 }
 

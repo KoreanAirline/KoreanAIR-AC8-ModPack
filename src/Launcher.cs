@@ -49,6 +49,7 @@ partial class Launcher : Form {
   Text=Core.Brand;AutoScaleDimensions=new SizeF(96,96);AutoScaleMode=AutoScaleMode.Dpi;
   Font=new Font("Segoe UI",10);ClientSize=new Size(920,760);MinimumSize=new Size(800,610);StartPosition=FormStartPosition.CenterScreen;
   Dialog=(text,icon)=>MessageBox.Show(this,text,Core.Brand,MessageBoxButtons.OK,icon);
+  Core.SubtitleFallbackNotice=details=>Dialog(ui.T("The current game subtitle data is not verified by this translation build. The previous translation archive has been removed and the game will use its original subtitles. Other selected modules remain enabled.\n\n","현재 게임의 자막 데이터는 이 번역 빌드에서 확인되지 않았습니다. 이전 번역 파일을 제외하고 게임 원본 자막으로 실행합니다. 선택한 다른 기능은 유지됩니다.\n\n")+details,MessageBoxIcon.Warning);
   var layout=new TableLayoutPanel{Name="launcherLayout",Dock=DockStyle.Fill,Padding=new Padding(22),ColumnCount=1,RowCount=4};
   layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
   layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));layout.RowStyles.Add(new RowStyle(SizeType.Percent,100));layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));Controls.Add(layout);
@@ -165,8 +166,9 @@ partial class Launcher : Form {
  sealed class MonitorChoice{public string Device{get;private set;}public string Label{get;private set;}public MonitorChoice(string device,string label){Device=device;Label=label;}}
  void SubtitlesTab(){
   var p=Tab("Subtitles","자막");
-  var translation=new CheckBox{Name="koreanTranslation",Checked=state.campaign,AutoSize=true};ui.Bind(translation,"Korean campaign translation","캠페인 한국어 번역");Row(p,translation);
-  Paragraph(p,"Optional Korean translation. Mouse flight and screen features work independently, including with English subtitles.\nApplying this selection opens the installer with your other modules retained. Close the game first.","한국어 번역은 선택 사항입니다. 영어 자막을 사용해도 마우스 조종·화면 기능은 독립적으로 작동합니다.\n적용을 누르면 다른 기능 선택을 유지한 설치 창이 열립니다. 먼저 게임을 종료하세요.");
+  var translation=new CheckBox{Name="koreanTranslation",Checked=state.campaign,AutoSize=true};ui.Bind(translation,"Korean campaign translation (optional; off by default)","캠페인 한국어 번역 (선택 사항·기본 꺼짐)");Row(p,translation);
+  Paragraph(p,"Only reviewed campaign dialogue is translated, using the installed game's current string table. Menus, equipment, skins and new/changed text retain their current game values. Unknown game data uses original subtitles until supported. Launch through this launcher so the archive is checked before each game start.\nMouse flight and screen features work independently. Applying this selection opens Setup with your other modules retained. Close the game first.","현재 게임의 문자열 표를 기준으로 확인된 캠페인 대사만 번역합니다. 메뉴·장비·스킨과 새로 추가되거나 변경된 문구는 게임 원본을 유지합니다. 확인되지 않은 게임 데이터는 지원 전까지 원본 자막을 사용합니다. 실행 전 검사를 위해 게임은 이 런처에서 실행하세요.\n마우스 조종·화면 기능은 독립적으로 작동합니다. 적용을 누르면 다른 기능 선택을 유지한 설치 창이 열립니다. 먼저 게임을 종료하세요.");
+  if(!String.IsNullOrEmpty(state.campaignStatus))Paragraph(p,"Translation check: "+state.campaignStatus,"번역 검사: "+state.campaignStatus);
   Button(Actions(p),"applyKoreanTranslation","Apply translation selection…","번역 선택 적용…",()=>OpenModuleSetup(translation.Checked));
   if(!state.mouse&&!state.display&&!state.campaign){Paragraph(p,"Subtitle positioning requires an installed module. Add one in Installation.","자막 위치를 조절하려면 모듈이 필요합니다. 설치 탭에서 추가하세요.");return;}
   var d=Core.ReadIni(Core.Config(root,"subtitle.ini"),"subtitles");string saved;int selected=d.TryGetValue("position",out saved)&&String.Equals(saved,"bottom",StringComparison.OrdinalIgnoreCase)?1:0;

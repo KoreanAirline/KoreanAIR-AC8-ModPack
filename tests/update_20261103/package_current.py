@@ -7,7 +7,7 @@ VERSION,BUILD='2.4',2026110301
 BRAND='KoreanAIR_AC8_ModPack_'+VERSION;TAG='v'+VERSION+'-b'+str(BUILD)
 TEXT_EXT={'.py','.cpp','.c','.h','.hpp','.cs','.json','.md','.txt','.ini','.cmd','.ps1','.lua','.asm','.def','.yml','.yaml','.xml','.inc','.cmake'}
 BINARY_EXT={'.pak','.ucas','.utoc','.pyc','.dll','.exe','.obj','.pdb','.lib','.dmp','.etl','.zip','.bin'}
-OWNER_INSTRUCTION='Owner explicitly authorized this build for agent startup verification and publication without owner gameplay testing on 2026-11-03.'
+OWNER_INSTRUCTION='버전이 업데이트 되면 그냥 실행전에 아직 업데이트가 안되서 작동이 안될 수도 있다 이렇게 명시하는게 맞을거 같은데 그런식으로 작업해서 github 바로 올려줘 내가 테스트 못해서 너가 그냥 알아서 게임 실행해서 문제 없나 보고 바로 업로드해 대신 쓸데없는데 토큰 사용하지마'
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 load=lambda p:json.loads(p.read_text(encoding='utf-8-sig'))
 

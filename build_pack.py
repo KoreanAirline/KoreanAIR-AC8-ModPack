@@ -20,7 +20,7 @@ assert f'AssemblyInformationalVersion("{release["version"]}+b{release["build"]}"
 assert release['repository'] in (D/'src/UpdateCore.cs').read_text(encoding='utf-8')
 refs=['System.Windows.Forms.dll','System.Drawing.dll','System.Web.Extensions.dll','System.IO.Compression.dll','System.IO.Compression.FileSystem.dll']
 def compile(name,source,resources=[]):
-    args=[str(CSC),'/nologo','/target:winexe','/optimize+','/platform:x64','/out:'+str(BIN/name)]+['/reference:'+r for r in refs]+resources+[str(D/'src/PackCore.cs'),str(D/'src/Ui.cs'),str(D/'src/UpdateCore.cs'),str(D/'src'/source)]
+    args=[str(CSC),'/nologo','/target:winexe','/optimize+','/platform:x64','/out:'+str(BIN/name)]+['/reference:'+r for r in refs]+resources+[str(D/'src/PackCore.cs'),str(D/'src/CampaignSubtitles.cs'),str(D/'src/Ui.cs'),str(D/'src/UpdateCore.cs'),str(D/'src'/source)]
     icon=D/'assets/launcher.ico'
     assert icon.is_file(), 'The launcher icon in assets/launcher.ico is required.'
     args+=['/win32icon:'+str(icon),'/resource:'+str(icon)+',KoreanAIR.LauncherIcon']
@@ -81,7 +81,7 @@ def verified_campaign_loader(distribution,identity):
     assert verified['abi_sha256']==native_sha(folder/'ABI_AND_GUARDS.json'),'Campaign executable guards changed after build; rebuild the loader.'
     proof=json.loads((folder/'ABI_AND_GUARDS.json').read_text(encoding='utf-8'))
     assert proof['game']['sha256']==verified['game_sha256'],'Campaign game identity does not match its verified guards.'
-    assert proof['approved_pak']['sha256']==verified['approved_pak_sha256']==native_sha(distribution/'campaign-source/rebuilt.pak'),'Campaign PAK does not match its verified loader.'
+    assert verified.get('approval_mode')=='launch_environment_sha256_size','Campaign loader must validate the current generated archive supplied by the launcher.'
     required={'policy_tests.txt','forwarder_tests.txt','hash_tests.txt','hash_approved_pak.txt','detour_tests.txt'}
     assert set(verified['test_sha256'])==required,'Campaign verification is incomplete.'
     for name,expected in verified['test_sha256'].items():
@@ -106,11 +106,12 @@ for f in runtime['ship_files']:
 for path in ['Game/Binaries/Win64/dwmapi.dll','Game/Binaries/Win64/override.txt','Game/Binaries/Win64/UE4SS/UE4SS.dll','Game/Binaries/Win64/UE4SS/UE4SS-settings.ini','Game/Binaries/Win64/UE4SS/UE4SS_SDK_Backends/UE4SS.json']:
     add(path,G/path,'runtime',path.endswith('UE4SS-settings.ini'))
 add('Game/Binaries/Win64/dinput8.dll',campaign_loader,'campaign')
-campaign_pak=D/'campaign-source/rebuilt.pak'
-campaign_source=json.loads((D/'campaign-source/release_source_manifest.json').read_text(encoding='utf-8'))
-assert campaign_pak.stat().st_size==campaign_source['release_pak_size']
-assert hashlib.sha256(campaign_pak.read_bytes()).hexdigest()==campaign_source['release_pak_sha256']
-add('Game/Content/Paks/pakchunk0-Windows_999_P.pak',campaign_pak,'campaign')
+# Reviewed dialogue dictionary only; no historical full CP table is shipped.
+campaign_patch=D/'campaign-source/campaign-dialogue.json.gz'
+patch_manifest=json.loads((D/'campaign-source/campaign-dialogue.json.manifest.json').read_text(encoding='utf-8'))
+assert patch_manifest['contains_original_table'] is False
+assert hashlib.sha256(campaign_patch.read_bytes()).hexdigest()==patch_manifest['sha256']
+add('KoreanAIR_AC8_ModPack/Translation/campaign-dialogue.json.gz',campaign_patch,'campaign')
 for name in ('README_ENG.txt','README_KOR.txt'):
     readme=(D/name).read_bytes()
     readme.decode('utf-8')

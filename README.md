@@ -44,7 +44,7 @@ As a result, you can actually see parts of the game world that would normally be
 
 ## Installation and bug reports
 
-**Existing users (including 1.0–2.3): close the game and run `KoreanAIR_AC8_ModPack_2.4_Setup.exe` over the same game folder. Do not uninstall or delete the old mod first. Settings, selected modules and disabled state are retained. If the old launcher cannot update, download the new Setup directly from this release and run it; you do not need the old launcher to work.** The standalone Setup downloads its matching payload when needed; extracting the complete ZIP also allows installation with `Payload.zip` beside Setup.
+Run Setup over the existing installation after closing the game. Your settings and module selection are retained. The standalone Setup downloads its matching payload when needed; extracting the complete ZIP also allows installation with `Payload.zip` beside Setup.
 
 For the shared-loader path, download [ACE8 Mod Loader 1.3.1 from its author](https://www.nexusmods.com/acecombat8wingsoftheve/mods/64) separately and follow its installation guide. Enable its IoStoreLoaderMod, close the game, then run this pack's Setup. The recognized loader owns archive loading; this pack removes only its own previous campaign hook and keeps external mod folders, shared runtime settings and load-order entries. Third-party loader files are not bundled. Unknown replacement DLLs are preserved and reported. FALKEN Add On 1.0.3 passed package/import/structure checks; combined in-game flight is not verified, and arbitrary mods are not guaranteed compatible.
 
@@ -110,8 +110,6 @@ Thanks for checking out my mod, and I hope you enjoy it!
 
 ### 설치 및 문제 보고
 
-**1.0~2.3 기존 사용자: 게임을 종료하고 새 Setup을 같은 게임 폴더에 실행하세요. 먼저 제거·삭제하지 마세요. 자동 업데이트가 실패하면 이 릴리즈의 `KoreanAIR_AC8_ModPack_2.4_Setup.exe`를 직접 받아 실행하면 됩니다. 설정과 선택 기능·꺼진 상태를 유지합니다.**
-
 게임을 종료하고 기존 폴더에 Setup을 실행하면 설정과 기능 선택을 유지한 채 업데이트합니다. 먼저 제거할 필요가 없습니다. Setup만 실행해도 필요한 파일을 내려받으며, 전체 ZIP을 받았다면 압축을 모두 풀고 `Payload.zip` 옆의 Setup을 실행하면 됩니다.
 
 공용 로더를 사용하려면 [제작자의 ACE8 Mod Loader 1.3.1](https://www.nexusmods.com/acecombat8wingsoftheve/mods/64)을 별도로 받아 설치 안내를 따르세요. IoStoreLoaderMod를 활성화하고 게임을 종료한 뒤 이 모드팩의 Setup을 실행하면, 확인된 로더 하나로 아카이브를 읽습니다. 이 모드팩의 기존 캠페인 훅만 제거하며 외부 모드 폴더·공용 런타임 설정·로드 순서를 보존합니다. 외부 로더 파일은 포함하지 않으며 확인되지 않은 DLL은 덮어쓰지 않고 안내합니다. FALKEN Add On 1.0.3은 패키지·DLL 의존성·구조를 확인했지만 실제 병용 비행은 검증하지 못했고, 임의의 모드까지 모두 호환된다는 뜻은 아닙니다.
@@ -130,7 +128,27 @@ Thanks for checking out my mod, and I hope you enjoy it!
 
 ---
 
-## Changes — 2.4 (build 2026110301)
+## Changes — 2.4 (build 2026110303)
+
+- Korean campaign translation is OFF for a new installation. Enable it explicitly in Setup or the launcher's Subtitles tab. Subtitle positioning starts at the game's original layout. Updates retain previously saved choices.
+
+- Replaced the obsolete shipped subtitle table with a reviewed dialogue dictionary. If enabled, Setup generates a full current CP_G table overlay whose only changed values are reviewed dialogue. Menu strings, indices and control glyphs are preserved byte-for-byte. This still mounts a complete table; per-lookup dialogue replacement and automatic merging of other mods' CP_G changes are not implemented.
+- Pre-launch checks remove the previous generated overlay when stock data is unsupported. The game then uses original subtitles, with a notice; no stale table is mounted. Changed or ambiguous source lines also keep their current text.
+- Preserves existing input, camera, subtitle-position and other-mod settings. No per-frame text searching was added. Launch from KoreanAIR to run the subtitle checks; the external mod manager remains usable for installing aircraft and restoring its Modded files.
+- FALKEN 1.0.3's Aircraft Set crash also reproduced with this pack's native runtime absent and its campaign translation archive disabled. The underlying game/external-mod cause remains unresolved. This release does not certify FALKEN compatibility or claim that crash is fixed.
+- Defender reported Trojan:Win32/Bearfoos.A!ml for the previous local build 2026110302. That classification has not been cleared by Microsoft analysis. Source review and a manually configured exclusion do not establish that it was a false positive; no clearance is claimed for this release.
+
+### 변경 내용 — 2.4 (빌드 2026110303)
+
+- 신규 설치의 캠페인 한국어 번역은 기본 OFF입니다. Setup 또는 런처 자막 탭에서 직접 켠 경우만 적용합니다. 자막 위치도 게임 기본 배치로 시작하며, 업데이트 시 기존에 저장한 선택은 유지합니다.
+
+- 예전 자막 표를 배포하던 방식을 제거했습니다. 켠 경우 현재 게임의 전체 CP_G 표에 확인된 대사 값만 반영한 파일을 생성하며, 메뉴·인덱스·제어 글리프는 바이트 단위로 보존합니다. 적용 파일은 여전히 전체 표이며, 대사 조회 단계 교체와 다른 모드의 CP_G 변경 자동 병합은 구현하지 않았습니다.
+- 실행 전 원본 검사를 통과하지 못하면 이전 번역 파일을 제외하고 안내한 뒤 원본 자막을 사용합니다. 원문이 달라지거나 대응이 불명확한 대사도 원문을 유지합니다.
+- 조종·카메라·자막 위치·다른 모드 설정을 유지합니다. 플레이 중 반복 검색은 추가하지 않았습니다. 자막 검사를 위해 게임은 KoreanAIR 런처에서 실행하고, 외부 모드 관리자는 기체 설치와 Modded 파일 복원에 사용하세요.
+- FALKEN 1.0.3의 기체 세트 크래시는 우리 네이티브 런타임이 로드되지 않고 번역 파일도 꺼진 상태에서도 재현됐습니다. 게임·외부 모드 중 정확한 원인은 아직 확정하지 못했으며, FALKEN 호환성이나 해당 크래시 해결을 보증하지 않습니다.
+- 이전 로컬 빌드 2026110302에 Defender의 Trojan:Win32/Bearfoos.A!ml 탐지가 있었습니다. Microsoft 분석으로 해소되지 않았으며 소스 검사나 수동 예외 설정만으로 오진이 확인된 것은 아닙니다. 이번 배포에 대한 보안 판정 해소도 주장하지 않습니다.
+
+## Previous changes — 2.4 (build 2026110301)
 
 - Updated the inspected executable identity and guarded campaign-loader addresses for the game update: timestamp `6AD2D0A7`, image size `215A2000`. Other game builds receive a warning rather than a version-only block; exact native code guards still apply, so changed features may remain inactive.
 - Added one recognized archive-loader owner when IoStoreLoaderMod 1.3.1 is installed. The Korean campaign archive uses that loader, avoiding two hooks on the same game constructor. External runtime files, mod folders and load order are retained during update, disable and uninstall.

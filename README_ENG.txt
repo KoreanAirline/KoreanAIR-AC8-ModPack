@@ -1,5 +1,5 @@
 KoreanAIR_AC8_ModPack_2.4
-English user guide — build 2026110301
+English user guide — build 2026110303
 
 INSTALL AND PLAY
 
@@ -11,6 +11,15 @@ INSTALL AND PLAY
    choose Play with selected mods.
 
 The standalone installer downloads the matching verified mod files when needed.
+
+Fresh installations leave Korean campaign translation OFF and subtitle placement
+at Original position. These are separate choices. Existing explicit selections
+are preserved when updating.
+
+Known security issue: Windows Defender detected/quarantined local build2026110302
+as Trojan:Win32/Bearfoos.A!ml. Clearance for this build is not established. Source
+review alone does not prove a false positive. If security software blocks a file,
+stop and report the detection; adding an exclusion is not a fix.
 
 Close the game before installing, removing or changing modules. A writable Steam
 library does not need administrator rights; a protected folder may require running
@@ -54,6 +63,16 @@ MODULES
   Online dialogue remains unchanged. In Subtitles, select Korean campaign
   translation and Apply translation selection to add/remove it through Setup.
   Mouse flight and screen features also work without Korean translation.
+  Translation changes only reviewed campaign dialogue keys, using the installed
+  game's current string table. Menu, parts, weapons, skin text and added entries
+  remain unchanged. Changed/ambiguous dialogue keeps its original text. Unsupported
+  game data removes the previous translation overlay and uses original subtitles,
+  with a notice. Launch through this pack's launcher for the pre-launch check/cache
+  refresh. Stock files are never edited; no in-game text polling is added.
+  The generated PAK still mounts complete CP_G.dat tables: reviewed dialogue
+  values differ, while every untouched non-dialogue UTF-8 slice is copied from
+  current stock. Per-lookup translation is not implemented. Another mod replacing
+  the same CP_G.dat is not automatically merged, even if the menu text is preserved.
 - Mouse flight controls: mouse steering, Alt free look, toggle zoom toward mouse
   aim and the flight helper HUD.
 - Screen & camera: flight FOV, automatic ultrawide correction or a window spanning
@@ -280,6 +299,15 @@ In this mode there is one archive-loading owner: IoStoreLoaderMod loads the Kore
 campaign PAK and this pack omits its own campaign constructor hook. Existing mod
 folders, runtime settings and load-order entries are preserved.
 
+Combined installation (close the game first)
+1. In ACE8 Mod Launcher, choose Install if its loader is absent, then choose Modded.
+2. Use Mods → Add mods… to add the aircraft mod ZIP or extracted folder.
+3. Run this pack's Setup to install/update, then save settings in KoreanAIR's launcher.
+4. For daily play, use KoreanAIR's Play with selected mods. The external Play button
+   does not run this pack's subtitle refresh, file checks or settings handling.
+For online play: close game → Disable KoreanAIR features only → external Unmodded.
+To return: close game → restore external Modded files → resume/play from KoreanAIR.
+
 Keep KoreanAIRCampaign enabled in IoStoreLoaderMod's loadorder.txt if you use the
 translation. An explicit disabled entry is reported rather than silently changed.
 Updating or removing this pack does not remove that external loader, its runtime
@@ -291,10 +319,13 @@ repeatedly move or replace the same shared files. A third-party manager's Unmodd
 mode may move the whole UE4SS tree; restore that manager's modded files before
 resuming this pack. Disabling this pack alone does not disable external mods.
 
-FALKEN Add On 1.0.3 was checked for package files, imports and loader structure.
-It needs IoStoreLoaderMod for its new assets. Combined in-game FALKEN flight has
-not been verified. This compatibility path is limited to the recognized files;
-arbitrary aircraft, camera or flight-controller mods are not guaranteed compatible.
+FALKEN Add On 1.0.3 needs IoStoreLoaderMod for its new assets. An isolated run with
+this pack's native runtime absent and campaign translation inactive also crashed
+in the Aircraft Set/hangar menu at the same game function as the combined run.
+The specific game/external-mod cause is unresolved; FALKEN compatibility is not
+certified and this build does not claim to fix that crash. This shared-loader
+path is limited to recognized files; arbitrary aircraft, camera, subtitle-table
+or flight-controller mods are not guaranteed compatible.
 
 
 AC8HOTAS / ANALOGUE YAW

@@ -64,7 +64,7 @@ class Setup : Form {
   path.Text=String.IsNullOrEmpty(preferred)?Core.DetectGame():preferred;path.Margin=new Padding(0,4,8,4);directory.Controls.Add(path,0,0);
   ui.Bind(browse,"Browse…","찾아보기…");browse.AutoSize=true;browse.AutoSizeMode=AutoSizeMode.GrowAndShrink;browse.Dock=DockStyle.Top;browse.Height=34;browse.MinimumSize=new Size(0,34);browse.Margin=new Padding(0);directory.Controls.Add(browse,1,0);Row(main,directory);
   browse.Click+=(s,e)=>{using(var f=new FolderBrowserDialog()){f.Description=ui.T("Select the ACE COMBAT 8 game folder.","ACE COMBAT 8 게임 폴더를 선택하세요.");f.SelectedPath=path.Text;if(f.ShowDialog(this)==DialogResult.OK){path.Text=f.SelectedPath;LoadState(true);}}};
-  ui.Bind(campaign,"Korean campaign subtitles","캠페인 한국어 자막");ui.Bind(mouse,"Mouse flight controls","마우스 비행 조종");ui.Bind(display,"Triple monitor span and FOV","트리플 모니터·FOV");mouse.Checked=true;
+  ui.Bind(campaign,"Korean campaign subtitles (optional; off by default)","캠페인 한국어 자막 (선택 사항·기본 꺼짐)");ui.Bind(mouse,"Mouse flight controls","마우스 비행 조종");ui.Bind(display,"Triple monitor span and FOV","트리플 모니터·FOV");campaign.Checked=false;mouse.Checked=true;
   foreach(var c in new[]{campaign,mouse,display}){c.Margin=new Padding(0,5,0,15);Row(main,c);}
   loaderStatus.Margin=new Padding(0,0,0,12);Row(main,loaderStatus);
   hotasStatus.Margin=new Padding(0,0,0,12);Row(main,hotasStatus);
@@ -79,7 +79,7 @@ class Setup : Form {
  }
  void Row(TableLayoutPanel parent,Control control){control.Dock=DockStyle.Top;int row=parent.RowCount++;parent.RowStyles.Add(new RowStyle(SizeType.AutoSize));parent.Controls.Add(control,0,row);}
  void Status(string en,string ko){ui.Bind(status,en,ko);}
- void LoadState(bool updateStatus){RefreshHotasStatus();moduleSelectionPath=path.Text;try{var s=Core.ReadState(path.Text);if(s!=null){campaign.Checked=s.campaign;mouse.Checked=s.mouse;display.Checked=s.display;if(updateStatus)Status("Existing installation detected","기존 설치를 확인했습니다.");}using(var p=ReleasePayload.OpenManifest(Assembly.GetExecutingAssembly())){loaderStatus.Visible=Core.InspectCampaignLoader(path.Text,p).ForeignLoader;}ui.Bind(loaderStatus,"Another mod uses Game/Binaries/Win64/dinput8.dll. Keep Korean campaign subtitles OFF to preserve it while installing Mouse/Screen. In-game coexistence is unverified.","다른 모드가 Game/Binaries/Win64/dinput8.dll을 사용합니다. 해당 파일을 보존하려면 캠페인 한국어 자막을 끄고 마우스·화면 기능을 설치하세요. 실제 게임에서의 동시 사용은 검증되지 않았습니다.");}catch{loaderStatus.Visible=false;}}
+ void LoadState(bool updateStatus){RefreshHotasStatus();moduleSelectionPath=path.Text;try{var s=Core.ReadState(path.Text);if(s!=null){campaign.Checked=s.campaign;mouse.Checked=s.mouse;display.Checked=s.display;if(updateStatus)Status("Existing installation detected","기존 설치를 확인했습니다.");}else{campaign.Checked=false;mouse.Checked=true;display.Checked=false;}using(var p=ReleasePayload.OpenManifest(Assembly.GetExecutingAssembly())){loaderStatus.Visible=Core.InspectCampaignLoader(path.Text,p).ForeignLoader;}ui.Bind(loaderStatus,"Another mod uses Game/Binaries/Win64/dinput8.dll. Keep Korean campaign subtitles OFF to preserve it while installing Mouse/Screen. In-game coexistence is unverified.","다른 모드가 Game/Binaries/Win64/dinput8.dll을 사용합니다. 해당 파일을 보존하려면 캠페인 한국어 자막을 끄고 마우스·화면 기능을 설치하세요. 실제 게임에서의 동시 사용은 검증되지 않았습니다.");}catch{loaderStatus.Visible=false;}}
  void RefreshHotasStatus(){
   try{
    var compatibility=Core.InspectHotas(path.Text);hotasStatus.Visible=compatibility.Present;
