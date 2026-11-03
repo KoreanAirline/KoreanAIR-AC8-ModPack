@@ -44,7 +44,7 @@ As a result, you can actually see parts of the game world that would normally be
 
 ## Installation and bug reports
 
-Run Setup over the existing installation after closing the game. Your settings and module selection are retained. The standalone Setup downloads its matching payload when needed; extracting the complete ZIP also allows installation with `Payload.zip` beside Setup.
+**Existing users (including 1.0–2.3): close the game and run `KoreanAIR_AC8_ModPack_2.4_Setup.exe` over the same game folder. Do not uninstall or delete the old mod first. Settings, selected modules and disabled state are retained. If the old launcher cannot update, download the new Setup directly from this release and run it; you do not need the old launcher to work.** The standalone Setup downloads its matching payload when needed; extracting the complete ZIP also allows installation with `Payload.zip` beside Setup.
 
 For the shared-loader path, download [ACE8 Mod Loader 1.3.1 from its author](https://www.nexusmods.com/acecombat8wingsoftheve/mods/64) separately and follow its installation guide. Enable its IoStoreLoaderMod, close the game, then run this pack's Setup. The recognized loader owns archive loading; this pack removes only its own previous campaign hook and keeps external mod folders, shared runtime settings and load-order entries. Third-party loader files are not bundled. Unknown replacement DLLs are preserved and reported. FALKEN Add On 1.0.3 passed package/import/structure checks; combined in-game flight is not verified, and arbitrary mods are not guaranteed compatible.
 
@@ -109,6 +109,8 @@ Thanks for checking out my mod, and I hope you enjoy it!
 따라서 일반적인 16:9 화면에서는 보이는 영역 밖에 있던 게임 속 장면도 볼 수 있습니다.
 
 ### 설치 및 문제 보고
+
+**1.0~2.3 기존 사용자: 게임을 종료하고 새 Setup을 같은 게임 폴더에 실행하세요. 먼저 제거·삭제하지 마세요. 자동 업데이트가 실패하면 이 릴리즈의 `KoreanAIR_AC8_ModPack_2.4_Setup.exe`를 직접 받아 실행하면 됩니다. 설정과 선택 기능·꺼진 상태를 유지합니다.**
 
 게임을 종료하고 기존 폴더에 Setup을 실행하면 설정과 기능 선택을 유지한 채 업데이트합니다. 먼저 제거할 필요가 없습니다. Setup만 실행해도 필요한 파일을 내려받으며, 전체 ZIP을 받았다면 압축을 모두 풀고 `Payload.zip` 옆의 Setup을 실행하면 됩니다.
 
