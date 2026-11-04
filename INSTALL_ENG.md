@@ -4,7 +4,7 @@
 
 ## Which launcher does what?
 
-Use **KoreanAIR for this pack's settings and game launch**. Use **ACE8 Mod Launcher to install its shared loader and manage other mods**. KoreanAIR keeps its own settings interface when both are installed.
+**Save settings in KoreanAIR, then launch from KoreanAIR or ACE8 Mod Launcher in Modded mode.** The external launcher also installs the shared loader and manages other mods. Both launch paths read the same saved control, crosshair, display and camera settings in the game folder.
 
 **Install this pack with its Setup.** Do not import its EXE, Payload.zip or installation folder through ACE8 Mod Launcher's Add mods/Add folder buttons. Setup puts the components in the game's mod folders; the external launcher reads those folders and lists them automatically.
 
@@ -18,11 +18,11 @@ These are two components of one Setup installation. Mouse flight and display fea
 ## Installing this pack on its own
 
 1. Close the game.
-2. Open the [latest release](https://github.com/KoreanAirline/KoreanAIR-AC8-ModPack/releases/latest), expand **Assets** and download `KoreanAIR_AC8_ModPack_2.4_Setup.exe`. It downloads the required installation files.
-3. For offline installation, download `KoreanAIR_AC8_ModPack_2.4.zip` from the same release, extract everything and run **the Setup EXE beside Payload.zip**. Do not extract Payload.zip. The Sources ZIP is not an installer.
+2. Open the [latest release](https://github.com/KoreanAirline/KoreanAIR-AC8-ModPack/releases/latest), expand **Assets** and download `KoreanAIR_AC8_ModPack_3.0_Setup.exe`. It downloads the required installation files.
+3. For offline installation, download `KoreanAIR_AC8_ModPack_3.0.zip` from the same release, extract everything and run **the Setup EXE beside Payload.zip**. Do not extract Payload.zip. The Sources ZIP is not an installer.
 4. Select the **ACE COMBAT 8 game folder** containing `start_protected_game.exe` and the `Game` folder. Do not select the inner Game or Win64 folder.
 5. Choose your features and select **Install / Update**. Korean translation is OFF by default for new installations.
-6. Open **`KoreanAIR_AC8_ModPack_2.4.exe` in the game folder**. Save your settings, then choose **Play → Play with selected mods**. Keep Steam running and signed in.
+6. Open **`KoreanAIR_AC8_ModPack_3.0.exe` in the game folder**. Save your settings, then choose **Play → Play with selected mods**. Keep Steam running and signed in.
 
 ACE8 Mod Launcher is optional when using only this pack.
 
@@ -46,9 +46,9 @@ Close the game before these steps.
 5. For another author's aircraft/skin mod, use **Mods → Add mods…** with that mod's ZIP, or **Add folder…** with its extracted folder. Follow that mod's own requirements too.
 6. **Install KoreanAIR using the Setup procedure above.** If already installed, run Setup over the existing installation. Do not import this pack's EXE, distribution ZIP, Payload.zip or game folder into the external launcher.
 7. Reopen the external mod list. It lists `AC8MouseAim` and, if translation is enabled, `KoreanAIRCampaign` from their installed locations. Check they are ON. No manual registration is needed.
-8. **Open `KoreanAIR_AC8_ModPack_2.4.exe` in the game folder, save settings and use Play → Play with selected mods.** Leave the external manager in Modded mode. Its window does not need to remain open.
+8. **Open `KoreanAIR_AC8_ModPack_3.0.exe` in the game folder and save your settings.** Then use external **Modded → Play modded**, or KoreanAIR's **Play → Play with selected mods**. Both use the same saved settings.
 
-For daily use: **external Modded mode → save settings in KoreanAIR → launch from KoreanAIR**. KoreanAIR uses the shared loader and other enabled mods in the same game folder.
+Open KoreanAIR when you want to change settings. For daily play, external **Modded → Play modded** uses those saved settings and other enabled mods. **After a game update, Korean translation users should start once from KoreanAIR or update through Setup to check the current stock subtitles.** External Play does not run KoreanAIR's subtitle refresh or duplicate-key notice.
 
 ## Where are the settings?
 
@@ -75,13 +75,13 @@ You do not need another triple-monitor mod. **`AC8MouseAim` also runs display su
 4. Enable **Choose the game displays manually** and assign three different connected displays to Game left/center/right. Extra monitors can remain connected. Game center can differ from the Windows main display.
 5. If sizes, heights or gaps differ, enable **Include gaps and different screen sizes**. Review the shown bounds and unused space. The launcher does not rearrange Windows displays.
 6. Enable **Span across three monitors** and click **Save screen & camera** near the bottom.
-7. Keep the external launcher in **Modded**, then launch using **KoreanAIR → Play → Play with selected mods**.
+7. Launch using external **Modded → Play modded** or **KoreanAIR → Play → Play with selected mods**. Both read the saved display selection and screen settings.
 
 Three FHD screens typically span 5760×1080; three QHD screens span 7680×1440. The selected display area determines the actual size. NVIDIA Surround is not required. For a single 21:9/32:9 display or an existing Surround display exposed as one screen, leave **Span across three monitors OFF**, enable Screen & camera and select the display's native resolution in the game.
 
 ### Only the center screen works
 
-- **If started from the external launcher or Steam, close the game and relaunch from KoreanAIR.** Being listed as ON does not confirm that KoreanAIR's runtime started. In the inspected external-launch log, its offline launch condition was missing and the control/display runtime did not start; triple-monitor support was therefore inactive.
+- **Version 3.0 fixes the 2.4 issue where control/display features did not start through external Play.** Close the game and update with the latest Setup, then use external **Modded → Play modded**. Normal Steam launch and external Unmodded are not this pack's launch paths.
 - If the external manager is **Unmodded**, close the game and restore **Modded**. Unmodded can move the entire mod tree out of the game.
 - Check `AC8MouseAim` ON, **Screen & camera settings** ON, **Span across three monitors** ON and that settings were saved. If the span option is disabled, refresh monitor detection, select the three displays again and read the layout message.
 - If it still fails, create a report in KoreanAIR's **Support** tab. Send `BugReport_*.txt` from `<game folder>/KoreanAIR_AC8_ModPack/Reports` and a screenshot of the display arrangement.
@@ -101,4 +101,4 @@ Shared-loader support means these mods use one loader. It does not certify every
 
 Close the game. If using the external manager, restore **Modded** first. Then use KoreanAIR's update button or the new Setup with the same game folder. **Do not uninstall first.** Existing settings, module selection and other mod files are retained.
 
-For online play: close game → disable KoreanAIR features → external Unmodded. To return to modded single-player: close game → external Modded → resume/play from KoreanAIR.
+For online play: close game → disable KoreanAIR features → external Unmodded. To return to modded single-player: close game → external Modded → resume KoreanAIR features, then launch from either launcher.

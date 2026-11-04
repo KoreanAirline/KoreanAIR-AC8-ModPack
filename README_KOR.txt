@@ -1,14 +1,15 @@
-﻿KoreanAIR_AC8_ModPack_2.4
-한국어 사용 안내 — 빌드 2026110402
+KoreanAIR_AC8_ModPack_3.0
+한국어 사용 안내 — 빌드 2026110403
 
 설치와 실행
 
 1. 먼저 Steam에서 ACE COMBAT 8을 한 번 정상 실행한 뒤 게임을 종료하세요.
 2. ZIP 전체를 압축 해제하고 Payload.zip과 같은 폴더의
-   KoreanAIR_AC8_ModPack_2.4_Setup.exe를 실행하세요. start_protected_game.exe가
+   KoreanAIR_AC8_ModPack_3.0_Setup.exe를 실행하세요. start_protected_game.exe가
    있는 게임 폴더를 지정하고 모듈을 선택한 뒤 설치 / 업데이트를 누르세요.
-3. 게임 폴더의 KoreanAIR_AC8_ModPack_2.4.exe를 실행하세요. Steam을 켜 둔 상태로
-   선택한 모드로 실행을 누르세요.
+3. 게임 폴더의 KoreanAIR_AC8_ModPack_3.0.exe를 실행하세요. Steam을 켜 둔 상태로
+   선택한 모드로 실행을 누르세요. 외부 ACE8 Mod Launcher와 함께 사용한다면
+   설정을 저장한 뒤 그 실행기의 Modded → Play modded로 시작해도 적용됩니다.
 
 설치 프로그램만 받은 경우에는 필요한 모드 파일을 검증하여 내려받습니다.
 검증된 설치 파일은 로컬 캐시에 보관해 기능을 변경할 때 재사용합니다. 설정 변경은
@@ -294,9 +295,9 @@ ON으로 두고 KoreanAIR 런처에서 설정합니다. 트리플 모니터도 �
 KoreanAIRCampaign: 선택형 한국어 번역 파일입니다. KoreanAIR의 자막 탭에서 켠 경우
 생성되며 번역 사용 중에는 ON으로 둡니다. 번역을 끄면 없어도 정상입니다.
 
-실제 게임은 게임 폴더의 KoreanAIR_AC8_ModPack_2.4.exe를 열어 플레이 → 선택한
-모드로 게임 실행으로 시작하세요. 외부 런처는 Modded로 둡니다. 외부에서 실행해
-오프라인 실행 조건이 전달되지 않으면 조종·화면 기능이 시작되지 않습니다.
+설정은 게임 폴더의 KoreanAIR_AC8_ModPack_3.0.exe에서 저장하세요. 게임은 이 런처의
+플레이 → 선택한 모드로 게임 실행이나 외부 ACE8 Mod Launcher의 Modded → Play modded
+중 원하는 방식으로 실행할 수 있습니다. 두 경로 모두 같은 저장 설정을 사용합니다.
 
 트리플 모니터는 KoreanAIR의 화면·카메라 탭에서 설정 사용과 모니터 3대 확장을
 켜고 설정을 저장합니다. 모니터 직접 선택으로 사용할 3대를 지정할 수 있습니다.
@@ -318,18 +319,20 @@ https://www.nexusmods.com/acecombat8wingsoftheve/mods/64
 1. 외부 ACE8 Mod Launcher에서 로더가 없다면 Install을 누르고 Modded로 전환하세요.
 2. 그 실행기의 Mods → Add mods…에서 기체 모드 ZIP을 추가하거나 Add folder…로 압축을 푼 기체 모드 폴더를 추가하세요.
 3. 이 모드팩의 Setup으로 설치 / 업데이트한 뒤 KoreanAIR 런처에서 설정을 저장하세요.
-4. 평소에는 KoreanAIR 런처의 선택한 모드로 게임 실행을 사용하세요. 외부 실행기의
-   Play 버튼은 이 모드팩의 자막 갱신·파일 검사·설정 처리를 대신하지 않습니다.
+4. 설정을 저장한 뒤 KoreanAIR의 게임 실행 또는 외부 Modded → Play modded를
+   사용하세요. 게임 업데이트 후 번역을 쓴다면 KoreanAIR에서 한 번 실행하거나
+   Setup을 업데이트해 원본 자막을 검사하세요. 외부 Play는 자막 갱신과 키 중복 안내를
+   실행하지 않습니다.
 온라인으로 전환하려면 게임 종료 → KoreanAIR 기능만 끄기 → 외부 실행기 Unmodded
 순서로 진행하세요. 다시 모드를 쓸 때는 게임 종료 → 외부 실행기 Modded 복원 →
-KoreanAIR 모드 다시 사용 / 게임 실행 순서로 진행하세요.
+KoreanAIR 모드 다시 사용 순서로 복원한 뒤 두 런처 중 원하는 쪽에서 실행하세요.
 
 번역을 사용한다면 IoStoreLoaderMod의 loadorder.txt에서 KoreanAIRCampaign을 끄지
 마세요. 명시적으로 비활성화된 항목은 임의로 바꾸지 않고 안내합니다. 이 모드팩을
 업데이트하거나 제거해도 외부 로더, 해당 공용 런타임과 다른 모드 폴더는 제거하지
 않습니다. 확인되지 않은 공용 DLL은 파일 이름이 같다는 이유만으로 호환 처리하지 않습니다.
 
-이 모드팩의 오프라인 플레이에는 이 런처를 사용하세요. 두 런처로 같은 공용 파일을
+설정은 KoreanAIR에서 저장하고 오프라인 플레이는 두 런처 중 선택하세요. 같은 공용 파일을
 번갈아 옮기거나 덮어쓰지 마세요. 다른 관리자의 Unmodded 기능은 UE4SS 폴더 전체를
 옮길 수 있으므로, 그 관리자의 모드 파일을 복원한 뒤 이 모드팩을 다시 사용하세요.
 이 모드팩만 끄는 기능은 외부 모드까지 끄지는 않습니다.

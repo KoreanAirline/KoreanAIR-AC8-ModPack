@@ -1,4 +1,4 @@
-# Building the current 2.4 candidate
+# Building the current candidate
 
 Use 64-bit Windows, Python 3.9+ and the .NET Framework 4.x C# compiler.
 `python build_pack.py --launcher-only` compiles the managed launcher source.

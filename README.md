@@ -50,7 +50,8 @@ Run Setup over the existing installation after closing the game. Your settings a
 
 **Using ACE8 Mod Launcher too?** Follow the [step-by-step installation guide](INSTALL_ENG.md). Install its loader, switch it to **Modded**, then install this pack with **KoreanAIR Setup**. Setup installs the components where the external manager finds them automatically. **Do not use Add mods/Add folder with this pack's EXE, Payload.zip or installation folder.**
 
-The external list shows **AC8MouseAim** for controls, screen/camera and subtitle placement, and **KoreanAIRCampaign** for optional Korean translation. These are components of one installation. Configure them in **KoreanAIR**, and start the game with **Play → Play with selected mods**. Leave the external manager in Modded mode. Its file list being ON does not confirm this pack's runtime started; an external launch missing the offline condition leaves control/display features inactive. The [guide](INSTALL_ENG.md#triple-monitor-setup) covers triple-monitor setup and troubleshooting, settings, load order and updating.
+The external list shows **AC8MouseAim** for controls, screen/camera and subtitle placement, and **KoreanAIRCampaign** for optional Korean translation. These are components of one installation. Save settings in **KoreanAIR**, then launch using either **ACE8 Mod Launcher → Modded → Play modded** or **KoreanAIR → Play → Play with selected mods**. Both use the saved settings. The [guide](INSTALL_ENG.md#triple-monitor-setup) covers triple-monitor setup, load order and updating.
+
 When using the inspected AC8HOTAS 0.2.0 bundle, keep **Mouse flight off**. Setup can merge the known shared runtime while retaining HOTAS folders and bindings. Actual combined in-game operation has not been verified.
 
 In **Support**, start optional input recording, reproduce the issue for up to two minutes, close the game and create a report. Send `BugReport_*.txt` from `<game folder>/KoreanAIR_AC8_ModPack/Reports`, plus the mission, aircraft and game control mode. The launcher opens the report location and uses `%LocalAppData%/KoreanAIR_AC8_ModPack/Reports` if necessary. Nothing is uploaded automatically.
@@ -117,7 +118,8 @@ Thanks for checking out my mod, and I hope you enjoy it!
 
 **ACE8 Mod Launcher도 함께 쓰나요?** [처음부터 따라 하는 설치·설정 안내](INSTALL_KOR.md)를 확인하세요. 외부 로더 설치 → **Modded** 전환 → **우리 Setup 설치** 순서입니다. Setup이 설치한 구성요소는 외부 런처가 자동으로 목록에 표시합니다. **우리 EXE·Payload.zip·설치 폴더를 Add mods/Add folder에 넣지 마세요.**
 
-외부 목록의 **AC8MouseAim**은 조종·화면·카메라·자막 위치 기능이고, **KoreanAIRCampaign**은 선택형 한국어 번역 파일입니다. 하나의 Setup이 설치하는 구성요소이며 설정은 **KoreanAIR 런처**에서 합니다. 외부 런처는 Modded로 두고, 실제 게임은 **KoreanAIR → 플레이 → 선택한 모드로 게임 실행**으로 시작하세요. 목록이 ON이어도 실행 조건이 없으면 조종·화면 기능은 시작되지 않습니다. [상세 안내](INSTALL_KOR.md#트리플-모니터-설정)에 트리플 모니터 설정과 미적용 원인, 각 설정 위치, 로드 순서와 업데이트 방법을 정리했습니다.
+외부 목록의 **AC8MouseAim**은 조종·화면·카메라·자막 위치 기능이고, **KoreanAIRCampaign**은 선택형 한국어 번역 파일입니다. 하나의 Setup이 설치하는 구성요소이며 설정은 **KoreanAIR 런처**에서 저장합니다. 게임은 **ACE8 Mod Launcher → Modded → Play modded** 또는 **KoreanAIR → 플레이 → 선택한 모드로 게임 실행** 중 원하는 방식으로 시작하세요. 두 경로 모두 저장한 설정을 사용합니다. [상세 안내](INSTALL_KOR.md#트리플-모니터-설정)에 트리플 모니터 설정, 각 설정 위치, 로드 순서와 업데이트 방법을 정리했습니다.
+
 확인된 AC8HOTAS 0.2.0 묶음을 함께 사용할 때는 **마우스 조종을 끄세요**. HOTAS 폴더와 바인딩을 보존하면서 공용 런타임을 통합합니다. 실제 게임 병용은 아직 검증하지 못했습니다.
 
 **문제 보고**에서 선택적으로 입력 기록을 시작하고 최대 2분 재현한 뒤 게임을 종료해 보고서를 만드세요. `<게임 폴더>/KoreanAIR_AC8_ModPack/Reports`의 `BugReport_*.txt`와 미션·기체·게임 조작 방식을 보내 주세요. 저장할 수 없는 폴더라면 `%LocalAppData%/KoreanAIR_AC8_ModPack/Reports`를 사용하며, 런처에서 저장 위치를 열어 줍니다. 보고서는 자동 전송하지 않습니다.
@@ -132,7 +134,19 @@ Thanks for checking out my mod, and I hope you enjoy it!
 
 ---
 
-## Changes — 2.4 (build 2026110402)
+## Changes — 3.0 (build 2026110403)
+
+- ACE8 Mod Launcher's Modded Play now starts this pack's mouse-flight and display runtime with the settings saved in KoreanAIR.
+- Triple-monitor selection, crosshair and camera settings apply through either supported launcher. Existing controls and settings are retained.
+- Expanded the English/Korean installation guide with automatic component detection, settings locations and load-order instructions.
+
+### 변경 내용 — 3.0 (빌드 2026110403)
+
+- ACE8 Mod Launcher의 Modded 실행에서도 KoreanAIR에 저장한 마우스 조종·화면 설정이 적용됩니다.
+- 두 런처 모두 저장한 모니터 선택·조준선·카메라 설정을 사용하며 기존 조종 설정을 유지합니다.
+- 자동 인식되는 구성요소, 설정 위치와 로드 순서를 한국어·영어 설치 안내에 정리했습니다.
+
+## Previous changes — 2.4 (build 2026110402)
 
 - Fixed mouse-flight response compensation falling back to slower tracking on aircraft with a fast neutral response.
 - The launcher checks for duplicate bindings between Accelerate, Decelerate and the game's Accelerate + Decelerate action. It explains how to remove the conflict without changing saved keys.

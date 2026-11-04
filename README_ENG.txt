@@ -1,14 +1,15 @@
-﻿KoreanAIR_AC8_ModPack_2.4
-English user guide — build 2026110402
+KoreanAIR_AC8_ModPack_3.0
+English user guide — build 2026110403
 
 INSTALL AND PLAY
 
 1. Start ACE COMBAT 8 normally through Steam at least once, then close the game.
 2. Extract the complete ZIP, keeping Payload.zip beside the installer, then run
-   KoreanAIR_AC8_ModPack_2.4_Setup.exe. Select the game folder containing
+   KoreanAIR_AC8_ModPack_3.0_Setup.exe. Select the game folder containing
    start_protected_game.exe, then choose the modules and click Install / Update.
-3. Open KoreanAIR_AC8_ModPack_2.4.exe in the game folder. Keep Steam open and
-   choose Play with selected mods.
+3. Open KoreanAIR_AC8_ModPack_3.0.exe in the game folder. Keep Steam open and
+   choose Play with selected mods. With ACE8 Mod Launcher installed, you can also
+   save settings here and start with its Modded → Play modded button.
 
 The standalone installer downloads the matching verified mod files when needed.
 Verified install files are cached locally for later module changes. Settings
@@ -314,10 +315,9 @@ Keep it ON for these features, including triple displays. KoreanAIRCampaign is
 optional Korean translation: enable it in KoreanAIR's Subtitles tab and leave
 the generated entry ON. Its absence with translation OFF is normal.
 
-Configure and launch from KoreanAIR_AC8_ModPack_2.4.exe in the game folder:
-Play → Play with selected mods. Leave the external manager in Modded mode.
-An external start missing the offline launch condition does not start the
-control/display runtime, even if the mod list shows ON.
+Configure settings in KoreanAIR_AC8_ModPack_3.0.exe in the game folder. Launch with
+its Play → Play with selected mods, or external Modded → Play modded. Both read
+the same saved settings.
 
 For triple displays, enable Screen & camera and Span across three monitors in
 KoreanAIR, choose the displays and save. No additional triple-display mod is needed.
@@ -337,10 +337,13 @@ Combined installation (close the game first)
 1. In ACE8 Mod Launcher, choose Install if its loader is absent, then choose Modded.
 2. Use Mods → Add mods… for the aircraft ZIP, or Add folder… for its extracted folder.
 3. Run this pack's Setup to install/update, then save settings in KoreanAIR's launcher.
-4. For daily play, use KoreanAIR's Play with selected mods. The external Play button
-   does not run this pack's subtitle refresh, file checks or settings handling.
+4. Save settings in KoreanAIR, then use either its Play with selected mods or
+   external Modded → Play modded. After a game update, Korean translation users
+   should start once from KoreanAIR or update through Setup to check stock
+   subtitles. External Play does not run subtitle refresh or duplicate-key notices.
 For online play: close game → Disable KoreanAIR features only → external Unmodded.
-To return: close game → restore external Modded files → resume/play from KoreanAIR.
+To return: close game → restore external Modded files → resume KoreanAIR features,
+then launch from either launcher.
 
 Keep KoreanAIRCampaign enabled in IoStoreLoaderMod's loadorder.txt if you use the
 translation. An explicit disabled entry is reported rather than silently changed.
@@ -348,7 +351,7 @@ Updating or removing this pack does not remove that external loader, its runtime
 or its other mod folders. Changes to unknown shared DLLs are reported for review;
 they are not treated as compatible merely because their filenames match.
 
-Use this pack's launcher for its offline mod play. Do not use two launchers to
+Save settings in KoreanAIR and choose either launcher for offline mod play. Do not
 repeatedly move or replace the same shared files. A third-party manager's Unmodded
 mode may move the whole UE4SS tree; restore that manager's modded files before
 resuming this pack. Disabling this pack alone does not disable external mods.

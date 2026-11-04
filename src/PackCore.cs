@@ -9,16 +9,16 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web.Script.Serialization;
 
-[assembly:System.Reflection.AssemblyVersion("2.4.0.0")]
-[assembly:System.Reflection.AssemblyFileVersion("2.4.0.0")]
-[assembly:System.Reflection.AssemblyInformationalVersion("2.4+b2026110402")]
+[assembly:System.Reflection.AssemblyVersion("3.0.0.0")]
+[assembly:System.Reflection.AssemblyFileVersion("3.0.0.0")]
+[assembly:System.Reflection.AssemblyInformationalVersion("3.0+b2026110403")]
 [assembly:System.Reflection.AssemblyProduct("KoreanAIR AC8 Mod Pack")]
 
 namespace KoreanAIR {
 public sealed class Item { public string path; public string source; public string hash; public string group; public bool mutable; }
 public sealed class FileState { public string path; public string hash; public string original; public bool mutable; }
 public sealed class FrameGenerationLease { public bool enabled,live,originalExists,originalReadOnly; public string encoding,newline,prefix,previousSection; }
-public sealed class State { public string version="2.4"; public long build; public string previousVersion; public long previousBuild; public string root; public bool campaign; public bool mouse; public bool display; public bool suspended; public bool sharedRuntime; public string campaignProvider; public string campaignFingerprint; public string campaignStatus; public string backup; public string campaignLoaderHash; public string legacyCampaignLoaderHash; public FrameGenerationLease frameGeneration; public List<FileState> files=new List<FileState>(); }
+public sealed class State { public string version="3.0"; public long build; public string previousVersion; public long previousBuild; public string root; public bool campaign; public bool mouse; public bool display; public bool suspended; public bool sharedRuntime; public string campaignProvider; public string campaignFingerprint; public string campaignStatus; public string backup; public string campaignLoaderHash; public string legacyCampaignLoaderHash; public FrameGenerationLease frameGeneration; public List<FileState> files=new List<FileState>(); }
 public sealed class Manifest { public List<Item> files; public Dictionary<string,string> legacy; }
 public sealed class LoaderCompatibility { public bool ForeignLoader; public string Path; public string Hash; public string Kind; }
 public sealed class HotasCompatibility { public bool Present,InputEnabled,KnownSharedRuntime,HotasEnabled,AnalogYawEnabled; }
@@ -68,8 +68,8 @@ public sealed class PackWriteException : IOException {
  }
 }
 public static class Core {
- public const string Brand="KoreanAIR_AC8_ModPack_2.4";
- public const long ReleaseBuild=2026110402;
+ public const string Brand="KoreanAIR_AC8_ModPack_3.0";
+ public const long ReleaseBuild=2026110403;
  public const string Folder="KoreanAIR_AC8_ModPack";
  public const string Mod="Game/Binaries/Win64/UE4SS/Mods/AC8MouseAim/";
  public const string CampaignLoader="Game/Binaries/Win64/dinput8.dll";
