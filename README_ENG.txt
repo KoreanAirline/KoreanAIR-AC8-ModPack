@@ -1,4 +1,4 @@
-KoreanAIR_AC8_ModPack_2.4
+﻿KoreanAIR_AC8_ModPack_2.4
 English user guide — build 2026110402
 
 INSTALL AND PLAY
@@ -302,6 +302,28 @@ Recoverable migration/original-file backups are stored outside the game folder:
 
 OTHER MODS / ACE8 MOD LOADER
 
+Step-by-step installation and settings guide:
+https://github.com/KoreanAirline/KoreanAIR-AC8-ModPack/blob/main/INSTALL_ENG.md
+
+Install this pack with its Setup. Do not import its EXE, Payload.zip or installed
+folder through external Add mods/Add folder. Setup installs the components where
+the external manager reads and lists them automatically.
+
+AC8MouseAim runs controls, crosshair, display/camera and subtitle placement.
+Keep it ON for these features, including triple displays. KoreanAIRCampaign is
+optional Korean translation: enable it in KoreanAIR's Subtitles tab and leave
+the generated entry ON. Its absence with translation OFF is normal.
+
+Configure and launch from KoreanAIR_AC8_ModPack_2.4.exe in the game folder:
+Play → Play with selected mods. Leave the external manager in Modded mode.
+An external start missing the offline launch condition does not start the
+control/display runtime, even if the mod list shows ON.
+
+For triple displays, enable Screen & camera and Span across three monitors in
+KoreanAIR, choose the displays and save. No additional triple-display mod is needed.
+Script mods do not need reordering. In Load order, the lower entry wins when two
+mods change the same game file; unrelated files do not need a special order.
+
 Download ACE8 Mod Loader 1.3.1 separately from its author and follow its installation
 instructions: https://www.nexusmods.com/acecombat8wingsoftheve/mods/64
 The third-party loader is not included in this pack. Once its IoStoreLoaderMod is
@@ -313,7 +335,7 @@ folders, runtime settings and load-order entries are preserved.
 
 Combined installation (close the game first)
 1. In ACE8 Mod Launcher, choose Install if its loader is absent, then choose Modded.
-2. Use Mods → Add mods… to add the aircraft mod ZIP or extracted folder.
+2. Use Mods → Add mods… for the aircraft ZIP, or Add folder… for its extracted folder.
 3. Run this pack's Setup to install/update, then save settings in KoreanAIR's launcher.
 4. For daily play, use KoreanAIR's Play with selected mods. The external Play button
    does not run this pack's subtitle refresh, file checks or settings handling.

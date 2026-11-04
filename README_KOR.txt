@@ -1,4 +1,4 @@
-KoreanAIR_AC8_ModPack_2.4
+﻿KoreanAIR_AC8_ModPack_2.4
 한국어 사용 안내 — 빌드 2026110402
 
 설치와 실행
@@ -281,6 +281,31 @@ T 타겟 보기와 인터랙티브 고개 조작 장면은 단일 울트라와�
 
 다른 모드 / ACE8 Mod Loader 병용
 
+단계별 최신 설치·설정 안내:
+https://github.com/KoreanAirline/KoreanAIR-AC8-ModPack/blob/main/INSTALL_KOR.md
+
+우리 모드팩은 우리 Setup으로 설치합니다. 외부 Add mods/Add folder에 우리 EXE,
+Payload.zip 또는 설치 폴더를 추가하지 마세요. Setup이 게임 모드 폴더에 설치하면
+외부 런처가 자동 인식해 목록에 표시합니다. AC8MouseAim과 KoreanAIRCampaign이
+보인다면 이미 인식된 상태입니다.
+
+AC8MouseAim: 조종·조준선·화면·카메라·자막 위치 기능입니다. 사용할 기능이 있으면
+ON으로 두고 KoreanAIR 런처에서 설정합니다. 트리플 모니터도 이 항목이 담당합니다.
+KoreanAIRCampaign: 선택형 한국어 번역 파일입니다. KoreanAIR의 자막 탭에서 켠 경우
+생성되며 번역 사용 중에는 ON으로 둡니다. 번역을 끄면 없어도 정상입니다.
+
+실제 게임은 게임 폴더의 KoreanAIR_AC8_ModPack_2.4.exe를 열어 플레이 → 선택한
+모드로 게임 실행으로 시작하세요. 외부 런처는 Modded로 둡니다. 외부에서 실행해
+오프라인 실행 조건이 전달되지 않으면 조종·화면 기능이 시작되지 않습니다.
+
+트리플 모니터는 KoreanAIR의 화면·카메라 탭에서 설정 사용과 모니터 3대 확장을
+켜고 설정을 저장합니다. 모니터 직접 선택으로 사용할 3대를 지정할 수 있습니다.
+별도 트리플 모니터 파일을 외부 런처에 추가할 필요는 없습니다.
+
+외부 Script mods는 동작을 바꾸는 모드 목록이며 순서를 바꿀 필요가 없습니다.
+Load order는 게임 파일을 제공하는 모드 목록이며 같은 파일을 변경할 때 아래쪽이
+우선합니다. 서로 다른 파일을 쓰는 모드끼리는 우리 모드 때문에 순서를 바꾸지 않습니다.
+
 ACE8 Mod Loader 1.3.1은 제작자의 배포처에서 별도로 받고 해당 설치 안내를 따르세요.
 https://www.nexusmods.com/acecombat8wingsoftheve/mods/64
 외부 로더 파일은 이 모드팩에 포함하지 않습니다. IoStoreLoaderMod를 설치·활성화한 뒤
@@ -291,7 +316,7 @@ https://www.nexusmods.com/acecombat8wingsoftheve/mods/64
 
 함께 설치하는 순서 (게임을 종료한 상태)
 1. 외부 ACE8 Mod Launcher에서 로더가 없다면 Install을 누르고 Modded로 전환하세요.
-2. 그 실행기의 Mods → Add mods…에서 기체 모드 ZIP 또는 압축을 푼 폴더를 추가하세요.
+2. 그 실행기의 Mods → Add mods…에서 기체 모드 ZIP을 추가하거나 Add folder…로 압축을 푼 기체 모드 폴더를 추가하세요.
 3. 이 모드팩의 Setup으로 설치 / 업데이트한 뒤 KoreanAIR 런처에서 설정을 저장하세요.
 4. 평소에는 KoreanAIR 런처의 선택한 모드로 게임 실행을 사용하세요. 외부 실행기의
    Play 버튼은 이 모드팩의 자막 갱신·파일 검사·설정 처리를 대신하지 않습니다.
