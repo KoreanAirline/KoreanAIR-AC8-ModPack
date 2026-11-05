@@ -138,7 +138,19 @@ Thanks for checking out my mod, and I hope you enjoy it!
 
 ---
 
-## Changes — 3.0 (build 2026110601)
+## Changes — 3.0 (build 2026110602)
+
+- Fixed mouse flight and the aim circle being unavailable on normal offline aircraft after automatic Expert-mode support was added.
+- Expert control checks now use the local aircraft's actual ownership. An optional network reference is not required.
+- A transient control-mode check keeps the aircraft, aim and camera state intact. Existing settings are retained.
+
+### 변경 내용 — 3.0 (빌드 2026110602)
+
+- Expert 자동 적용 추가 후 정상 싱글 기체에서 마우스 조종과 조준원이 작동하지 않던 문제를 수정했습니다.
+- 실제 플레이어 기체 소유권을 확인하며, 없어도 되는 네트워크 참조는 요구하지 않습니다.
+- 조작 방식 확인이 잠시 지연돼도 기체·조준점·카메라 상태를 초기화하지 않습니다. 기존 설정은 유지합니다.
+
+## Previous changes — 3.0 (build 2026110601)
 
 - Mouse flight now applies Expert controls automatically, including when the game is set to Standard.
 - Screen/camera-only use keeps the original control mode. Direct WASD control and Alt free look are retained.

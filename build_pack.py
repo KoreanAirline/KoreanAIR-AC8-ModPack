@@ -111,6 +111,7 @@ add('Game/Binaries/Win64/dinput8.dll',campaign_loader,'campaign')
 # Reviewed dialogue dictionary only; no historical full CP table is shipped.
 # Reviewed dialogue dictionary only; no historical full CP table is shipped.
 # Reviewed dialogue dictionary only; no historical full CP table is shipped.
+# Reviewed dialogue dictionary only; no historical full CP table is shipped.
 campaign_patch=D/'campaign-source/campaign-dialogue.json.gz'
 patch_manifest=json.loads((D/'campaign-source/campaign-dialogue.json.manifest.json').read_text(encoding='utf-8'))
 assert patch_manifest['contains_original_table'] is False

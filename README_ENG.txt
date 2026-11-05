@@ -1,5 +1,5 @@
 KoreanAIR_AC8_ModPack_3.0
-English user guide — build 2026110601
+English user guide — build 2026110602
 
 INSTALL AND PLAY
 
