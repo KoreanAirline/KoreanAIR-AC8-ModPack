@@ -1,5 +1,5 @@
 KoreanAIR_AC8_ModPack_3.0
-English user guide — build 2026110403
+English user guide — build 2026110601
 
 INSTALL AND PLAY
 
@@ -95,6 +95,10 @@ Camera distance and height use steps of 1.
 Use the tab's Save button to store your changes.
 
 MOUSE FLIGHT (Controls)
+
+Mouse flight automatically uses Expert controls. There is no need to change from
+Standard manually. Screen/camera features alone retain your original control mode.
+Direct WASD control and Alt free look remain available.
 
 Set acceleration, braking, weapons and WASD in the game's key assignment menu.
 The default separate bindings are Left Shift for acceleration and Left Ctrl for

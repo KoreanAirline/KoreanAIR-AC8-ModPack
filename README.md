@@ -20,6 +20,8 @@ Here's what this mod offers:
 
 ## War Thunder-Style Mouse Controls
 
+**Mouse flight automatically uses Expert controls.** You do not need to switch from Standard manually. Screen/camera features alone retain your original control mode. Direct WASD control and Alt free look remain available.
+
 I made this mod mainly for players who prefer using a keyboard and mouse.
 
 I took inspiration from War Thunder, which is well known for its mouse-friendly flight controls, and tried to bring a similar control scheme to this game.
@@ -88,6 +90,8 @@ Thanks for checking out my mod, and I hope you enjoy it!
 
 ### 워 썬더 방식 마우스 조작
 
+**마우스 비행 조종을 사용할 때는 Expert 조작 방식을 자동 적용합니다.** Standard에서 직접 바꿀 필요는 없습니다. 화면·카메라 기능만 사용할 때는 원래 조작 방식을 유지하며, WASD 직접 조종과 Alt 자유 시점도 계속 사용할 수 있습니다.
+
 이 모드는 주로 키보드와 마우스로 플레이하는 분들을 위해 만들었습니다.
 
 마우스로 편하게 비행할 수 있는 워 썬더에서 영감을 받아, 이 게임에서도 비슷한 방식으로 조작할 수 있도록 했습니다.
@@ -134,7 +138,17 @@ Thanks for checking out my mod, and I hope you enjoy it!
 
 ---
 
-## Changes — 3.0 (build 2026110403)
+## Changes — 3.0 (build 2026110601)
+
+- Mouse flight now applies Expert controls automatically, including when the game is set to Standard.
+- Screen/camera-only use keeps the original control mode. Direct WASD control and Alt free look are retained.
+
+### 변경 내용 — 3.0 (빌드 2026110601)
+
+- 게임에서 Standard로 설정했더라도 마우스 비행 조종은 Expert 방식을 자동 적용합니다.
+- 화면·카메라 기능만 사용할 때는 원래 조작 방식을 유지합니다. WASD 직접 조종과 Alt 자유 시점도 유지합니다.
+
+## Previous changes — 3.0 (build 2026110403)
 
 - ACE8 Mod Launcher's Modded Play now starts this pack's mouse-flight and display runtime with the settings saved in KoreanAIR.
 - Triple-monitor selection, crosshair and camera settings apply through either supported launcher. Existing controls and settings are retained.

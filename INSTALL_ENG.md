@@ -65,6 +65,10 @@ Open KoreanAIR when you want to change settings. For daily play, external **Modd
 
 Use each tab's Save/Apply button. Close the game before changing installed modules or translation.
 
+### Mouse flight and control mode
+
+Mouse flight **automatically uses Expert controls**. You do not need to switch from Standard manually. Using only screen/camera features retains your original control mode. Direct WASD control and Alt free look remain available.
+
 ## Triple-monitor setup
 
 You do not need another triple-monitor mod. **`AC8MouseAim` also runs display support.**

@@ -5,7 +5,9 @@ from datetime import datetime,timezone
 H=Path(__file__).resolve().parent;D=H.parents[1]
 CSC=Path('C:/Windows/Microsoft.NET/Framework64/v4.0.30319/csc.exe')
 B=Path('<USER_HOME>/Downloads/ACE8 Mod Loader 1.3.1 (Windows Version) 64 1.3.1 2026-10-23T22-20Z pZViQ1V4u')
-bin=next(B.rglob('UE4SS.dll')).parent.parent
+downloaded=next(B.rglob('UE4SS.dll'),None)
+bin=downloaded.parent.parent if downloaded else Path('E:/SteamLibrary/steamapps/common/ACE COMBAT 8/Game/Binaries/Win64')
+assert hashlib.sha256((bin/'UE4SS/UE4SS.dll').read_bytes()).hexdigest()=='680a026890abb4d0df2211251f8defc1681a584275f1521dcc0fe30af480006f'
 payload=H/'shared_provider_fixture_payload.zip';files={}
 for name in ('dwmapi.dll','ue4ss/UE4SS.dll'):
     files['Game/Binaries/Win64/'+name]=(bin/name).read_bytes()
